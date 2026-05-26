@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatórios FACV — Guarda Nacional</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#1c2118;--surface:#252b20;--card:#2d3528;--border:#3d4a35;
+  --primary:#6b8c3e;--primary-h:#7da34a;--text:#e8eddf;--muted:#9aab85;--dim:#6b7a5e;
+  --danger:#c0392b;--danger-h:#e74c3c;--success:#27ae60;--warn:#f39c12;
+  --in-bg:#1e2419;--in-bdr:#3d4a35;--r:6px;--sh:0 2px 8px rgba(0,0,0,.45);
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5}
+button{cursor:pointer;font-family:inherit;font-size:14px}
+input,textarea,select{font-family:inherit;font-size:13px;color:var(--text);background:var(--in-bg);border:1px solid var(--in-bdr);border-radius:var(--r);padding:7px 10px;width:100%;outline:none;transition:border-color .15s}
+input:focus,textarea:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(107,140,62,.2)}
+textarea{resize:vertical;min-height:58px}
+label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid var(--border);padding:5px 8px;text-align:left;font-size:12px}
+th{background:rgba(0,0,0,.2);font-weight:600;color:var(--muted)}
+code{font-size:12px;background:rgba(0,0,0,.3);padding:1px 5px;border-radius:3px}
+
+/* ── Layout ── */
+#app{display:flex;flex-direction:column;min-height:100vh}
+.bar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 18px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:var(--sh)}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:34px;height:34px;background:var(--primary);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#fff;letter-spacing:-.5px;flex-shrink:0}
+.brand-t{font-weight:700;font-size:15px;line-height:1.1}
+.brand-s{font-size:10px;color:var(--muted)}
+.bar-right{display:flex;align-items:center;gap:8px}
+.rbadge{background:var(--primary);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em}
+.uname{font-size:12px;color:var(--muted);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.main{flex:1;padding:22px 18px;max-width:1100px;margin:0 auto;width:100%}
+.page{display:none}.page.active{display:block}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 15px;border-radius:var(--r);border:none;font-weight:600;font-size:13px;transition:.15s;cursor:pointer}
+.btn-p{background:var(--primary);color:#fff}.btn-p:hover{background:var(--primary-h)}
+.btn-g{background:transparent;color:var(--muted);border:1px solid var(--border)}.btn-g:hover{background:var(--card);color:var(--text)}
+.btn-d{background:var(--danger);color:#fff}.btn-d:hover{background:var(--danger-h)}
+.btn-goog{background:#fff;color:#444;border:1px solid #ddd;gap:8px}.btn-goog:hover{background:#f8f8f8}
+.btn-goog img{width:18px;height:18px}
+.sm{padding:4px 10px!important;font-size:12px!important}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* ── Cards ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:14px}
+.sec{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);background:rgba(0,0,0,.15);padding:6px 16px;margin:-20px -20px 16px;border-bottom:1px solid var(--border);border-radius:8px 8px 0 0}
+
+/* ── Grid ── */
+.g{display:grid;gap:14px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:1fr 1fr 1fr}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g5{grid-template-columns:repeat(5,1fr)}
+@media(max-width:640px){.g2,.g3,.g4,.g5{grid-template-columns:1fr}}
+.field{}
+
+/* ── Login ── */
+#login-page{display:none;align-items:center;justify-content:center;min-height:100vh;background:var(--bg);padding:20px}
+#login-page.show{display:flex}
+.lcard{background:var(--card);border:1px solid var(--border);border-radius:12px;width:400px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.55)}
+.lhdr{background:var(--primary);padding:22px 26px;text-align:center}
+.lhdr h1{color:#fff;font-size:19px;margin-bottom:3px}
+.lhdr p{color:rgba(255,255,255,.7);font-size:12px}
+.lbody{padding:24px 26px}
+.lerr{background:rgba(192,57,43,.15);border:1px solid rgba(192,57,43,.4);color:#e74c3c;border-radius:var(--r);padding:8px 12px;font-size:12px;margin-bottom:14px;display:none}
+.lerr.show{display:block}
+.linfo{background:rgba(107,140,62,.12);border:1px solid rgba(107,140,62,.3);border-radius:var(--r);padding:10px 14px;font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.6}
+.linfo b{color:var(--text)}
+.lstep{font-size:11px;color:var(--dim);text-align:center;margin:12px 0 4px}
+
+/* ── Setup page ── */
+.setup-card{max-width:540px;margin:60px auto}
+.setup-card h2{font-size:18px;margin-bottom:6px}
+.setup-card p{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.7}
+.setup-steps{counter-reset:step;list-style:none;margin:16px 0;padding:0}
+.setup-steps li{counter-increment:step;display:flex;gap:12px;margin-bottom:14px;align-items:flex-start}
+.setup-steps li::before{content:counter(step);background:var(--primary);color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px}
+.setup-steps li p{font-size:13px;color:var(--muted);line-height:1.6}
+.setup-steps li p b{color:var(--text)}
+
+/* ── Painel ── */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center}
+.stat-n{font-size:30px;font-weight:800;color:var(--primary);line-height:1}
+.stat-l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:5px}
+.nav-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.nav-c{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px;cursor:pointer;transition:.15s;text-align:left;width:100%}
+.nav-c:hover{border-color:var(--primary);background:rgba(107,140,62,.07)}
+.nav-c-ico{font-size:22px;margin-bottom:8px}
+.nav-c-t{font-weight:700;font-size:14px;margin-bottom:3px}
+.nav-c-d{font-size:12px;color:var(--muted)}
+
+/* ── Reports list ── */
+.ri{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:13px 15px;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:12px}
+.ri-t{font-weight:600;font-size:13px}
+.ri-m{font-size:11px;color:var(--muted);margin-top:2px}
+.ri-act{display:flex;gap:6px;flex-shrink:0}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase}
+.bp{background:rgba(243,156,18,.15);color:var(--warn)}
+.be{background:rgba(39,174,96,.15);color:var(--success)}
+.br{background:rgba(107,140,62,.2);color:var(--primary)}
+
+/* ── Admin ── */
+.ur{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 15px;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:12px}
+.ur-n{font-weight:600;font-size:14px}
+.ur-d{font-size:11px;color:var(--muted);margin-top:2px}
+.ur-a{display:flex;gap:6px;flex-shrink:0}
+
+/* ── Drive status ── */
+.ds{display:flex;align-items:center;gap:8px;font-size:12px;padding:8px 12px;border-radius:var(--r);border:1px solid var(--border);background:var(--surface)}
+.ds-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ds-ok{background:var(--success)}
+.ds-err{background:var(--danger)}
+.ds-off{background:var(--dim)}
+
+/* ── Modal ── */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;display:none;align-items:center;justify-content:center;padding:16px}
+.ov.show{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:12px;width:100%;max-width:500px;max-height:92vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,.65)}
+.mh{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.mh h2{font-size:15px}
+.mclose{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1;padding:2px 6px;transition:.15s}
+.mclose:hover{color:var(--text)}
+.mb{padding:18px}
+.mf{padding:12px 18px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
+.mfield{margin-bottom:14px}
+
+/* ── Toast ── */
+#tc{position:fixed;bottom:18px;right:18px;z-index:1000;display:flex;flex-direction:column;gap:7px}
+.toast{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:11px 15px;font-size:13px;box-shadow:var(--sh);animation:sIn .2s ease;max-width:300px}
+.toast.ok{border-color:var(--success);background:rgba(39,174,96,.1)}
+.toast.err{border-color:var(--danger);background:rgba(192,57,43,.1)}
+.toast.info{border-color:var(--primary);background:rgba(107,140,62,.1)}
+@keyframes sIn{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
+
+/* ── Loading ── */
+.loader{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:40px;color:var(--muted);font-size:13px}
+.spin{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Empty ── */
+.empty{text-align:center;padding:36px;color:var(--muted)}
+.empty-i{font-size:36px;margin-bottom:10px}
+
+/* ── Page header ── */
+.ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;gap:12px}
+.ph-l h1{font-size:19px;margin-bottom:3px}
+.ph-l p{font-size:12px;color:var(--muted)}
+.back{background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px;padding:0;margin-bottom:7px;transition:.15s}
+.back:hover{color:var(--text)}
+
+/* ── Table input ── */
+.ti{border:1px solid var(--in-bdr);border-radius:3px;padding:3px 5px;background:var(--in-bg);color:var(--text);font-size:12px;width:100%}
+.ti:focus{outline:none;border-color:var(--primary)}
+.ox{overflow-x:auto}
+
+/* ── Submit bar ── */
+.sb{border-top:1px solid var(--border);padding-top:14px;display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+.sb p{font-size:12px;color:var(--muted)}
+
+/* ── Spinner overlay ── */
+#driveSpinner{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:900;display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;color:var(--text);font-size:14px}
+#driveSpinner.show{display:flex}
+
+/* ── Signature setup block ── */
+.sig-preview{background:rgba(0,0,0,.15);border:1px solid var(--border);border-radius:6px;padding:12px 16px;font-size:12px;color:var(--muted);line-height:2}
+.sig-preview b{color:var(--text);font-size:13px}
+
+/* ── Print ── */
+@media print{
+  .no-print{display:none!important}
+  body,#app,.main{background:#fff!important;color:#000!important}
+  .bar,.main>.page:not(#page-view){display:none!important}
+  #print-area{display:block!important}
+  #driveSpinner,#tc,#login-page,#setup-page{display:none!important}
+}
+.po{display:none}
+#print-area{display:none}
+.print-page{font-family:"Times New Roman",serif;font-size:9pt;color:#000;background:#fff;padding:12mm 14mm}
+</style>
+</head>
+<body>
+
+<!-- SETUP PAGE (first time) -->
+<div id="setup-page" style="display:none;padding:30px 20px">
+  <div class="card setup-card">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <div class="logo" style="width:42px;height:42px;font-size:14px">FACV</div>
+      <div>
+        <h2>Configuração Inicial</h2>
+        <p style="font-size:12px;color:var(--muted);margin:0">Sistema de Relatórios — Guarda Nacional</p>
+      </div>
+    </div>
+    <p>Para ligar o sistema ao Google Drive, necessita de um <strong>Google Client ID</strong>. Siga os passos abaixo (feito uma única vez pelo administrador):</p>
+    <ol class="setup-steps">
+      <li><p>Aceda a <b>console.cloud.google.com</b> e crie um novo projeto (ex: "FACV Relatorios")</p></li>
+      <li><p>Em <b>APIs &amp; Serviços → Biblioteca</b>, ative a <b>Google Drive API</b></p></li>
+      <li><p>Em <b>APIs &amp; Serviços → Credenciais</b>, clique em <b>Criar Credenciais → ID de cliente OAuth 2.0</b></p></li>
+      <li><p>Tipo: <b>Aplicação da Web</b>. Em <b>Origens JavaScript autorizadas</b>, adicione o URL do seu site GitHub Pages (ex: <code>https://usuario.github.io</code>)</p></li>
+      <li><p>Copie o <b>ID do cliente</b> e cole abaixo</p></li>
+    </ol>
+    <div class="mfield">
+      <label>Google Client ID</label>
+      <input id="setup-client-id" placeholder="000000000000-xxxxxxxxxxxxxxxx.apps.googleusercontent.com">
+    </div>
+    <button class="btn btn-p" style="width:100%;justify-content:center" onclick="saveClientId()">Guardar e Continuar</button>
+  </div>
+</div>
+
+<!-- LOGIN PAGE -->
+<div id="login-page">
+  <div class="lcard">
+    <div class="lhdr">
+      <h1>Sistema de Relatórios</h1>
+      <p>Forças Armadas de Cabo Verde — Guarda Nacional</p>
+    </div>
+    <div class="lbody">
+      <div id="lerr" class="lerr"></div>
+
+      <!-- Step 1: Connect Drive -->
+      <div id="step-drive">
+        <div id="drive-status" class="ds" style="margin-bottom:14px">
+          <div class="ds-dot ds-off" id="ds-dot"></div>
+          <span id="ds-text">Não ligado ao Google Drive</span>
+        </div>
+        <button class="btn btn-goog" style="width:100%;justify-content:center" onclick="connectDrive()">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
+          Ligar ao Google Drive
+        </button>
+        <div class="lstep">ou</div>
+        <button class="btn btn-g" style="width:100%;justify-content:center;font-size:12px" onclick="showSetup()">⚙ Configurar Google Client ID</button>
+      </div>
+
+      <!-- Step 2: Select user -->
+      <div id="step-user" style="display:none">
+        <div id="drive-status2" class="ds" style="margin-bottom:14px">
+          <div class="ds-dot ds-ok"></div>
+          <span id="ds-text2">Drive ligado</span>
+        </div>
+        <div class="mfield">
+          <label>Utilizador</label>
+          <select id="user-select" onchange="onUserSelect()">
+            <option value="">— selecionar —</option>
+          </select>
+        </div>
+        <div class="mfield" id="pass-field" style="display:none">
+          <label>Senha</label>
+          <input type="password" id="user-pass" placeholder="senha" onkeydown="if(event.key==='Enter')doLogin()">
+        </div>
+        <button class="btn btn-p" id="login-btn" style="width:100%;justify-content:center;display:none" onclick="doLogin()">Entrar</button>
+        <div style="margin-top:12px;text-align:center">
+          <button class="btn btn-g sm" onclick="disconnectDrive()">Desligar Drive</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" style="display:none">
+  <div class="bar no-print">
+    <div class="brand">
+      <div class="logo">FACV</div>
+      <div>
+        <div class="brand-t">Guarda Nacional</div>
+        <div class="brand-s">Cmd. 3ª Região Militar</div>
+      </div>
+    </div>
+    <div class="bar-right">
+      <span class="uname" id="nav-name"></span>
+      <span class="rbadge" id="nav-role"></span>
+      <button class="btn btn-g sm" id="btn-settings" onclick="openSettings()" title="Configurações">⚙</button>
+      <button class="btn btn-g sm" onclick="doLogout()">Sair</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div id="page-home" class="page active">
+      <div class="ph">
+        <div class="ph-l"><h1>Painel</h1><p>Guarda Nacional — Cmd. 3ª Região Militar</p></div>
+      </div>
+      <div class="stats" id="stats"></div>
+      <div class="nav-grid" id="nav-grid"></div>
+    </div>
+
+    <div id="page-reports" class="page">
+      <button class="back" onclick="navigate('home')">← Painel</button>
+      <div class="ph">
+        <div class="ph-l"><h1 id="reports-title">Relatórios</h1><p id="reports-sub"></p></div>
+        <button class="btn btn-g sm" onclick="exportAllJSON()">⬇ Exportar JSON</button>
+      </div>
+      <div id="reports-list"></div>
+    </div>
+
+    <div id="page-oficial-dia" class="page">
+      <button class="back" onclick="navigate('home')">← Painel</button>
+      <div class="ph">
+        <div class="ph-l"><h1>Relatório Oficial Dia</h1><p>Forças Armadas de Cabo Verde — Guarda Nacional</p></div>
+        <div id="od-user-label" style="text-align:right;font-size:12px;color:var(--muted)"></div>
+      </div>
+      <div id="od-form"></div>
+    </div>
+
+    <div id="page-sargento-guarda" class="page">
+      <button class="back" onclick="navigate('home')">← Painel</button>
+      <div class="ph">
+        <div class="ph-l"><h1>Relatório Sargento da Guarda</h1><p>Forças Armadas de Cabo Verde — Guarda Nacional</p></div>
+        <div id="sg-user-label" style="text-align:right;font-size:12px;color:var(--muted)"></div>
+      </div>
+      <div id="sg-form"></div>
+    </div>
+
+    <div id="page-admin" class="page">
+      <button class="back" onclick="navigate('home')">← Painel</button>
+      <div class="ph"><div class="ph-l"><h1>Administração</h1><p>Gestão de utilizadores e relatórios</p></div></div>
+      <div id="admin-content"></div>
+    </div>
+
+    <div id="page-view" class="page">
+      <div class="no-print" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <button class="back" style="margin:0" onclick="viewBack()">← Voltar</button>
+        <button class="btn btn-p sm" onclick="doPrint()">🖨 Exportar PDF / Imprimir</button>
+      </div>
+      <div id="view-toolbar" class="no-print" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 15px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div>
+          <div id="view-type" style="font-weight:600;font-size:14px"></div>
+          <div id="view-meta" style="font-size:11px;color:var(--muted);margin-top:2px"></div>
+        </div>
+      </div>
+      <div class="no-print" id="view-preview" style="background:#e5e5e5;padding:20px;border-radius:8px;overflow-x:auto"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRINT AREA -->
+<div id="print-area" class="po"></div>
+
+<!-- DRIVE SPINNER -->
+<div id="driveSpinner">
+  <div class="spin"></div>
+  <span id="spinner-msg">A carregar do Google Drive...</span>
+</div>
+
+<!-- MODAL: SETTINGS -->
+<div id="modal-settings" class="ov">
+  <div class="modal" style="max-width:560px">
+    <div class="mh"><h2>⚙ Configurações</h2><button class="mclose" onclick="closeModal('modal-settings')">×</button></div>
+    <div class="mb">
+      <div style="margin-bottom:18px">
+        <label style="margin-bottom:8px">Google Client ID</label>
+        <div style="display:flex;gap:8px">
+          <input id="s-client-id" placeholder="Client ID do Google Cloud">
+          <button class="btn btn-p sm" style="white-space:nowrap" onclick="updateClientId()">Guardar</button>
+        </div>
+        <p style="font-size:11px;color:var(--dim);margin-top:6px">Mude apenas se tiver um novo projeto Google Cloud. A página será recarregada.</p>
+      </div>
+      <div id="s-drive-status" style="margin-bottom:16px"></div>
+      <div id="s-admin-section" style="display:none">
+        <div style="border-top:1px solid var(--border);padding-top:16px">
+          <p style="font-size:13px;font-weight:600;margin-bottom:10px">Administração do Sistema</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-g sm" onclick="closeModal('modal-settings');navigate('admin')">👥 Gerir Utilizadores</button>
+            <button class="btn btn-g sm" onclick="forceReloadUsers()">🔄 Recarregar Utilizadores do Drive</button>
+            <button class="btn btn-d sm" onclick="confirmClearAll()">🗑 Limpar Todos os Dados</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: USER EDIT -->
+<div id="modal-user" class="ov">
+  <div class="modal">
+    <div class="mh"><h2 id="mu-title">Novo Utilizador</h2><button class="mclose" onclick="closeModal('modal-user')">×</button></div>
+    <div class="mb">
+      <div class="mfield"><label>Nome Completo</label><input id="mu-nome" placeholder="Ex: Halfdan Jailson Cabral Delgado"></div>
+      <div class="mfield"><label>Posto</label><input id="mu-posto" placeholder="Ex: Tenente, Sargento-Chefe, Cabo..."></div>
+      <div class="mfield"><label>Nome de Utilizador (login)</label><input id="mu-user" placeholder="Ex: halfdan.delgado"></div>
+      <div class="mfield">
+        <label>Função / Permissão no Sistema</label>
+        <select id="mu-role">
+          <option value="oficial_dia">Oficial Dia — acesso total + exportação</option>
+          <option value="sargento_guarda">Sargento da Guarda — relatório da guarda</option>
+          <option value="sargento_dia">Sargento Dia — relatório do dia</option>
+          <option value="sargento_ronda">Sargento Ronda — relatório de rondas</option>
+          <option value="piquete">Piquete — os seus relatórios</option>
+          <option value="administrador">Administrador — manutenção geral do sistema</option>
+        </select>
+      </div>
+      <div class="mfield">
+        <label>Senha</label>
+        <input type="password" id="mu-pass" placeholder="Deixar vazio = não alterar (em edição)">
+      </div>
+      <div class="sig-preview" id="mu-sig-preview">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">Pré-visualização da assinatura no PDF:</div>
+        <div><b id="sp-func">O Oficial Dia</b></div>
+        <div><b id="sp-nome">Nome do Utilizador</b></div>
+        <div><b id="sp-posto">Posto</b></div>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-g" onclick="closeModal('modal-user')">Cancelar</button>
+      <button class="btn btn-p" onclick="saveUser()">💾 Guardar no Drive</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: CONFIRM -->
+<div id="modal-confirm" class="ov">
+  <div class="modal" style="max-width:360px">
+    <div class="mh"><h2>Confirmar</h2><button class="mclose" onclick="closeModal('modal-confirm')">×</button></div>
+    <div class="mb"><p id="mc-text" style="font-size:14px;line-height:1.6"></p></div>
+    <div class="mf">
+      <button class="btn btn-g" onclick="closeModal('modal-confirm')">Cancelar</button>
+      <button class="btn btn-d" id="mc-btn">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: PRINT CONFIRM -->
+<div id="modal-print-confirm" class="ov">
+  <div class="modal" style="max-width:400px">
+    <div class="mh"><h2>🖨 Exportar PDF</h2><button class="mclose" onclick="closeModal('modal-print-confirm')">×</button></div>
+    <div class="mb">
+      <p style="font-size:14px;line-height:1.7;margin-bottom:12px">O relatório será impresso / exportado como PDF.</p>
+      <p style="font-size:13px;color:var(--muted);line-height:1.6">⚠️ Após confirmação, <strong style="color:var(--text)">os dados serão automaticamente eliminados do Google Drive</strong>.</p>
+    </div>
+    <div class="mf">
+      <button class="btn btn-g" onclick="closeModal('modal-print-confirm')">Cancelar</button>
+      <button class="btn btn-p" onclick="executePrint()">🖨 Imprimir e Eliminar do Drive</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="tc"></div>
+
+<script>
+'use strict';
+
+// ═══════════════════════════════════════════════════════
+//  CONFIG & STATE  (nothing in localStorage)
+// ═══════════════════════════════════════════════════════
+
+const SS = sessionStorage; // session only — cleared on tab close
+
+const ROLE_LABELS = {
+  oficial_dia:'Oficial Dia', sargento_guarda:'Sargento da Guarda',
+  sargento_dia:'Sargento Dia', sargento_ronda:'Sargento Ronda',
+  piquete:'Piquete', administrador:'Administrador',
+};
+
+// Role → allowed form types
+const ROLE_FORMS = {
+  oficial_dia:['oficial_dia','sargento_guarda'],
+  sargento_guarda:['sargento_guarda'],
+  sargento_dia:['oficial_dia'],
+  sargento_ronda:[],
+  piquete:[],
+  administrador:['oficial_dia','sargento_guarda'],
+};
+
+const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
+const FOLDER_NAME = 'FACV_Relatorios';
+const RELAT_FOLDER = 'Relatorios';
+const USERS_FILE   = 'facv_users.json';
+
+let ST = {
+  clientId: SS.getItem('facv_cid') || '',
+  token: SS.getItem('facv_tok') || '',
+  tokenExp: parseInt(SS.getItem('facv_tok_exp')||'0',10),
+  folderId: SS.getItem('facv_fid') || '',
+  relatFolderId: SS.getItem('facv_rfid') || '',
+  usersFileId: SS.getItem('facv_uid') || '',
+  users: [],
+  user: null,
+  reports: [],
+  viewReport: null,
+  viewFrom: 'reports',
+};
+
+function saveToken(tok, expiresIn) {
+  ST.token = tok;
+  ST.tokenExp = Date.now() + (expiresIn - 60) * 1000;
+  SS.setItem('facv_tok', tok);
+  SS.setItem('facv_tok_exp', String(ST.tokenExp));
+}
+function saveFolders(fid, rfid) {
+  ST.folderId = fid; ST.relatFolderId = rfid;
+  SS.setItem('facv_fid', fid); SS.setItem('facv_rfid', rfid);
+}
+function saveUsersFileId(id) { ST.usersFileId = id; SS.setItem('facv_uid', id); }
+function clearSession() {
+  ['facv_tok','facv_tok_exp','facv_fid','facv_rfid','facv_uid'].forEach(k=>SS.removeItem(k));
+  ST = {...ST, token:'', tokenExp:0, folderId:'', relatFolderId:'', usersFileId:'', users:[], user:null, reports:[]};
+}
+
+function hasValidToken() { return !!(ST.token && Date.now() < ST.tokenExp); }
+
+// ═══════════════════════════════════════════════════════
+//  GOOGLE OAUTH (GIS)
+// ═══════════════════════════════════════════════════════
+
+let tokenClient = null;
+let _afterToken = null;
+
+function initGIS() {
+  if (!ST.clientId) return;
+  tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: ST.clientId,
+    scope: DRIVE_SCOPE,
+    callback: (resp) => {
+      if (resp.error) { toast('Erro OAuth: ' + resp.error, 'err'); return; }
+      saveToken(resp.access_token, resp.expires_in || 3600);
+      if (_afterToken) { const cb = _afterToken; _afterToken = null; cb(); }
+    },
+  });
+}
+
+function ensureToken(cb) {
+  if (hasValidToken()) { cb(); return; }
+  _afterToken = cb;
+  if (!tokenClient) { initGIS(); }
+  if (!tokenClient) { toast('Configure o Google Client ID primeiro.','err'); return; }
+  tokenClient.requestAccessToken({ prompt: '' });
+}
+
+// ═══════════════════════════════════════════════════════
+//  DRIVE API WRAPPER
+// ═══════════════════════════════════════════════════════
+
+async function drive(method, path, body, params) {
+  const url = new URL('https://www.googleapis.com/drive/v3/' + path);
+  if (params) Object.entries(params).forEach(([k,v]) => url.searchParams.set(k,String(v)));
+  const opts = { method, headers: { Authorization: 'Bearer ' + ST.token, 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(url, opts);
+  if (r.status === 204) return {};
+  if (!r.ok) { const e = await r.json().catch(()=>{}); throw new Error((e?.error?.message)||r.status); }
+  return r.json();
+}
+
+async function driveUpload(name, jsonStr, fileId, parentId) {
+  const meta = { name };
+  if (parentId) meta.parents = [parentId];
+  const form = new FormData();
+  form.append('metadata', new Blob([JSON.stringify(meta)], {type:'application/json'}));
+  form.append('file', new Blob([jsonStr], {type:'application/json'}));
+  const method = fileId ? 'PATCH' : 'POST';
+  const path = fileId
+    ? `https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=multipart`
+    : `https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart`;
+  const r = await fetch(path, { method, headers: { Authorization: 'Bearer ' + ST.token }, body: form });
+  if (!r.ok) { const e = await r.json().catch(()=>{}); throw new Error((e?.error?.message)||r.status); }
+  return r.json();
+}
+
+async function driveReadFile(fileId) {
+  const r = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
+    headers: { Authorization: 'Bearer ' + ST.token }
+  });
+  if (!r.ok) throw new Error('Falha ao ler ficheiro: ' + r.status);
+  return r.text();
+}
+
+async function driveFindOrCreateFolder(name, parentId) {
+  // search
+  const q = `name='${name}' and mimeType='application/vnd.google-apps.folder' and trashed=false${parentId ? ` and '${parentId}' in parents` : ''}`;
+  const res = await drive('GET', 'files', null, { q, fields:'files(id,name)', spaces:'drive' });
+  if (res.files && res.files.length > 0) return res.files[0].id;
+  // create
+  const body = { name, mimeType: 'application/vnd.google-apps.folder' };
+  if (parentId) body.parents = [parentId];
+  const f = await drive('POST', 'files', body, { fields: 'id' });
+  return f.id;
+}
+
+async function driveFindFile(name, parentId) {
+  const q = `name='${name}' and trashed=false${parentId ? ` and '${parentId}' in parents` : ''}`;
+  const res = await drive('GET', 'files', null, { q, fields:'files(id,name)', spaces:'drive' });
+  return res.files && res.files.length > 0 ? res.files[0] : null;
+}
+
+async function driveListFiles(parentId) {
+  const q = `'${parentId}' in parents and trashed=false and mimeType!='application/vnd.google-apps.folder'`;
+  const res = await drive('GET', 'files', null, { q, fields:'files(id,name,createdTime)', spaces:'drive', orderBy:'createdTime desc', pageSize:200 });
+  return res.files || [];
+}
+
+async function driveDelete(fileId) {
+  await drive('DELETE', 'files/' + fileId);
+}
+
+// ═══════════════════════════════════════════════════════
+//  DRIVE OPERATIONS
+// ═══════════════════════════════════════════════════════
+
+async function driveSetup() {
+  spinner('A verificar estrutura no Drive...');
+  // Get or create main folder
+  const fid = await driveFindOrCreateFolder(FOLDER_NAME, null);
+  const rfid = await driveFindOrCreateFolder(RELAT_FOLDER, fid);
+  saveFolders(fid, rfid);
+  spinner('A carregar utilizadores...');
+  await loadUsersFromDrive();
+  spinnerOff();
+}
+
+async function loadUsersFromDrive() {
+  if (!ST.folderId) return;
+  let f = await driveFindFile(USERS_FILE, ST.folderId);
+  if (!f) {
+    // Create default users file
+    const defaults = getDefaultUsers();
+    const res = await driveUpload(USERS_FILE, JSON.stringify(defaults, null, 2), null, ST.folderId);
+    saveUsersFileId(res.id);
+    ST.users = defaults;
+  } else {
+    saveUsersFileId(f.id);
+    const txt = await driveReadFile(f.id);
+    ST.users = JSON.parse(txt);
+  }
+}
+
+async function saveUsersToaDrive() {
+  if (!ST.usersFileId) {
+    const res = await driveUpload(USERS_FILE, JSON.stringify(ST.users, null, 2), null, ST.folderId);
+    saveUsersFileId(res.id);
+  } else {
+    await driveUpload(USERS_FILE, JSON.stringify(ST.users, null, 2), ST.usersFileId, null);
+  }
+}
+
+async function loadMyReports() {
+  if (!ST.relatFolderId) return [];
+  const files = await driveListFiles(ST.relatFolderId);
+  const reports = [];
+  for (const f of files) {
+    try {
+      const txt = await driveReadFile(f.id);
+      const r = JSON.parse(txt);
+      r._driveId = f.id;
+      r._driveName = f.name;
+      reports.push(r);
+    } catch {}
+  }
+  // Filter by user (admin sees all)
+  if (isAdmin()) return reports;
+  return reports.filter(r => r.userId === ST.user.id);
+}
+
+async function saveReportToDrive(report) {
+  const name = `relat_${report.type}_${report.userId}_${report.id}.json`;
+  report._driveName = name;
+  const res = await driveUpload(name, JSON.stringify(report, null, 2), null, ST.relatFolderId);
+  report._driveId = res.id;
+  return report;
+}
+
+async function deleteReportFromDrive(driveId) {
+  if (!driveId) return;
+  await driveDelete(driveId);
+}
+
+// ═══════════════════════════════════════════════════════
+//  DEFAULT USERS
+// ═══════════════════════════════════════════════════════
+
+function getDefaultUsers() {
+  return [
+    { id:1, nome:'Administrador', posto:'Administrador', username:'admin', password:'admin123', role:'administrador' },
+    { id:2, nome:'Oficial Dia', posto:'Tenente', username:'oficial_dia', password:'oficial123', role:'oficial_dia' },
+    { id:3, nome:'Sargento da Guarda', posto:'Sargento-Chefe', username:'sargento_guarda', password:'sargento123', role:'sargento_guarda' },
+    { id:4, nome:'Sargento Dia', posto:'Sargento', username:'sargento_dia', password:'sargento123', role:'sargento_dia' },
+    { id:5, nome:'Piquete', posto:'Cabo', username:'piquete', password:'piquete123', role:'piquete' },
+  ];
+}
+
+// ═══════════════════════════════════════════════════════
+//  AUTH
+// ═══════════════════════════════════════════════════════
+
+function isAdmin() { return ST.user && (ST.user.role === 'administrador'); }
+function isOficialDia() { return ST.user && (ST.user.role === 'oficial_dia' || isAdmin()); }
+
+function connectDrive() {
+  if (!ST.clientId) { showSetup(); return; }
+  if (!tokenClient) initGIS();
+  if (!tokenClient) { toast('Configure o Google Client ID primeiro.', 'err'); return; }
+  _afterToken = async () => {
+    try {
+      await driveSetup();
+      showUserStep();
+    } catch(e) {
+      toast('Erro ao ligar ao Drive: ' + e.message, 'err');
+    }
+  };
+  tokenClient.requestAccessToken({ prompt: 'consent' });
+}
+
+function disconnectDrive() {
+  clearSession();
+  location.reload();
+}
+
+function onUserSelect() {
+  const v = document.getElementById('user-select').value;
+  document.getElementById('pass-field').style.display = v ? 'block' : 'none';
+  document.getElementById('login-btn').style.display = v ? 'block' : 'none';
+}
+
+function doLogin() {
+  const uid = parseInt(document.getElementById('user-select').value);
+  const pass = document.getElementById('user-pass').value;
+  const u = ST.users.find(u => u.id === uid);
+  if (!u) { showErr('Selecione um utilizador.'); return; }
+  if (u.password !== pass) { showErr('Senha incorreta.'); return; }
+  ST.user = u;
+  showApp();
+}
+
+function doLogout() {
+  ST.user = null;
+  ST.reports = [];
+  showLoginPage();
+}
+
+function showErr(msg) {
+  const el = document.getElementById('lerr');
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+// ═══════════════════════════════════════════════════════
+//  PAGE ROUTING
+// ═══════════════════════════════════════════════════════
+
+function boot() {
+  if (!ST.clientId) { showSetup(); return; }
+  if (hasValidToken() && ST.folderId) {
+    // Try to restore session
+    spinner('A restaurar sessão...');
+    loadUsersFromDrive().then(() => {
+      spinnerOff();
+      showLoginPage();
+    }).catch(() => { spinnerOff(); showLoginPage(); });
+  } else {
+    showLoginPage();
+  }
+}
+
+function showSetup() {
+  hide('login-page'); hide('setup-page'); hide('app');
+  document.getElementById('setup-page').style.display = 'block';
+}
+
+function showLoginPage() {
+  hide('setup-page'); hide('app');
+  const lp = document.getElementById('login-page');
+  lp.classList.add('show');
+  if (hasValidToken() && ST.users.length > 0) {
+    showUserStep();
+  } else {
+    document.getElementById('step-drive').style.display = 'block';
+    document.getElementById('step-user').style.display = 'none';
+  }
+}
+
+function showUserStep() {
+  document.getElementById('step-drive').style.display = 'none';
+  const su = document.getElementById('step-user');
+  su.style.display = 'block';
+  document.getElementById('ds-text2').textContent = 'Google Drive ligado ✓';
+  const sel = document.getElementById('user-select');
+  sel.innerHTML = '<option value="">— selecionar utilizador —</option>' +
+    ST.users.map(u => `<option value="${u.id}">${escH(u.nome)} (${escH(u.posto)})</option>`).join('');
+  document.getElementById('pass-field').style.display = 'none';
+  document.getElementById('login-btn').style.display = 'none';
+}
+
+function showApp() {
+  document.getElementById('login-page').classList.remove('show');
+  hide('setup-page');
+  document.getElementById('app').style.display = 'flex';
+  document.getElementById('nav-name').textContent = ST.user.nome + ' — ' + ST.user.posto;
+  document.getElementById('nav-role').textContent = ROLE_LABELS[ST.user.role] || ST.user.role;
+  document.getElementById('btn-settings').style.display = isAdmin() ? 'flex' : 'none';
+  navigate('home');
+}
+
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById('page-' + page);
+  if (el) el.classList.add('active');
+  window.scrollTo(0, 0);
+  if (page === 'home') renderHome();
+  if (page === 'reports') renderReports();
+  if (page === 'oficial-dia') renderODForm();
+  if (page === 'sargento-guarda') renderSGForm();
+  if (page === 'admin') renderAdmin();
+}
+
+function hide(id) {
+  const el = document.getElementById(id);
+  if (el) { el.style.display = 'none'; el.classList && el.classList.remove('show'); }
+}
+
+// ═══════════════════════════════════════════════════════
+//  SETTINGS
+// ═══════════════════════════════════════════════════════
+
+function saveClientId() {
+  const v = document.getElementById('setup-client-id').value.trim();
+  if (!v) { toast('Insira o Client ID.', 'err'); return; }
+  ST.clientId = v;
+  SS.setItem('facv_cid', v);
+  location.reload();
+}
+
+function openSettings() {
+  document.getElementById('s-client-id').value = ST.clientId;
+  const sdiv = document.getElementById('s-drive-status');
+  sdiv.innerHTML = hasValidToken()
+    ? `<div class="ds"><div class="ds-dot ds-ok"></div><span>Google Drive ligado</span></div>`
+    : `<div class="ds"><div class="ds-dot ds-err"></div><span>Drive desligado</span></div>`;
+  document.getElementById('s-admin-section').style.display = isAdmin() ? 'block' : 'none';
+  openModal('modal-settings');
+}
+
+function updateClientId() {
+  const v = document.getElementById('s-client-id').value.trim();
+  if (!v) { toast('Insira o Client ID.', 'err'); return; }
+  SS.setItem('facv_cid', v);
+  toast('Client ID guardado. A recarregar...', 'ok');
+  setTimeout(() => location.reload(), 1000);
+}
+
+async function forceReloadUsers() {
+  spinner('A recarregar utilizadores...');
+  try {
+    await loadUsersFromDrive();
+    spinnerOff();
+    toast('Utilizadores recarregados do Drive', 'ok');
+  } catch(e) { spinnerOff(); toast('Erro: ' + e.message, 'err'); }
+}
+
+function confirmClearAll() {
+  confirmAction('Eliminar TODOS os dados do Drive? (utilizadores e relatórios) Esta ação é irreversível.', async () => {
+    spinner('A eliminar dados...');
+    try {
+      const files = await driveListFiles(ST.relatFolderId);
+      for (const f of files) await driveDelete(f.id);
+      if (ST.usersFileId) await driveDelete(ST.usersFileId);
+      saveUsersFileId('');
+      clearSession();
+      spinnerOff();
+      toast('Dados eliminados. A recarregar...', 'ok');
+      setTimeout(() => location.reload(), 1500);
+    } catch(e) { spinnerOff(); toast('Erro: ' + e.message, 'err'); }
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+//  HOME / PAINEL
+// ═══════════════════════════════════════════════════════
+
+function renderHome() {
+  const role = ST.user.role;
+  const canOD = ROLE_FORMS[role]?.includes('oficial_dia');
+  const canSG = ROLE_FORMS[role]?.includes('sargento_guarda');
+
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><div class="stat-n" id="stat-total">—</div><div class="stat-l">Relatórios</div></div>
+    <div class="stat"><div class="stat-n" id="stat-od">—</div><div class="stat-l">Oficial Dia</div></div>
+    <div class="stat"><div class="stat-n" id="stat-sg">—</div><div class="stat-l">Sargento Guarda</div></div>`;
+
+  const cards = [];
+  if (canOD) cards.push({ico:'📋',t:'Rel. Oficial Dia',d:'Preencher e submeter relatório do oficial de dia',p:'oficial-dia'});
+  if (canSG) cards.push({ico:'🛡️',t:'Rel. Sargento da Guarda',d:'Corpo da guarda, sentinelas, materiais, presos',p:'sargento-guarda'});
+  cards.push({ico:'📁',t:'Os Meus Relatórios',d:'Ver, imprimir e exportar relatórios submetidos',p:'reports'});
+  if (isAdmin()) cards.push({ico:'⚙️',t:'Administração',d:'Gerir utilizadores, configurar e manter o sistema',p:'admin'});
+
+  document.getElementById('nav-grid').innerHTML = cards.map(c=>`
+    <button class="nav-c" onclick="navigate('${c.p}')">
+      <div class="nav-c-ico">${c.ico}</div>
+      <div class="nav-c-t">${c.t}</div>
+      <div class="nav-c-d">${c.d}</div>
+    </button>`).join('');
+
+  // Load stats async
+  loadStats();
+}
+
+async function loadStats() {
+  try {
+    ensureToken(async () => {
+      const reports = await loadMyReports();
+      document.getElementById('stat-total').textContent = reports.length;
+      document.getElementById('stat-od').textContent = reports.filter(r=>r.type==='oficial_dia').length;
+      document.getElementById('stat-sg').textContent = reports.filter(r=>r.type==='sargento_guarda').length;
+    });
+  } catch {}
+}
+
+// ═══════════════════════════════════════════════════════
+//  REPORTS LIST
+// ═══════════════════════════════════════════════════════
+
+async function renderReports() {
+  const isAdm = isAdmin() || isOficialDia();
+  document.getElementById('reports-title').textContent = isAdm ? 'Todos os Relatórios' : 'Os Meus Relatórios';
+  document.getElementById('reports-sub').textContent = isAdm ? 'Relatórios de todos os utilizadores' : 'Relatórios submetidos por si';
+  const el = document.getElementById('reports-list');
+  el.innerHTML = '<div class="loader"><div class="spin"></div>A carregar do Drive...</div>';
+
+  ensureToken(async () => {
+    try {
+      const reports = await loadMyReports();
+      ST.reports = reports;
+      if (reports.length === 0) {
+        el.innerHTML = '<div class="empty"><div class="empty-i">📄</div><p>Nenhum relatório encontrado no Drive.</p></div>';
+        return;
+      }
+      const tl = {oficial_dia:'Relatório Oficial Dia', sargento_guarda:'Relatório Sargento da Guarda'};
+      el.innerHTML = reports.map((r,i) => `
+        <div class="ri">
+          <div>
+            <div class="ri-t">${tl[r.type]||r.type}</div>
+            <div class="ri-m">Por ${escH(r.submittedBy)} — ${new Date(r.createdAt).toLocaleString('pt')}</div>
+          </div>
+          <div class="ri-act">
+            <button class="btn btn-g sm" onclick="openReport(${i},'reports')">Ver / PDF</button>
+            ${isAdm?`<button class="btn btn-d sm" onclick="deleteReport(${i})">Eliminar</button>`:''}
+          </div>
+        </div>`).join('');
+    } catch(e) {
+      el.innerHTML = `<div class="empty"><div class="empty-i">⚠️</div><p>Erro ao carregar: ${escH(e.message)}</p></div>`;
+    }
+  });
+}
+
+function openReport(idx, from) {
+  ST.viewReport = ST.reports[idx];
+  ST.viewFrom = from || 'reports';
+  showViewReport(ST.viewReport);
+}
+
+function viewBack() { navigate(ST.viewFrom); }
+
+function showViewReport(r) {
+  navigate('view');
+  const tl = {oficial_dia:'Relatório Oficial Dia', sargento_guarda:'Relatório Sargento da Guarda'};
+  document.getElementById('view-type').textContent = tl[r.type]||r.type;
+  document.getElementById('view-meta').textContent = `Submetido por ${r.submittedBy} — ${new Date(r.createdAt).toLocaleString('pt')}`;
+  const html = r.type==='oficial_dia' ? buildODPdf(r.data) : buildSGPdf(r.data);
+  document.getElementById('view-preview').innerHTML = `<div style="background:#fff;width:210mm;min-height:297mm;margin:0 auto;box-shadow:0 4px 20px rgba(0,0,0,.3)">${html}</div>`;
+  document.getElementById('print-area').innerHTML = html;
+}
+
+async function deleteReport(idx) {
+  const r = ST.reports[idx];
+  confirmAction('Eliminar este relatório do Drive permanentemente?', async () => {
+    spinner('A eliminar do Drive...');
+    try {
+      await deleteReportFromDrive(r._driveId);
+      spinnerOff(); toast('Relatório eliminado do Drive', 'ok');
+      navigate('reports');
+    } catch(e) { spinnerOff(); toast('Erro: '+e.message,'err'); }
+  });
+}
+
+async function exportAllJSON() {
+  ensureToken(async () => {
+    try {
+      const reports = await loadMyReports();
+      downloadJSON(reports, 'relatorios_' + new Date().toISOString().slice(0,10) + '.json');
+      toast('JSON exportado', 'ok');
+    } catch(e) { toast('Erro: '+e.message,'err'); }
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+//  PRINT / EXPORT PDF
+// ═══════════════════════════════════════════════════════
+
+function doPrint() {
+  openModal('modal-print-confirm');
+}
+
+function executePrint() {
+  closeModal('modal-print-confirm');
+  window.print();
+  window.onafterprint = async () => {
+    window.onafterprint = null;
+    if (ST.viewReport?._driveId) {
+      spinner('A eliminar relatório do Drive após exportação...');
+      try {
+        await deleteReportFromDrive(ST.viewReport._driveId);
+        spinnerOff();
+        toast('Relatório exportado e eliminado do Drive automaticamente', 'ok');
+        ST.viewReport = null;
+        navigate(ST.viewFrom || 'home');
+      } catch(e) { spinnerOff(); toast('PDF exportado. Erro ao eliminar do Drive: '+e.message,'err'); }
+    }
+  };
+}
+
+// ═══════════════════════════════════════════════════════
+//  REPORT SUBMISSION
+// ═══════════════════════════════════════════════════════
+
+async function submitReport(type, data) {
+  const report = {
+    id: Date.now(),
+    type, data,
+    userId: ST.user.id,
+    submittedBy: ST.user.nome,
+    submittedByPosto: ST.user.posto,
+    submittedByRole: ST.user.role,
+    createdAt: new Date().toISOString(),
+  };
+  spinner('A guardar no Google Drive...');
+  try {
+    ensureToken(async () => {
+      await saveReportToDrive(report);
+      spinnerOff();
+      toast('Relatório guardado no Drive com sucesso!', 'ok');
+      navigate('home');
+    });
+  } catch(e) { spinnerOff(); toast('Erro ao guardar no Drive: ' + e.message, 'err'); }
+}
+
+// ═══════════════════════════════════════════════════════
+//  ADMIN PANEL
+// ═══════════════════════════════════════════════════════
+
+function renderAdmin() {
+  if (!isAdmin()) {
+    document.getElementById('admin-content').innerHTML = '<p style="color:var(--muted)">Acesso negado.</p>';
+    return;
+  }
+  const el = document.getElementById('admin-content');
+  el.innerHTML = `
+    <div style="margin-bottom:24px">
+      <div class="ph" style="margin-bottom:14px">
+        <div class="ph-l"><h2 style="font-size:16px">👥 Utilizadores</h2></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-p sm" onclick="openUserModal()">+ Novo Utilizador</button>
+          <button class="btn btn-g sm" onclick="reloadAndRenderAdmin()">🔄 Recarregar</button>
+        </div>
+      </div>
+      <div id="users-list">${renderUsersList()}</div>
+    </div>
+    <div>
+      <div class="ph" style="margin-bottom:14px">
+        <div class="ph-l"><h2 style="font-size:16px">📄 Todos os Relatórios</h2></div>
+        <button class="btn btn-g sm" onclick="navigate('reports')">Ver Relatórios</button>
+      </div>
+      <p style="font-size:13px;color:var(--muted)">Use a secção "Os Meus Relatórios" para ver todos os relatórios (como Administrador tem acesso total).</p>
+    </div>`;
+}
+
+function renderUsersList() {
+  if (!ST.users || ST.users.length === 0) return '<div class="empty"><div class="empty-i">👤</div><p>Nenhum utilizador.</p></div>';
+  return ST.users.map(u => `
+    <div class="ur">
+      <div>
+        <div class="ur-n">${escH(u.nome)} <span style="font-weight:400;font-size:12px;color:var(--muted)">(${escH(u.posto)})</span></div>
+        <div class="ur-d">
+          <span class="badge br">${ROLE_LABELS[u.role]||u.role}</span>
+          &nbsp; login: <code>${escH(u.username)}</code>
+        </div>
+      </div>
+      <div class="ur-a">
+        <button class="btn btn-g sm" onclick="openUserModal(${u.id})">Editar</button>
+        ${u.id !== ST.user.id ? `<button class="btn btn-d sm" onclick="deleteUser(${u.id})">Eliminar</button>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+async function reloadAndRenderAdmin() {
+  spinner('A recarregar utilizadores...');
+  try {
+    ensureToken(async () => {
+      await loadUsersFromDrive();
+      spinnerOff();
+      document.getElementById('users-list').innerHTML = renderUsersList();
+      toast('Utilizadores recarregados', 'ok');
+    });
+  } catch(e) { spinnerOff(); toast('Erro: '+e.message,'err'); }
+}
+
+// ── User modal ──
+
+let _editId = null;
+
+function openUserModal(id) {
+  _editId = id || null;
+  document.getElementById('mu-title').textContent = id ? 'Editar Utilizador' : 'Novo Utilizador';
+  document.getElementById('mu-pass').placeholder = id ? 'Deixar vazio = não alterar' : 'Senha obrigatória';
+  if (id) {
+    const u = ST.users.find(u=>u.id===id);
+    if (u) {
+      document.getElementById('mu-nome').value = u.nome;
+      document.getElementById('mu-posto').value = u.posto||'';
+      document.getElementById('mu-user').value = u.username;
+      document.getElementById('mu-role').value = u.role;
+      document.getElementById('mu-pass').value = '';
+    }
+  } else {
+    document.getElementById('mu-nome').value = '';
+    document.getElementById('mu-posto').value = '';
+    document.getElementById('mu-user').value = '';
+    document.getElementById('mu-role').value = 'sargento_guarda';
+    document.getElementById('mu-pass').value = '';
+  }
+  updateSigPreview();
+  openModal('modal-user');
+}
+
+function updateSigPreview() {
+  const nome = document.getElementById('mu-nome').value || 'Nome do Utilizador';
+  const posto = document.getElementById('mu-posto').value || 'Posto';
+  const role = document.getElementById('mu-role').value;
+  document.getElementById('sp-func').textContent = 'O ' + (ROLE_LABELS[role]||role);
+  document.getElementById('sp-nome').textContent = nome;
+  document.getElementById('sp-posto').textContent = posto;
+}
+
+document.getElementById('mu-nome').addEventListener('input', updateSigPreview);
+document.getElementById('mu-posto').addEventListener('input', updateSigPreview);
+document.getElementById('mu-role').addEventListener('change', updateSigPreview);
+
+async function saveUser() {
+  const nome = document.getElementById('mu-nome').value.trim();
+  const posto = document.getElementById('mu-posto').value.trim();
+  const username = document.getElementById('mu-user').value.trim();
+  const pass = document.getElementById('mu-pass').value;
+  const role = document.getElementById('mu-role').value;
+
+  if (!nome || !posto || !username) { toast('Nome, Posto e Utilizador são obrigatórios', 'err'); return; }
+  if (!_editId && !pass) { toast('Senha obrigatória para novo utilizador', 'err'); return; }
+
+  if (_editId) {
+    const idx = ST.users.findIndex(u=>u.id===_editId);
+    if (idx>=0) {
+      ST.users[idx] = {...ST.users[idx], nome, posto, username, role};
+      if (pass) ST.users[idx].password = pass;
+    }
+  } else {
+    ST.users.push({ id: Date.now(), nome, posto, username, password: pass, role });
+  }
+
+  spinner('A guardar utilizadores no Drive...');
+  try {
+    ensureToken(async () => {
+      await saveUsersToaDrive();
+      spinnerOff();
+      closeModal('modal-user');
+      document.getElementById('users-list').innerHTML = renderUsersList();
+      toast(_editId ? 'Utilizador atualizado no Drive' : 'Utilizador criado no Drive', 'ok');
+    });
+  } catch(e) { spinnerOff(); toast('Erro ao guardar: '+e.message,'err'); }
+}
+
+function deleteUser(id) {
+  const u = ST.users.find(u=>u.id===id);
+  confirmAction(`Eliminar o utilizador "${u?.nome}" permanentemente?`, async () => {
+    ST.users = ST.users.filter(u=>u.id!==id);
+    spinner('A guardar no Drive...');
+    try {
+      ensureToken(async () => {
+        await saveUsersToaDrive();
+        spinnerOff();
+        document.getElementById('users-list').innerHTML = renderUsersList();
+        toast('Utilizador eliminado do Drive', 'ok');
+      });
+    } catch(e) { spinnerOff(); toast('Erro: '+e.message,'err'); }
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+//  FORM: OFICIAL DIA
+// ═══════════════════════════════════════════════════════
+
+const MAT_G_OD = [
+  'Pist. Makarov NºBP 0288|1','Munição de Makarov|8','Carregador de Pistola|2','Coldre de Perna Verde|1',
+  'Cinturão Verde|1','Coronha Móvel Nº663166|1','Munições Reais AKM|88','Munições de Salva AKM|2',
+  'Carregador Metálico AKM|4','Canana Verde e Bandoleira|1',
+].map(s=>{const[d,e]=s.split('|');return{designacao:d,existente:e,quantReceb:'',quantEntrega:''};});
+
+const MAT_A_OD = [
+  'Capa Chuva Verde|4','TV Plasma Luso|1','Mesa de Televisão|1','Gabardine Verde|3','Cama Tipo Português|1',
+  'Colchão e Estrado|1','Caixa de chaves Metal Pequeno|1','Caixa de chaves Metal Grande|1','Lanterna|1',
+  'Bateria E/R Hytera PD705|2','NEP|1','Telemóvel Alcatel|1','Secretária|1','Estabilizador Corrente|1',
+  'Frigobar West Point|1','Ventoinha de Pé|1','Lençol Creme|5','Mosquiteiro|1','Armário tipo Francês|1',
+  'Rádio E/R Hytera PD705 e Carregador|1','Livro Plano Defesa|1',
+].map(s=>{const[d,e]=s.split('|');return{designacao:d,existente:e,quantReceb:'',quantEntrega:''};});
+
+let OD = {};
+
+function initOD() {
+  const u = ST.user;
+  OD = {
+    dataInicio:td(),horaInicio:'08:00',dataFim:tm(),horaFim:'08:00',
+    oficialDia:u.nome, reserva:'', auxiliar:'', conferenciaACarga:'',
+    rondas:Array.from({length:4},()=>({graduado1:'',horario1:'',graduado2:'',horario2:''})),
+    formaturaDetidos:Array.from({length:3},()=>({horario:'',faltas:''})),
+    ocorrenciasExtraordinarias:'',alteracoesPessoal:'',alimentacao:'',apresentacao:'',baixasMarchas:'',
+    consumoEnergia:{anterior:'',atual:'',total:'0'},consumoAgua:{abastecimento:'',totalFinal:''},
+    materiaisGuerra:JSON.parse(JSON.stringify(MAT_G_OD)),
+    materiaisAquartelamento:JSON.parse(JSON.stringify(MAT_A_OD)),
+    ocorrenciasDiversos:'',anexos:'',localData:'Quartel em Achada Limpo',dataAssinatura:tm(),
+    cessante:{nome:u.nome,posto:u.posto,funcao:ROLE_LABELS[u.role]||u.role},
+    entrante:{nome:'',posto:'',funcao:''},
+    entrante_userId:'',
+  };
+}
+
+function setOD(p,v){const k=p.split('.');if(k.length===1)OD[k[0]]=v;else if(k.length===2)OD[k[0]][k[1]]=v;}
+function setODArr(a,i,k,v){OD[a][i][k]=v;}
+
+function renderODForm() {
+  initOD();
+  document.getElementById('od-user-label').innerHTML = `A submeter como:<br><strong>${escH(ST.user.nome)}</strong><br><span style="font-size:11px">${escH(ST.user.posto)}</span>`;
+  document.getElementById('od-form').innerHTML = buildODFormHTML();
+}
+
+function onEntrante(uid) {
+  if (!uid) { setOD('entrante.nome',''); setOD('entrante.posto',''); setOD('entrante.funcao',''); return; }
+  const u = ST.users.find(u=>u.id==uid);
+  if (u) { setOD('entrante.nome',u.nome); setOD('entrante.posto',u.posto); setOD('entrante.funcao',ROLE_LABELS[u.role]||u.role); }
+}
+
+function buildODFormHTML() {
+  const userOpts = '<option value="">— manual —</option>' + ST.users.filter(u=>ROLE_FORMS[u.role]?.includes('oficial_dia')).map(u=>`<option value="${u.id}">${escH(u.nome)} — ${escH(u.posto)}</option>`).join('');
+  const sigBlock = (label, obj, prefix) => `
+    <div>
+      <p style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:10px">${label}</p>
+      ${prefix==='entrante'?`<div class="field" style="margin-bottom:10px"><label>Selecionar Utilizador</label><select class="ti" style="width:100%;padding:7px 10px" onchange="OD.entrante_userId=this.value;onEntrante(this.value)"><${userOpts}</select></div>`:''}
+      <div class="field"><label>O / A Função</label><input class="ti" style="width:100%" value="${escH(obj.funcao)}" oninput="setOD('${prefix}.funcao',this.value)"></div>
+      <div class="field" style="margin-top:8px"><label>Nome</label><input class="ti" style="width:100%" value="${escH(obj.nome)}" oninput="setOD('${prefix}.nome',this.value)"></div>
+      <div class="field" style="margin-top:8px"><label>Posto</label><input class="ti" style="width:100%" value="${escH(obj.posto)}" oninput="setOD('${prefix}.posto',this.value)"></div>
+    </div>`;
+
+  return `
+  <div class="card">
+    <div class="sec">Período de Serviço</div>
+    <div class="g g4">
+      <div class="field"><label>Data início</label><input type="date" value="${OD.dataInicio}" oninput="setOD('dataInicio',this.value)"></div>
+      <div class="field"><label>Hora início</label><input type="time" value="${OD.horaInicio}" oninput="setOD('horaInicio',this.value)"></div>
+      <div class="field"><label>Data fim</label><input type="date" value="${OD.dataFim}" oninput="setOD('dataFim',this.value)"></div>
+      <div class="field"><label>Hora fim</label><input type="time" value="${OD.horaFim}" oninput="setOD('horaFim',this.value)"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="sec">Pessoal de Serviço</div>
+    <div class="g g3">
+      <div class="field"><label>Oficial Dia</label><input value="${escH(OD.oficialDia)}" oninput="setOD('oficialDia',this.value)"></div>
+      <div class="field"><label>Reserva</label><input value="${escH(OD.reserva)}" oninput="setOD('reserva',this.value)"></div>
+      <div class="field"><label>Auxiliar</label><input value="${escH(OD.auxiliar)}" oninput="setOD('auxiliar',this.value)"></div>
+    </div>
+    <div class="field" style="margin-top:14px"><label>Conferência à Carga</label><textarea oninput="setOD('conferenciaACarga',this.value)">${escH(OD.conferenciaACarga)}</textarea></div>
+  </div>
+  <div class="card">
+    <div class="sec">Rondas ao Aquartelamento</div>
+    <div class="ox"><table>
+      <thead><tr><th>Graduado</th><th>Horários</th><th>Graduado</th><th>Horários</th></tr></thead>
+      <tbody>${OD.rondas.map((r,i)=>`<tr>
+        <td><input class="ti" value="${escH(r.graduado1)}" oninput="setODArr('rondas',${i},'graduado1',this.value)"></td>
+        <td><input class="ti" value="${escH(r.horario1)}" oninput="setODArr('rondas',${i},'horario1',this.value)" placeholder="/"></td>
+        <td><input class="ti" value="${escH(r.graduado2)}" oninput="setODArr('rondas',${i},'graduado2',this.value)"></td>
+        <td><input class="ti" value="${escH(r.horario2)}" oninput="setODArr('rondas',${i},'horario2',this.value)" placeholder="/"></td>
+      </tr>`).join('')}</tbody>
+    </table></div>
+  </div>
+  <div class="card">
+    <div class="sec">Formatura de Detidos e Convalescente</div>
+    <div class="ox"><table>
+      <thead><tr>${OD.formaturaDetidos.map(()=>'<th>Horário</th><th>Faltas</th>').join('')}</tr></thead>
+      <tbody><tr>${OD.formaturaDetidos.map((f,i)=>`
+        <td><input class="ti" value="${escH(f.horario)}" oninput="setODArr('formaturaDetidos',${i},'horario',this.value)"></td>
+        <td><input class="ti" value="${escH(f.faltas)}" oninput="setODArr('formaturaDetidos',${i},'faltas',this.value)"></td>`).join('')}</tr></tbody>
+    </table></div>
+  </div>
+  <div class="card">
+    <div class="sec">Ocorrências e Serviço</div>
+    <div class="g g2">
+      ${[['ocorrenciasExtraordinarias','Ocorrências Extraordinárias'],['alteracoesPessoal','Alterações ao Pessoal'],['alimentacao','Alimentação'],['apresentacao','Apresentação'],['baixasMarchas','Baixas e Marchas']].map(([k,l])=>`
+      <div class="field"><label>${l}</label><textarea oninput="setOD('${k}',this.value)">${escH(OD[k])}</textarea></div>`).join('')}
+    </div>
+  </div>
+  <div class="card">
+    <div class="sec">Consumo de Energia e Água</div>
+    <div class="g g3">
+      <div class="field"><label>Energia Anterior (Mgw/KW)</label><input value="${escH(OD.consumoEnergia.anterior)}" oninput="setOD('consumoEnergia.anterior',this.value)"></div>
+      <div class="field"><label>Energia Atual (Mgw/KW)</label><input value="${escH(OD.consumoEnergia.atual)}" oninput="setOD('consumoEnergia.atual',this.value)"></div>
+      <div class="field"><label>Total (Mgw/KW)</label><input value="${escH(OD.consumoEnergia.total)}" oninput="setOD('consumoEnergia.total',this.value)"></div>
+      <div class="field"><label>Água Abastecimento (m³)</label><input value="${escH(OD.consumoAgua.abastecimento)}" oninput="setOD('consumoAgua.abastecimento',this.value)"></div>
+      <div class="field"><label>Total Final (M³)</label><input value="${escH(OD.consumoAgua.totalFinal)}" oninput="setOD('consumoAgua.totalFinal',this.value)"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="sec">Materiais de Guerra</div>
+    <div class="ox"><table>
+      <thead><tr><th>Designação</th><th>Existente</th><th>Qt. Receb.</th><th>Qt. Entrega</th></tr></thead>
+      <tbody>${OD.materiaisGuerra.map((m,i)=>`<tr>
+        <td>${escH(m.designacao)}</td><td style="text-align:center;font-weight:600">${escH(m.existente)}</td>
+        <td><input class="ti" value="${escH(m.quantReceb)}" oninput="setODArr('materiaisGuerra',${i},'quantReceb',this.value)"></td>
+        <td><input class="ti" value="${escH(m.quantEntrega)}" oninput="setODArr('materiaisGuerra',${i},'quantEntrega',this.value)"></td>
+      </tr>`).join('')}</tbody>
+    </table></div>
+  </div>
+  <div class="card">
+    <div class="sec">Materiais de Aquartelamento</div>
+    <div class="ox"><table>
+      <thead><tr><th>Designação</th><th>Existente</th><th>Qt. Receb.</th><th>Qt. Entrega</th></tr></thead>
+      <tbody>${OD.materiaisAquartelamento.map((m,i)=>`<tr>
+        <td>${escH(m.designacao)}</td><td style="text-align:center;font-weight:600">${escH(m.existente)}</td>
+        <td><input class="ti" value="${escH(m.quantReceb)}" oninput="setODArr('materiaisAquartelamento',${i},'quantReceb',this.value)"></td>
+        <td><input class="ti" value="${escH(m.quantEntrega)}" oninput="setODArr('materiaisAquartelamento',${i},'quantEntrega',this.value)"></td>
+      </tr>`).join('')}</tbody>
+    </table></div>
+  </div>
+  <div class="card">
+    <div class="sec">Ocorrências, Anexos, Local e Assinaturas</div>
+    <div class="g g2">
+      <div class="field"><label>Ocorrências Diversas</label><textarea oninput="setOD('ocorrenciasDiversos',this.value)">${escH(OD.ocorrenciasDiversos)}</textarea></div>
+      <div class="field"><label>Anexos</label><textarea oninput="setOD('anexos',this.value)">${escH(OD.anexos)}</textarea></div>
+    </div>
+    <div class="g g2" style="margin-top:14px">
+      <div class="field"><label>Local</label><input value="${escH(OD.localData)}" oninput="setOD('localData',this.value)"></div>
+      <div class="field"><label>Data da Assinatura</label><input type="date" value="${OD.dataAssinatura}" oninput="setOD('dataAssinatura',this.value)"></div>
+    </div>
+    <div class="g g2" style="margin-top:16px">
+      ${sigBlock('Oficial Dia Cessante', OD.cessante, 'cessante')}
+      ${sigBlock('Oficial Dia Entrante', OD.entrante, 'entrante')}
+    </div>
+    <div class="sb" style="margin-top:16px">
+      <p>A submeter como <strong>${escH(ST.user.nome)}</strong> — ${escH(ST.user.posto)}</p>
+      <button class="btn btn-p" onclick="submitOD()">💾 Guardar no Drive</button>
+    </div>
+  </div>`;
+}
+
+function submitOD() {
+  const data = {...OD, diaSemanaInicio:dayName(OD.dataInicio), diaSemanaFim:dayName(OD.dataFim)};
+  submitReport('oficial_dia', data);
+}
+
+// ═══════════════════════════════════════════════════════
+//  FORM: SARGENTO DA GUARDA
+// ═══════════════════════════════════════════════════════
+
+const MAT_G_SG = [
+  'AKM: 3919|','AKM: 0624P|','AKM: 636762|','AKM: 7608|','AKM: O252|','AKM: 7418|','AKM: 6632|','AKM: 8069|',
+  'AKM: 1887|16','AKM: 8468|','AKM: 6760|','AKM: 8592P|','AKM: 1820|','AKM: 1684|','AKM: 426802|','AKM: 422027|',
+  'Munições Real de AKM|1776','Munições Salva de AKM|34','Vareta de AKM e Banduleira|16',
+  'Carregador Metalico de AKM|20','Canana verde|01','Pistola Makarov (Nº 2795)|01',
+  'Munições Makarov|08','Carregador Pistola Makarov|02','Coldre Táctico verde|01',
+  'Cinturão Verde|01','Espingarda SKS|04','Bandeira Nacional|01',
+].map(s=>{const[d,e]=s.split('|');return{designacao:d,existente:e,recebida:'',entregue:'',estado:''};});
+
+const MAT_A_SG = [
+  'Armario Tipo Português|01','Armario Tipo Francês|01','Armeiro verde Três Portas|01','Banco c\\ armação ferro|02',
+  'Banco de Madeira|03','Cama, estrado e colchão|14','caixa de Plastico 25 L|01','Capa Chuva Verde|18',
+  'Mosquiteiro Branco|08','Gabardine Azul|16','Lencois Castanho 2 tipos|06','Lanterna|01',
+  'Cadeados de Armario|03','Televisor LCD S/ Comando|01','Secretaria (Usado)|03','Copox Inox|17',
+  'Ventoinha de Pé|01','Estante Branco|01',
+].map(s=>{const[d,e]=s.split('|');return{designacao:d,existente:e,recebida:'',entregue:'',estado:''};});
+
+const MAT_CCTV_SG = [
+  'UPS|1','Cameras|6','POE injector Adapter|1','CPU/Rato/Teclado|01','Carregadores CCTV|04','Monitor|02',
+].map(s=>{const[d,e]=s.split('|');return{designacao:d,existente:e,recebida:'',entregue:'',estado:''};});
+
+const MAT_COM_SG = [
+  'Rádio E/R Hytera|03','Baterias|06','Carregador|03','Ficha do Carregador|03',
+].map(s=>{const[d,e]=s.split('|');return{designacao:d,existente:e,recebida:'',entregue:'',estado:''};});
+
+const HRS = ['8h00','10h0','12h0','14h0','16h0','18h0','20h0','22h0','24h0','2h00','4h00','6h00'];
+
+let SG = {};
+
+function initSG() {
+  const u = ST.user;
+  SG = {
+    dataInicio:td(),horaInicio:'08:00',dataFim:tm(),horaFim:'08:00',
+    comandanteGuarda:u.nome, reserva:'',
+    forcasGuarda:{sargento:'1',auxiliar:'1',sentinelas:'15'},
+    localSentinelas:{portaDArma:'A',observacao:'B',mTransporte:'C',piramide:'D',reforcoPiramide:'E'},
+    relacaoCorpo:Array.from({length:16},()=>({unidade:'',posto:'',nome:'',horarios:Object.fromEntries(HRS.map(h=>[h,'']))})),
+    materialGuerra:JSON.parse(JSON.stringify(MAT_G_SG)),
+    materialAquartelamento:JSON.parse(JSON.stringify(MAT_A_SG)),
+    sistemasCCTV:JSON.parse(JSON.stringify(MAT_CCTV_SG)),
+    meiosComunicacao:JSON.parse(JSON.stringify(MAT_COM_SG)),
+    registoPreso:Array.from({length:3},()=>({unidade:'',posto:'',nMec:'',nome:'',dataEntrada:'',dataSaida:'',situacao:''})),
+    ocorrencias:'',localData:'Quartel em Achada Limpo',dataAssinatura:tm(),
+    cessante:{nome:u.nome,posto:u.posto,funcao:ROLE_LABELS[u.role]||u.role},
+    entrante:{nome:'',posto:'',funcao:''},
+  };
+}
+
+function setSG(p,v){const k=p.split('.');if(k.length===1)SG[k[0]]=v;else if(k.length===2)SG[k[0]][k[1]]=v;}
+function setSGArr(a,i,k,v){SG[a][i][k]=v;}
+function setSGHor(i,h,v){SG.relacaoCorpo[i].horarios[h]=v;}
+function setSGPreso(i,k,v){SG.registoPreso[i][k]=v;}
+
+function renderSGForm() {
+  initSG();
+  document.getElementById('sg-user-label').innerHTML = `A submeter como:<br><strong>${escH(ST.user.nome)}</strong><br><span style="font-size:11px">${escH(ST.user.posto)}</span>`;
+  document.getElementById('sg-form').innerHTML = buildSGFormHTML();
+}
+
+function onSGEntrante(uid) {
+  if (!uid) { setSG('entrante.nome',''); setSG('entrante.posto',''); setSG('entrante.funcao',''); return; }
+  const u = ST.users.find(u=>u.id==uid);
+  if (u) { setSG('entrante.nome',u.nome); setSG('entrante.posto',u.posto); setSG('entrante.funcao',ROLE_LABELS[u.role]||u.role); }
+}
+
+function matTableSG(arr,items) {
+  return `<div class="ox"><table>
+    <thead><tr><th>Designação</th><th>Existente</th><th>Recebida</th><th>Entregue</th><th>Estado</th></tr></thead>
+    <tbody>${items.map((m,i)=>`<tr>
+      <td>${escH(m.designacao)}</td><td style="text-align:center;font-weight:600">${escH(m.existente)}</td>
+      <td><input class="ti" value="${escH(m.recebida)}" oninput="setSGArr('${arr}',${i},'recebida',this.value)"></td>
+      <td><input class="ti" value="${escH(m.entregue)}" oninput="setSGArr('${arr}',${i},'entregue',this.value)"></td>
+      <td><input class="ti" value="${escH(m.estado)}" oninput="setSGArr('${arr}',${i},'estado',this.value)"></td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+function buildSGFormHTML() {
+  const sgOpts = '<option value="">— manual —</option>' + ST.users.filter(u=>ROLE_FORMS[u.role]?.includes('sargento_guarda')).map(u=>`<option value="${u.id}">${escH(u.nome)} — ${escH(u.posto)}</option>`).join('');
+  const sigBlockSG = (label, obj, prefix, selOpts) => `
+    <div>
+      <p style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:10px">${label}</p>
+      ${prefix==='entrante_sg'?`<div class="field" style="margin-bottom:10px"><label>Selecionar Utilizador</label><select class="ti" style="width:100%;padding:7px 10px" onchange="onSGEntrante(this.value)"><${selOpts}</select></div>`:''}
+      <div class="field"><label>O / A Função</label><input class="ti" style="width:100%" value="${escH(obj.funcao)}" oninput="setSG('${prefix==='entrante_sg'?'entrante':'cessante'}.funcao',this.value)"></div>
+      <div class="field" style="margin-top:8px"><label>Nome</label><input class="ti" style="width:100%" value="${escH(obj.nome)}" oninput="setSG('${prefix==='entrante_sg'?'entrante':'cessante'}.nome',this.value)"></div>
+      <div class="field" style="margin-top:8px"><label>Posto</label><input class="ti" style="width:100%" value="${escH(obj.posto)}" oninput="setSG('${prefix==='entrante_sg'?'entrante':'cessante'}.posto',this.value)"></div>
+    </div>`;
+
+  return `
+  <div class="card">
+    <div class="sec">Período de Serviço</div>
+    <div class="g g4">
+      <div class="field"><label>Data início</label><input type="date" value="${SG.dataInicio}" oninput="setSG('dataInicio',this.value)"></div>
+      <div class="field"><label>Hora início</label><input type="time" value="${SG.horaInicio}" oninput="setSG('horaInicio',this.value)"></div>
+      <div class="field"><label>Data fim</label><input type="date" value="${SG.dataFim}" oninput="setSG('dataFim',this.value)"></div>
+      <div class="field"><label>Hora fim</label><input type="time" value="${SG.horaFim}" oninput="setSG('horaFim',this.value)"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="sec">Pessoal</div>
+    <div class="g g2">
+      <div class="field"><label>Comandante da Guarda</label><input value="${escH(SG.comandanteGuarda)}" oninput="setSG('comandanteGuarda',this.value)"></div>
+      <div class="field"><label>Reserva</label><input value="${escH(SG.reserva)}" oninput="setSG('reserva',this.value)"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="sec">Forças da Guarda e Local das Sentinelas</div>
+    <div class="g g3" style="margin-bottom:14px">
+      <div class="field"><label>Sargento</label><input value="${escH(SG.forcasGuarda.sargento)}" oninput="setSG('forcasGuarda.sargento',this.value)"></div>
+      <div class="field"><label>Auxiliar</label><input value="${escH(SG.forcasGuarda.auxiliar)}" oninput="setSG('forcasGuarda.auxiliar',this.value)"></div>
+      <div class="field"><label>Sentinelas</label><input value="${escH(SG.forcasGuarda.sentinelas)}" oninput="setSG('forcasGuarda.sentinelas',this.value)"></div>
+    </div>
+    <div class="g g5">
+      ${[['portaDArma',"Porta D'Arma (A)"],['observacao','Observação (B)'],['mTransporte','M. Transporte (C)'],['piramide','Pirâmide (D)'],['reforcoPiramide','Reforço Pirâmide (E)']].map(([k,l])=>`
+      <div class="field"><label>${l}</label><input value="${escH(SG.localSentinelas[k])}" oninput="setSG('localSentinelas.${k}',this.value)"></div>`).join('')}
+    </div>
+  </div>
+  <div class="card">
+    <div class="sec">Relação do Corpo da Guarda e Horário de Sentinelas</div>
+    <div class="ox"><table style="min-width:900px">
+      <thead><tr><th>Unidade</th><th>Posto</th><th>Nome</th>${HRS.map(h=>`<th style="min-width:36px;text-align:center">${h}</th>`).join('')}</tr></thead>
+      <tbody>${SG.relacaoCorpo.map((r,i)=>`<tr>
+        <td><input class="ti" style="width:60px" value="${escH(r.unidade)}" oninput="setSGArr('relacaoCorpo',${i},'unidade',this.value)"></td>
+        <td><input class="ti" style="width:60px" value="${escH(r.posto)}" oninput="setSGArr('relacaoCorpo',${i},'posto',this.value)"></td>
+        <td><input class="ti" style="width:120px" value="${escH(r.nome)}" oninput="setSGArr('relacaoCorpo',${i},'nome',this.value)"></td>
+        ${HRS.map(h=>`<td><input class="ti" value="${escH(r.horarios[h]||'')}" maxlength="1" style="width:28px;text-align:center" oninput="setSGHor(${i},'${h}',this.value)"></td>`).join('')}
+      </tr>`).join('')}</tbody>
+    </table></div>
+  </div>
+  <div class="card"><div class="sec">Material de Guerra</div>${matTableSG('materialGuerra',SG.materialGuerra)}</div>
+  <div class="card"><div class="sec">Material de Aquartelamento</div>${matTableSG('materialAquartelamento',SG.materialAquartelamento)}</div>
+  <div class="card"><div class="sec">Sistema de Vídeo Vigilância CCTV</div>${matTableSG('sistemasCCTV',SG.sistemasCCTV)}</div>
+  <div class="card"><div class="sec">Meios de Comunicação</div>${matTableSG('meiosComunicacao',SG.meiosComunicacao)}</div>
+  <div class="card">
+    <div class="sec">Registo de Preso</div>
+    <div class="ox"><table>
+      <thead><tr>${['Unidade','Posto','Nº Mec.','Nome','Data Entrada','Data Saída','Situação'].map(h=>`<th>${h}</th>`).join('')}</tr></thead>
+      <tbody>${SG.registoPreso.map((r,i)=>`<tr>${['unidade','posto','nMec','nome','dataEntrada','dataSaida','situacao'].map(k=>`<td><input class="ti" value="${escH(r[k])}" oninput="setSGPreso(${i},'${k}',this.value)"></td>`).join('')}</tr>`).join('')}</tbody>
+    </table></div>
+  </div>
+  <div class="card">
+    <div class="sec">Ocorrências, Local e Assinaturas</div>
+    <div class="field"><label>Ocorrências</label><textarea rows="3" oninput="setSG('ocorrencias',this.value)">${escH(SG.ocorrencias)}</textarea></div>
+    <div class="g g2" style="margin-top:14px">
+      <div class="field"><label>Local</label><input value="${escH(SG.localData)}" oninput="setSG('localData',this.value)"></div>
+      <div class="field"><label>Data da Assinatura</label><input type="date" value="${SG.dataAssinatura}" oninput="setSG('dataAssinatura',this.value)"></div>
+    </div>
+    <div class="g g2" style="margin-top:16px">
+      ${sigBlockSG('Cmdt. Guarda Cessante', SG.cessante, 'cessante', '')}
+      ${sigBlockSG('Cmdt. Guarda Entrante', SG.entrante, 'entrante_sg', sgOpts)}
+    </div>
+    <div class="sb" style="margin-top:16px">
+      <p>A submeter como <strong>${escH(ST.user.nome)}</strong> — ${escH(ST.user.posto)}</p>
+      <button class="btn btn-p" onclick="submitSG()">💾 Guardar no Drive</button>
+    </div>
+  </div>`;
+}
+
+function submitSG() {
+  const data = {...SG, diaSemanaInicio:dayName(SG.dataInicio), diaSemanaFim:dayName(SG.dataFim)};
+  submitReport('sargento_guarda', data);
+}
+
+// ═══════════════════════════════════════════════════════
+//  PDF TEMPLATES
+// ═══════════════════════════════════════════════════════
+
+function pt(v){return v?String(v):'';}
+
+function sigBlock3(label, obj) {
+  const funcao = obj?.funcao || '';
+  const nome = obj?.nome || '';
+  const posto = obj?.posto || '';
+  return `<div style="text-align:center;width:40%;border-top:.5pt solid #000;padding-top:4pt">
+    <div style="font-size:8.5pt">O ${escH(funcao)}</div>
+    <div style="font-weight:bold;font-size:8.5pt;margin-top:16pt">${escH(nome)}</div>
+    <div style="font-size:8.5pt">${escH(posto)}</div>
+  </div>`;
+}
+
+function buildODPdf(d) {
+  const rondas = d.rondas||Array.from({length:4},()=>({graduado1:'',horario1:'/',graduado2:'',horario2:'/'}));
+  const fmtDet = d.formaturaDetidos||[{horario:'',faltas:''},{horario:'',faltas:''},{horario:'',faltas:''}];
+  const matG = d.materiaisGuerra||[]; const matA = d.materiaisAquartelamento||[];
+  const ce = d.consumoEnergia||{}; const ca = d.consumoAgua||{};
+  const hG = Math.ceil(matG.length/2), gL=matG.slice(0,hG), gR=matG.slice(hG);
+  const hA = Math.ceil(matA.length/2), aL=matA.slice(0,hA), aR=matA.slice(hA);
+  const rows = Math.max(gL.length,gR.length), rowsA = Math.max(aL.length,aR.length);
+  const mh = `<tr><th style="border:.5pt solid #000;padding:1pt 3pt;width:22%">Designação</th><th style="border:.5pt solid #000;padding:1pt 3pt;width:6%">Existente</th><th style="border:.5pt solid #000;padding:1pt 3pt;width:7%">Quant Receb</th><th style="border:.5pt solid #000;padding:1pt 3pt;width:7%">Qt. Entrega</th><th style="border:.5pt solid #000;padding:1pt 3pt;width:22%">Designação</th><th style="border:.5pt solid #000;padding:1pt 3pt;width:6%">Existente</th><th style="border:.5pt solid #000;padding:1pt 3pt;width:7%">Quant Receb</th><th style="border:.5pt solid #000;padding:1pt 3pt;width:7%">Qt. Entrega</th></tr>`;
+  const mr = (l,r) => `<tr><td style="border:.5pt solid #000;padding:1pt 3pt">${pt(l?.designacao)}</td><td style="border:.5pt solid #000;padding:1pt 3pt;text-align:center">${pt(l?.existente)}</td><td style="border:.5pt solid #000;padding:1pt 3pt">${pt(l?.quantReceb)}</td><td style="border:.5pt solid #000;padding:1pt 3pt">${pt(l?.quantEntrega)}</td><td style="border:.5pt solid #000;padding:1pt 3pt">${pt(r?.designacao)}</td><td style="border:.5pt solid #000;padding:1pt 3pt;text-align:center">${pt(r?.existente)}</td><td style="border:.5pt solid #000;padding:1pt 3pt">${pt(r?.quantReceb)}</td><td style="border:.5pt solid #000;padding:1pt 3pt">${pt(r?.quantEntrega)}</td></tr>`;
+
+  return `<div class="print-page" style="font-family:'Times New Roman',serif;font-size:9pt;color:#000;background:#fff;padding:12mm 14mm">
+    <div style="text-align:center;margin-bottom:6pt"><div style="font-weight:bold">Forças Armadas de Cabo Verde</div><div style="font-weight:bold">Guarda Nacional</div><div style="font-weight:bold">Comando da Terceira Região Militar</div></div>
+    <div style="text-align:center;margin-bottom:8pt;font-size:8.5pt">Início às ${pt(d.horaInicio)} Horas do dia ${pt(d.dataInicio)} - ${pt(d.diaSemanaInicio)}&nbsp;&nbsp;Fim às ${pt(d.horaFim)} Horas do dia ${pt(d.dataFim)} - ${pt(d.diaSemanaFim)}</div>
+    ${[['Oficial Dia:',d.oficialDia],['Reserva:',d.reserva],['Auxiliar:',d.auxiliar],['Conferencia a Carga:',d.conferenciaACarga]].map(([l,v])=>`<div style="display:flex;border-bottom:.5pt solid #000;padding:2pt 0;min-height:14pt"><span style="font-weight:bold;min-width:110pt;font-size:8.5pt">${l}</span><span style="flex:1;font-size:8.5pt">${pt(v)}</span></div>`).join('')}
+    <div style="margin-top:4pt;margin-bottom:2pt;font-weight:bold;font-size:8.5pt">Rondas ao aquartelamento</div>
+    <table style="width:100%;border-collapse:collapse;font-size:8pt"><thead><tr><th style="border:.5pt solid #000;padding:2pt 4pt;text-align:center;width:25%">Graduado</th><th style="border:.5pt solid #000;padding:2pt 4pt;text-align:center;width:25%">Horários</th><th style="border:.5pt solid #000;padding:2pt 4pt;text-align:center;width:25%">Graduado</th><th style="border:.5pt solid #000;padding:2pt 4pt;text-align:center;width:25%">Horários</th></tr></thead>
+    <tbody>${rondas.map(r=>`<tr><td style="border:.5pt solid #000;padding:2pt 4pt">${pt(r.graduado1)}</td><td style="border:.5pt solid #000;padding:2pt 4pt;text-align:center">${pt(r.horario1)||'/'}</td><td style="border:.5pt solid #000;padding:2pt 4pt">${pt(r.graduado2)}</td><td style="border:.5pt solid #000;padding:2pt 4pt;text-align:center">${pt(r.horario2)||'/'}</td></tr>`).join('')}</tbody></table>
+    <div style="margin-top:4pt;margin-bottom:2pt;font-weight:bold;font-size:8.5pt">Formatura de Detidos e Convalescente:</div>
+    <table style="width:100%;border-collapse:collapse;font-size:8pt"><thead><tr>${fmtDet.map(()=>'<th style="border:.5pt solid #000;padding:2pt 4pt;width:16.6%">Horário</th><th style="border:.5pt solid #000;padding:2pt 4pt;width:16.6%">Faltas</th>').join('')}</tr></thead><tbody><tr>${fmtDet.map(f=>`<td style="border:.5pt solid #000;padding:2pt 4pt">${pt(f.horario)}</td><td style="border:.5pt solid #000;padding:2pt 4pt">${pt(f.faltas)}</td>`).join('')}</tr></tbody></table>
+    ${[['Ocorrências extraordinárias:',d.ocorrenciasExtraordinarias],['Alterações ao Pessoal de Serviço:',d.alteracoesPessoal],['Alimentação:',d.alimentacao],['Apresentação:',d.apresentacao],['Baixas e Marchas:',d.baixasMarchas]].map(([l,v])=>`<div style="display:flex;border-bottom:.5pt solid #000;padding:2pt 0;min-height:16pt"><span style="font-weight:bold;min-width:140pt;font-size:8.5pt">${l}</span><span style="flex:1;font-size:8.5pt;white-space:pre-wrap">${pt(v)}</span></div>`).join('')}
+    <div style="margin-top:4pt;font-weight:bold;font-size:8.5pt">Registro de Consumo Diário de Água e Eletricidade.</div>
+    <div style="font-size:8.5pt;margin-top:2pt">Consumo de Energia Elétrica: Anterior <u style="min-width:50pt;display:inline-block">${pt(ce.anterior)}</u> (Mg w/KW) Atual <u style="min-width:50pt;display:inline-block">${pt(ce.atual)}</u> (Mg w/KW).</div>
+    <div style="font-size:8.5pt">Consumo Total <u style="min-width:40pt;display:inline-block">${pt(ce.total)||'0'}</u> Mg w/KW</div>
+    <div style="font-size:8.5pt;margin-bottom:4pt">Abastecimento de Água doce m3 <u style="min-width:50pt;display:inline-block">${pt(ca.abastecimento)}</u> Total Final <u style="min-width:40pt;display:inline-block">${pt(ca.totalFinal)}</u> M3</div>
+    <div style="font-weight:bold;font-size:8.5pt;margin-bottom:8pt">Registro de Chamadas de Serviço Efectuadas pelo Oficial Dia.</div>
+    <div style="font-weight:bold;font-size:8.5pt;margin-bottom:2pt">Materiais de Guerra Existentes no Gabinete do Oficial Dia.</div>
+    <table style="width:100%;border-collapse:collapse;font-size:7.5pt"><thead>${mh}</thead><tbody>${Array.from({length:rows},(_,i)=>mr(gL[i],gR[i])).join('')}</tbody></table>
+    <div style="font-weight:bold;font-size:8.5pt;margin:4pt 0 2pt">Materiais de Aquartelamento</div>
+    <table style="width:100%;border-collapse:collapse;font-size:7.5pt"><thead>${mh}</thead><tbody>${Array.from({length:rowsA},(_,i)=>mr(aL[i],aR[i])).join('')}</tbody></table>
+    <div style="display:flex;border-bottom:.5pt solid #000;margin-top:4pt;padding:2pt 0;min-height:30pt"><span style="font-weight:bold;min-width:110pt;font-size:8.5pt">Ocorrências Diversos:</span><span style="flex:1;font-size:8.5pt;white-space:pre-wrap">${pt(d.ocorrenciasDiversos)}</span></div>
+    <div style="display:flex;border-bottom:.5pt solid #000;padding:2pt 0;min-height:20pt"><span style="font-weight:bold;min-width:110pt;font-size:8.5pt">Anexos:</span><span style="flex:1;font-size:8.5pt;white-space:pre-wrap">${pt(d.anexos)}</span></div>
+    <div style="text-align:center;margin-top:8pt;font-size:8.5pt">${pt(d.localData)||'Quartel em Achada Limpo'} aos, ${pt(d.dataAssinatura)}</div>
+    <div style="display:flex;justify-content:space-between;margin-top:24pt">
+      ${sigBlock3('Cessante', d.cessante)}
+      ${sigBlock3('Entrante', d.entrante)}
+    </div>
+  </div>`;
+}
+
+function buildSGPdf(d) {
+  const fg=d.forcasGuarda||{};const ls=d.localSentinelas||{};const rel=d.relacaoCorpo||[];
+  const matG=d.materialGuerra||[];const matA=d.materialAquartelamento||[];const cctv=d.sistemasCCTV||[];const com=d.meiosComunicacao||[];
+  const presos=d.registoPreso||[];const horarios=['8h00','10h0','12h0','14h0','16h0','18h0','20h0','22h0','24h0','2h00','4h00','6h00'];
+  function mt2(title,items){const h=Math.ceil(items.length/2),L=items.slice(0,h),R=items.slice(h),rows=Math.max(L.length,R.length);
+    return `<div style="font-weight:bold;font-size:8.5pt;margin:4pt 0 2pt">${title}</div><table style="width:100%;border-collapse:collapse;font-size:7.5pt"><thead><tr><th style="border:.5pt solid #000;padding:1pt 3pt;width:20%">Designação</th><th style="border:.5pt solid #000;padding:1pt 3pt;width:6%">Existente</th><th style="border:.5pt solid #000;padding:1pt 3pt;width:6%">Recebida</th><th style="border:.5pt solid #000;padding:1pt 3pt;width:6%">Entregue</th><th style="border:.5pt solid #000;padding:1pt 3pt;width:6%">Estado</th><th style="border:.5pt solid #000;padding:1pt 3pt;width:20%">Designação</th><th style="border:.5pt solid #000;padding:1pt 3pt;width:6%">Existente</th><th style="border:.5pt solid #000;padding:1pt 3pt;width:6%">Recebida</th><th style="border:.5pt solid #000;padding:1pt 3pt;width:6%">Entregue</th><th style="border:.5pt solid #000;padding:1pt 3pt;width:6%">Estado</th></tr></thead><tbody>${Array.from({length:rows},(_,i)=>`<tr><td style="border:.5pt solid #000;padding:1pt 3pt">${pt(L[i]?.designacao)}</td><td style="border:.5pt solid #000;padding:1pt 3pt;text-align:center">${pt(L[i]?.existente)}</td><td style="border:.5pt solid #000;padding:1pt 3pt">${pt(L[i]?.recebida)}</td><td style="border:.5pt solid #000;padding:1pt 3pt">${pt(L[i]?.entregue)}</td><td style="border:.5pt solid #000;padding:1pt 3pt">${pt(L[i]?.estado)}</td><td style="border:.5pt solid #000;padding:1pt 3pt">${pt(R[i]?.designacao)}</td><td style="border:.5pt solid #000;padding:1pt 3pt;text-align:center">${pt(R[i]?.existente)}</td><td style="border:.5pt solid #000;padding:1pt 3pt">${pt(R[i]?.recebida)}</td><td style="border:.5pt solid #000;padding:1pt 3pt">${pt(R[i]?.entregue)}</td><td style="border:.5pt solid #000;padding:1pt 3pt">${pt(R[i]?.estado)}</td></tr>`).join('')}</tbody></table>`;}
+
+  return `<div class="print-page" style="font-family:'Times New Roman',serif;font-size:9pt;color:#000;background:#fff;padding:12mm 14mm">
+    <div style="text-align:center;margin-bottom:4pt"><div style="font-weight:bold">Forças Armadas de Cabo Verde</div><div style="font-weight:bold">Guarda Nacional</div><div style="font-weight:bold">Comando da Terceira Região Militar</div><div style="font-weight:bold;margin-top:4pt;text-decoration:underline">RELATÓRIO DE SARGENTO DA GUARDA</div></div>
+    <div style="text-align:center;margin-bottom:6pt;font-size:8.5pt">Início às ${pt(d.horaInicio)} Horas do dia ${pt(d.dataInicio)} - ${pt(d.diaSemanaInicio)}&nbsp;&nbsp;Fim às ${pt(d.horaFim)} Horas do dia ${pt(d.dataFim)} - ${pt(d.diaSemanaFim)}</div>
+    <div style="display:flex;gap:20pt;margin-bottom:4pt;font-size:8.5pt"><div><strong>Comandante da Guarda:</strong> ${pt(d.comandanteGuarda)}</div><div><strong>Reserva:</strong> ${pt(d.reserva)}</div></div>
+    <div style="display:flex;gap:0;margin-bottom:4pt">
+      <table style="border-collapse:collapse;font-size:8pt;flex:1"><thead><tr><th colspan="3" style="border:.5pt solid #000;padding:1pt 3pt;text-align:center">FORÇAS DA GUARDA</th></tr><tr><th style="border:.5pt solid #000;padding:1pt 3pt">SARGENTO</th><th style="border:.5pt solid #000;padding:1pt 3pt">AUXILIAR</th><th style="border:.5pt solid #000;padding:1pt 3pt">SENTINELAS</th></tr></thead><tbody><tr><td style="border:.5pt solid #000;padding:1pt 6pt;text-align:center">${pt(fg.sargento)||'1'}</td><td style="border:.5pt solid #000;padding:1pt 6pt;text-align:center">${pt(fg.auxiliar)||'1'}</td><td style="border:.5pt solid #000;padding:1pt 6pt;text-align:center">${pt(fg.sentinelas)||'15'}</td></tr></tbody></table>
+      <table style="border-collapse:collapse;font-size:8pt;flex:2;margin-left:4pt"><thead><tr><th colspan="5" style="border:.5pt solid #000;padding:1pt 3pt;text-align:center">LOCAL DAS SENTINELAS</th></tr><tr><th style="border:.5pt solid #000;padding:1pt 3pt">Porta D'Àrma</th><th style="border:.5pt solid #000;padding:1pt 3pt">Observação</th><th style="border:.5pt solid #000;padding:1pt 3pt">M. Transporte</th><th style="border:.5pt solid #000;padding:1pt 3pt">Piramide</th><th style="border:.5pt solid #000;padding:1pt 3pt">Reforço Piramide</th></tr></thead><tbody><tr><td style="border:.5pt solid #000;padding:1pt 6pt;text-align:center">${pt(ls.portaDArma)||'A'}</td><td style="border:.5pt solid #000;padding:1pt 6pt;text-align:center">${pt(ls.observacao)||'B'}</td><td style="border:.5pt solid #000;padding:1pt 6pt;text-align:center">${pt(ls.mTransporte)||'C'}</td><td style="border:.5pt solid #000;padding:1pt 6pt;text-align:center">${pt(ls.piramide)||'D'}</td><td style="border:.5pt solid #000;padding:1pt 6pt;text-align:center">${pt(ls.reforcoPiramide)||'E'}</td></tr></tbody></table>
+    </div>
+    <div style="font-weight:bold;font-size:8.5pt;margin:4pt 0 2pt;text-align:center">Relação do Corpo da Guarda e Horário de Sentinelas</div>
+    <table style="width:100%;border-collapse:collapse;font-size:7pt"><thead><tr><th style="border:.5pt solid #000;padding:1pt 2pt">Unidade</th><th style="border:.5pt solid #000;padding:1pt 2pt">Posto</th><th style="border:.5pt solid #000;padding:1pt 2pt">Nome</th>${horarios.map(h=>`<th style="border:.5pt solid #000;padding:1pt 2pt;text-align:center;width:5%">${h}</th>`).join('')}</tr></thead>
+    <tbody>${rel.length>0?rel.map(row=>{const hs=row.horarios||{};return`<tr><td style="border:.5pt solid #000;padding:1pt 2pt">${pt(row.unidade)}</td><td style="border:.5pt solid #000;padding:1pt 2pt">${pt(row.posto)}</td><td style="border:.5pt solid #000;padding:1pt 2pt">${pt(row.nome)}</td>${horarios.map(h=>`<td style="border:.5pt solid #000;padding:1pt 2pt;text-align:center">${pt(hs[h])}</td>`).join('')}</tr>`;}).join(''):Array.from({length:5},()=>`<tr><td style="border:.5pt solid #000;padding:4pt 2pt"></td><td style="border:.5pt solid #000;padding:4pt 2pt"></td><td style="border:.5pt solid #000;padding:4pt 2pt"></td>${horarios.map(()=>'<td style="border:.5pt solid #000;padding:4pt 2pt"></td>').join('')}</tr>`).join('')}</tbody></table>
+    ${mt2('Material de Guerra',matG)}${mt2('Material de Aquartelamento',matA)}${mt2('Sistema de Video Vigilançia CCTV',cctv)}${mt2('Meios de Comunicação',com)}
+    <div style="font-weight:bold;font-size:8.5pt;margin:4pt 0 2pt">Registo de Preso</div>
+    <table style="width:100%;border-collapse:collapse;font-size:7.5pt"><thead><tr>${['Unidade','POSTO','Nª MEC','NOME','ENTRADA','SAIDA','SITUAÇÃO'].map(h=>`<th style="border:.5pt solid #000;padding:1pt 3pt">${h}</th>`).join('')}</tr></thead>
+    <tbody>${presos.length>0?presos.map(r=>`<tr><td style="border:.5pt solid #000;padding:2pt 3pt">${pt(r.unidade)}</td><td style="border:.5pt solid #000;padding:2pt 3pt">${pt(r.posto)}</td><td style="border:.5pt solid #000;padding:2pt 3pt">${pt(r.nMec)}</td><td style="border:.5pt solid #000;padding:2pt 3pt">${pt(r.nome)}</td><td style="border:.5pt solid #000;padding:2pt 3pt">${pt(r.dataEntrada)}</td><td style="border:.5pt solid #000;padding:2pt 3pt">${pt(r.dataSaida)}</td><td style="border:.5pt solid #000;padding:2pt 3pt">${pt(r.situacao)}</td></tr>`).join(''):Array.from({length:3},()=>`<tr>${Array.from({length:7},()=>'<td style="border:.5pt solid #000;padding:4pt 3pt"></td>').join('')}</tr>`).join('')}</tbody></table>
+    <div style="display:flex;border-bottom:.5pt solid #000;margin-top:4pt;padding:2pt 0;min-height:30pt"><span style="font-weight:bold;min-width:80pt;font-size:8.5pt">Ocorrências:</span><span style="flex:1;font-size:8.5pt;white-space:pre-wrap">${pt(d.ocorrencias)}</span></div>
+    <div style="text-align:center;margin-top:8pt;font-size:8.5pt">${pt(d.localData)||'Quartel em Achada Limpo'} aos, ${pt(d.dataAssinatura)}</div>
+    <div style="display:flex;justify-content:space-between;margin-top:24pt">
+      ${sigBlock3('Cessante', d.cessante)}
+      ${sigBlock3('Entrante', d.entrante)}
+    </div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  MODALS & UTILS
+// ═══════════════════════════════════════════════════════
+
+function openModal(id){document.getElementById(id).classList.add('show');}
+function closeModal(id){document.getElementById(id).classList.remove('show');}
+document.querySelectorAll('.ov').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)closeModal(o.id);}));
+
+let _confirmCb=null;
+function confirmAction(msg,cb){
+  document.getElementById('mc-text').textContent=msg;
+  _confirmCb=cb;
+  document.getElementById('mc-btn').onclick=()=>{closeModal('modal-confirm');if(_confirmCb)_confirmCb();};
+  openModal('modal-confirm');
+}
+
+function toast(msg,type){
+  const el=document.createElement('div');
+  el.className='toast '+(type||'');
+  el.textContent=msg;
+  document.getElementById('tc').appendChild(el);
+  setTimeout(()=>el.remove(),3800);
+}
+
+function spinner(msg){
+  document.getElementById('spinner-msg').textContent=msg||'A processar...';
+  document.getElementById('driveSpinner').classList.add('show');
+}
+function spinnerOff(){document.getElementById('driveSpinner').classList.remove('show');}
+
+function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function downloadJSON(data,name){
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+  a.download=name; a.click(); URL.revokeObjectURL(a.href);
+}
+
+const WDAYS=['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+function dayName(s){if(!s)return '';return WDAYS[new Date(s+'T12:00:00').getDay()];}
+function td(){return new Date().toISOString().split('T')[0];}
+function tm(){return new Date(Date.now()+86400000).toISOString().split('T')[0];}
+
+// ═══════════════════════════════════════════════════════
+//  MODO DEMONSTRAÇÃO (?demo=1)
+// ═══════════════════════════════════════════════════════
+
+const DEMO = new URLSearchParams(location.search).get('demo') === '1';
+
+// In demo mode, Drive operations use in-memory storage
+if (DEMO) {
+  let _demoReports = [];
+
+  window._origDriveSetup = window.driveSetup;
+  window.driveSetup = async () => {
+    ST.folderId = 'demo-folder';
+    ST.relatFolderId = 'demo-relat';
+    ST.usersFileId = 'demo-users';
+    ST.users = getDefaultUsers();
+  };
+
+  window._origLoadUsersFromDrive = window.loadUsersFromDrive;
+  window.loadUsersFromDrive = async () => { /* already in ST.users in demo */ };
+
+  window._origSaveUsersToaDrive = window.saveUsersToaDrive;
+  window.saveUsersToaDrive = async () => { toast('[DEMO] Utilizadores guardados em memória', 'info'); };
+
+  window._origLoadMyReports = window.loadMyReports;
+  window.loadMyReports = async () => {
+    if (isAdmin() || isOficialDia()) return _demoReports;
+    return _demoReports.filter(r => r.userId === ST.user?.id);
+  };
+
+  window._origSaveReportToDrive = window.saveReportToDrive;
+  window.saveReportToDrive = async (report) => {
+    report._driveId = 'demo-' + report.id;
+    _demoReports.unshift({...report});
+    return report;
+  };
+
+  window._origDeleteReportFromDrive = window.deleteReportFromDrive;
+  window.deleteReportFromDrive = async (driveId) => {
+    _demoReports = _demoReports.filter(r => r._driveId !== driveId);
+  };
+
+  window.connectDrive = () => {
+    ST.token = 'demo-token';
+    ST.tokenExp = Date.now() + 3600000;
+    ST.users = getDefaultUsers();
+    ST.folderId = 'demo-folder';
+    ST.relatFolderId = 'demo-relat';
+    showUserStep();
+  };
+
+  window.ensureToken = (cb) => cb();
+}
+
+// ═══════════════════════════════════════════════════════
+//  BOOT
+// ═══════════════════════════════════════════════════════
+
+window.addEventListener('DOMContentLoaded', () => {
+  if (DEMO) {
+    // Demo: skip setup, show login with pre-connected Drive
+    ST.clientId = 'demo';
+    ST.token = 'demo-token';
+    ST.tokenExp = Date.now() + 3600000;
+    ST.folderId = 'demo-folder';
+    ST.relatFolderId = 'demo-relat';
+    ST.users = getDefaultUsers();
+    showLoginPage();
+    return;
+  }
+  if (ST.clientId) { try { initGIS(); } catch {} }
+  boot();
+});
+</script>
+</body>
+</html>
