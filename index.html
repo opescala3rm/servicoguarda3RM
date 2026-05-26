@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Relatórios FACV — Guarda Nacional</title>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -326,7 +328,7 @@ code{font-size:12px;background:rgba(0,0,0,.3);padding:1px 5px;border-radius:3px}
     <div id="page-view" class="page">
       <div class="no-print" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
         <button class="back" style="margin:0" onclick="viewBack()">← Voltar</button>
-        <button class="btn btn-p sm" onclick="doPrint()">🖨 Exportar PDF / Imprimir</button>
+        <button class="btn btn-p sm" onclick="doPrint()">📤 Guardar PDF no Drive</button>
       </div>
       <div id="view-toolbar" class="no-print" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 15px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
         <div>
@@ -430,12 +432,12 @@ code{font-size:12px;background:rgba(0,0,0,.3);padding:1px 5px;border-radius:3px}
   <div class="modal" style="max-width:400px">
     <div class="mh"><h2>🖨 Exportar PDF</h2><button class="mclose" onclick="closeModal('modal-print-confirm')">×</button></div>
     <div class="mb">
-      <p style="font-size:14px;line-height:1.7;margin-bottom:12px">O relatório será impresso / exportado como PDF.</p>
-      <p style="font-size:13px;color:var(--muted);line-height:1.6">⚠️ Após confirmação, <strong style="color:var(--text)">os dados serão automaticamente eliminados do Google Drive</strong>.</p>
+      <p style="font-size:14px;line-height:1.7;margin-bottom:12px">O relatório será gerado como PDF e guardado diretamente no Google Drive.</p>
+      <p style="font-size:13px;color:var(--muted);line-height:1.6">📁 O PDF ficará na pasta <strong style="color:var(--text)">FACV_Relatorios / PDFs</strong> no seu Drive. O JSON original será eliminado.</p>
     </div>
     <div class="mf">
       <button class="btn btn-g" onclick="closeModal('modal-print-confirm')">Cancelar</button>
-      <button class="btn btn-p" onclick="executePrint()">🖨 Imprimir e Eliminar do Drive</button>
+      <button class="btn btn-p" onclick="executePrint()">📤 Guardar PDF no Drive</button>
     </div>
   </div>
 </div>
@@ -472,6 +474,7 @@ const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
 const FOLDER_NAME = 'FACV_Relatorios';
 const RELAT_FOLDER = 'Relatorios';
 const USERS_FILE   = 'facv_users.json';
+const PDF_FOLDER   = 'PDFs';
 
 let ST = {
   clientId: SS.getItem('facv_cid') || '833617747341-rg5ovk38u0i8tts4ph3p7187clg10l4r.apps.googleusercontent.com',
@@ -480,6 +483,7 @@ let ST = {
   folderId: SS.getItem('facv_fid') || '',
   relatFolderId: SS.getItem('facv_rfid') || '',
   usersFileId: SS.getItem('facv_uid') || '',
+  pdfFolderId: SS.getItem('facv_pfid') || '',
   users: [],
   user: null,
   reports: [],
@@ -498,8 +502,9 @@ function saveFolders(fid, rfid) {
   SS.setItem('facv_fid', fid); SS.setItem('facv_rfid', rfid);
 }
 function saveUsersFileId(id) { ST.usersFileId = id; SS.setItem('facv_uid', id); }
+function savePdfFolderId(id) { ST.pdfFolderId = id; SS.setItem('facv_pfid', id); }
 function clearSession() {
-  ['facv_tok','facv_tok_exp','facv_fid','facv_rfid','facv_uid'].forEach(k=>SS.removeItem(k));
+  ['facv_tok','facv_tok_exp','facv_fid','facv_rfid','facv_uid','facv_pfid'].forEach(k=>SS.removeItem(k));
   ST = {...ST, token:'', tokenExp:0, folderId:'', relatFolderId:'', usersFileId:'', users:[], user:null, reports:[]};
 }
 
@@ -563,6 +568,19 @@ async function driveUpload(name, jsonStr, fileId, parentId) {
   return r.json();
 }
 
+async function driveUploadPDF(name, pdfBlob, parentId) {
+  const meta = { name, mimeType: 'application/pdf' };
+  if (parentId) meta.parents = [parentId];
+  const form = new FormData();
+  form.append('metadata', new Blob([JSON.stringify(meta)], {type:'application/json'}));
+  form.append('file', pdfBlob);
+  const r = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+    method: 'POST', headers: { Authorization: 'Bearer ' + ST.token }, body: form
+  });
+  if (!r.ok) { const e = await r.json().catch(()=>{}); throw new Error((e?.error?.message)||r.status); }
+  return r.json();
+}
+
 async function driveReadFile(fileId) {
   const r = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
     headers: { Authorization: 'Bearer ' + ST.token }
@@ -609,6 +627,8 @@ async function driveSetup() {
   const fid = await driveFindOrCreateFolder(FOLDER_NAME, null);
   const rfid = await driveFindOrCreateFolder(RELAT_FOLDER, fid);
   saveFolders(fid, rfid);
+  const pfid = await driveFindOrCreateFolder(PDF_FOLDER, fid);
+  savePdfFolderId(pfid);
   spinner('A carregar utilizadores...');
   await loadUsersFromDrive();
   spinnerOff();
@@ -995,22 +1015,40 @@ function doPrint() {
   openModal('modal-print-confirm');
 }
 
-function executePrint() {
+async function executePrint() {
   closeModal('modal-print-confirm');
-  window.print();
-  window.onafterprint = async () => {
-    window.onafterprint = null;
-    if (ST.viewReport?._driveId) {
-      spinner('A eliminar relatório do Drive após exportação...');
-      try {
-        await deleteReportFromDrive(ST.viewReport._driveId);
-        spinnerOff();
-        toast('Relatório exportado e eliminado do Drive automaticamente', 'ok');
-        ST.viewReport = null;
-        navigate(ST.viewFrom || 'home');
-      } catch(e) { spinnerOff(); toast('PDF exportado. Erro ao eliminar do Drive: '+e.message,'err'); }
+  spinner('A gerar PDF...');
+  try {
+    const el = document.getElementById('print-area');
+    el.style.display = 'block';
+    const canvas = await html2canvas(el, { scale: 2, useCORS: true, backgroundColor: '#fff' });
+    el.style.display = 'none';
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const imgData = canvas.toDataURL('image/jpeg', 0.92);
+    const pdfW = pdf.internal.pageSize.getWidth();
+    const pdfH = (canvas.height * pdfW) / canvas.width;
+    let y = 0;
+    const pageH = pdf.internal.pageSize.getHeight();
+    while (y < pdfH) {
+      if (y > 0) pdf.addPage();
+      pdf.addImage(imgData, 'JPEG', 0, -y, pdfW, pdfH);
+      y += pageH;
     }
-  };
+    const blob = pdf.output('blob');
+    const r = ST.viewReport;
+    const name = (r?._driveName || ('relatorio_' + Date.now())).replace(/\.json$/, '') + '.pdf';
+    spinner('A enviar PDF para o Drive...');
+    await driveUploadPDF(name, blob, ST.pdfFolderId || ST.folderId);
+    if (r?._driveId) await deleteReportFromDrive(r._driveId);
+    spinnerOff();
+    toast('PDF guardado no Drive na pasta "PDFs"', 'ok');
+    ST.viewReport = null;
+    navigate(ST.viewFrom || 'home');
+  } catch(e) {
+    spinnerOff();
+    toast('Erro ao gerar PDF: ' + e.message, 'err');
+  }
 }
 
 // ═══════════════════════════════════════════════════════
