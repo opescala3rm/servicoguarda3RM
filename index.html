@@ -450,6 +450,12 @@ code{font-size:12px;background:rgba(0,0,0,.3);padding:1px 5px;border-radius:3px}
 <!-- TOAST -->
 <div id="tc"></div>
 
+<!-- JS LOADING GUARD: hidden by boot(), shows if JS never runs -->
+<div id="js-guard" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#f5f7f4;z-index:9999;font-family:sans-serif;flex-direction:column;gap:12px">
+  <div style="font-size:15px;color:#5a6e48">A carregar sistema...</div>
+  <div style="font-size:11px;color:#8a9b7a">Se esta mensagem não desaparecer, verifique a consola do browser (F12)</div>
+</div>
+
 <script>
 'use strict';
 
@@ -1183,9 +1189,7 @@ function updateSigPreview() {
   document.getElementById('sp-posto').textContent = posto;
 }
 
-document.getElementById('mu-nome').addEventListener('input', updateSigPreview);
-document.getElementById('mu-posto').addEventListener('input', updateSigPreview);
-document.getElementById('mu-role').addEventListener('change', updateSigPreview);
+// NOTE: listeners wired in DOMContentLoaded below
 
 async function saveUser() {
   const nome = document.getElementById('mu-nome').value.trim();
@@ -1982,7 +1986,7 @@ function buildSGPdf(d) {
 
 function openModal(id){document.getElementById(id).classList.add('show');}
 function closeModal(id){document.getElementById(id).classList.remove('show');}
-document.querySelectorAll('.ov').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)closeModal(o.id);}));
+// NOTE: .ov click-to-close wired in DOMContentLoaded below
 
 let _confirmCb=null;
 function confirmAction(msg,cb){
@@ -2078,19 +2082,43 @@ if (DEMO) {
 // ═══════════════════════════════════════════════════════
 
 window.addEventListener('DOMContentLoaded', () => {
-  if (DEMO) {
-    // Demo: skip setup, show login with pre-connected Drive
-    ST.clientId = 'demo';
-    ST.token = 'demo-token';
-    ST.tokenExp = Date.now() + 3600000;
-    ST.folderId = 'demo-folder';
-    ST.relatFolderId = 'demo-relat';
-    ST.users = getDefaultUsers();
-    showLoginPage();
-    return;
+  // Hide the loading guard — JS is running
+  const guard = document.getElementById('js-guard');
+  if (guard) guard.style.display = 'none';
+
+  // Wire modal input listeners now that DOM is ready
+  const elNome = document.getElementById('mu-nome');
+  const elPosto = document.getElementById('mu-posto');
+  const elRole = document.getElementById('mu-role');
+  if (elNome)  elNome.addEventListener('input', updateSigPreview);
+  if (elPosto) elPosto.addEventListener('input', updateSigPreview);
+  if (elRole)  elRole.addEventListener('change', updateSigPreview);
+
+  // Wire overlay click-to-close
+  document.querySelectorAll('.ov').forEach(o => o.addEventListener('click', e => {
+    if (e.target === o) closeModal(o.id);
+  }));
+
+  try {
+    if (DEMO) {
+      ST.clientId = 'demo';
+      ST.token = 'demo-token';
+      ST.tokenExp = Date.now() + 3600000;
+      ST.folderId = 'demo-folder';
+      ST.relatFolderId = 'demo-relat';
+      ST.users = getDefaultUsers();
+      showLoginPage();
+      return;
+    }
+    if (ST.clientId) { try { initGIS(); } catch(_e) {} }
+    boot();
+  } catch(err) {
+    document.body.innerHTML = '<div style="font-family:sans-serif;padding:40px;color:#c00">' +
+      '<h2>Erro de inicialização</h2>' +
+      '<pre style="background:#fee;padding:12px;border-radius:6px;white-space:pre-wrap">' +
+      (err && err.stack ? err.stack : String(err)) + '</pre>' +
+      '<p>Copie o erro acima e reporte ao administrador do sistema.</p></div>';
   }
-  if (ST.clientId) { try { initGIS(); } catch {} }
-  boot();
 });
 </script>
 </body>
