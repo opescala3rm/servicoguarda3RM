@@ -312,6 +312,41 @@
     </div>
 
     <!-- ── Arquivo ────────────────────────────────────── -->
+    <!-- ── Painel de Serviços Exportados ───────────────────── -->
+    <div id="view-painel" class="view">
+      <div class="page-header">
+        <div>
+          <div class="page-subtitle">Histórico</div>
+          <h1 class="page-title">Serviços Exportados</h1>
+        </div>
+      </div>
+      <div class="card" style="padding:0;">
+        <table class="table">
+          <thead><tr><th>Data de Serviço</th><th>Fechado em</th><th>Fechado por</th><th>Relatórios</th><th>Informes</th><th>Registos</th><th style="text-align:right;">Ação</th></tr></thead>
+          <tbody id="painel-tbody"></tbody>
+        </table>
+        <div id="painel-empty" style="display:none;padding:3rem;text-align:center;color:var(--text2);font-size:13px;">Ainda não há nenhum serviço exportado.</div>
+        <div id="painel-loading" style="padding:3rem;text-align:center;"><div class="loader" style="margin:0 auto;"></div></div>
+      </div>
+    </div>
+
+    <!-- ── Detalhe de um Serviço Exportado ───────────── -->
+    <div id="view-painel-servico" class="view">
+      <div class="page-header">
+        <div>
+          <div class="page-subtitle"><a href="#" onclick="navigate(\'painel\');return false;" style="color:var(--text2);">← Voltar</a></div>
+          <h1 class="page-title" id="painel-servico-titulo">Serviço</h1>
+        </div>
+      </div>
+      <div class="card" style="padding:0;">
+        <table class="table">
+          <thead><tr><th>Data</th><th>Perfil</th><th>Oficial</th><th>Estado</th><th style="text-align:right;">Ação</th></tr></thead>
+          <tbody id="painel-servico-tbody"></tbody>
+        </table>
+        <div id="painel-servico-loading" style="padding:3rem;text-align:center;"><div class="loader" style="margin:0 auto;"></div></div>
+      </div>
+    </div>
+
     <div id="view-arquivo" class="view">
       <div class="page-header">
         <div>
@@ -1219,6 +1254,7 @@ var App = {
   sdReadOnly:  false,
   sdInventory: [],
   archiveReports: [],
+  currentServico: null,
   selectedIds: new Set(),
   editUserId:  null,
 };
@@ -1385,6 +1421,9 @@ function renderSidebar() {
   nav.innerHTML = '';
   nav.innerHTML += '<button class="nav-flat" id="nav-dashboard" onclick="navigate(\'dashboard\')">Painel</button>';
   nav.innerHTML += '<button class="nav-flat" id="nav-arquivo" onclick="navigate(\'arquivo\')">Arquivo</button>';
+  if (n.nivel === 'Oficial Dia' || n.nivel === 'Administrador') {
+    nav.innerHTML += '<button class="nav-flat" id="nav-painel" onclick="navigate(\'painel\')">Serviços Exportados</button>';
+  }
   var sections = [
     { key:'oficial-dia', label:'Oficial de Dia' },
     { key:'sargento-guarda', label:'Sargento da Guarda' },
@@ -1466,6 +1505,8 @@ function navigate(view, params) {
   if (navEl) navEl.classList.add('active');
   if (view === 'dashboard')         loadDashboard();
   if (view === 'arquivo')           loadArquivo();
+  if (view === 'painel')            loadPainel();
+  if (view === 'painel-servico')    loadPainelServico(params && params.id);
   if (view === 'relatorio-od')      initOD(params);
   if (view === 'admin-users')       loadUsers();
   if (view === 'admin-inventory')   loadInventory();
@@ -2066,90 +2107,51 @@ function loadArquivo() {
   document.getElementById('arquivo-loading').style.display = 'block';
   document.getElementById('arquivo-tbody').innerHTML = '';
   document.getElementById('arquivo-empty').style.display = 'none';
+  document.getElementById('arquivo-empty').textContent = 'Sem relatórios encontrados.';
+  document.getElementById('export-btn').style.display = 'none';
+  document.getElementById('th-cb').style.display = 'none';
   var canExport = App.user.nivel === 'Oficial Dia' || App.user.nivel === 'Administrador';
-  // Map user nivel → roleType for own-informe filter
   var _nivelToRoleType = {
     'Oficial Dia':'oficial-dia','Sargento da Guarda':'sargento-guarda',
     'Sargento Dia':'sargento-dia','Sargento Ronda':'sargento-ronda','Sargento Piquete':'sargento-piquete'
   };
-  // 'Os Meus Informes'
-  if (type === '__inf') {
-    var ownRoleType = _nivelToRoleType[App.user.nivel] || '';
-    document.getElementById('export-btn').style.display = 'none';
-    document.getElementById('th-cb').style.display = 'none';
-    gas('listInformes', [App.token, ownRoleType]).then(function(res) {
-      document.getElementById('arquivo-loading').style.display = 'none';
-      if (!res.ok || !res.informes || !res.informes.length) { document.getElementById('arquivo-empty').style.display = 'block'; return; }
-      var tbody = document.getElementById('arquivo-tbody');
-      tbody.innerHTML = '';
-      res.informes.forEach(function(inf) {
-        tbody.innerHTML += '<tr>' +
-          '<td>' + escHtml(inf.dataLabel || fmtDate(inf.createdAt)) + '</td>' +
-          '<td><span style="font-size:12px;font-weight:600;">Informe</span></td>' +
-          '<td>' + escHtml(inf.autorNome || App.user.nome || '') + '</td>' +
-          '<td><span class="badge badge-green">Guardado</span></td>' +
-          '<td style="text-align:right;"><a href="#" onclick="App.informeRoleType=\'' + ownRoleType + '\';navigate(\'informe\',{roleType:\'' + ownRoleType + '\',mode:\'view\',id:' + inf.id + '});return false;" style="font-size:12px;color:var(--green2);font-weight:600;text-decoration:none;">Ver →</a></td></tr>';
-      });
-    }).catch(function() {
-      document.getElementById('arquivo-loading').style.display = 'none';
-      document.getElementById('arquivo-empty').style.display = 'block';
-    });
-    return;
-  }
-  // Registos Diários filter
-  if (type === 'registos-diarios') {
-    document.getElementById('export-btn').style.display = 'none';
-    document.getElementById('th-cb').style.display = 'none';
-    gas('listRegistosDiarios', [App.token]).then(function(res) {
-      document.getElementById('arquivo-loading').style.display = 'none';
-      if (!res.ok || !res.registos || !res.registos.length) { document.getElementById('arquivo-empty').style.display = 'block'; return; }
-      var tbody = document.getElementById('arquivo-tbody');
-      tbody.innerHTML = '';
-      res.registos.forEach(function(rd) {
-        tbody.innerHTML += '<tr>' +
-          '<td>' + fmtDate(rd.createdAt) + '</td>' +
-          '<td><span style="font-size:12px;font-weight:600;">Registos Diários</span></td>' +
-          '<td>' + escHtml(rd.autorNome || '') + '</td>' +
-          '<td><span class="badge badge-green">Guardado</span></td>' +
-          '<td style="text-align:right;"><a href="#" onclick="openRegistosDiarios(' + rd.id + ');return false;" style="font-size:12px;color:var(--green2);font-weight:600;text-decoration:none;">Ver →</a></td></tr>';
-      });
-    }).catch(function() {
-      document.getElementById('arquivo-loading').style.display = 'none';
-      document.getElementById('arquivo-empty').style.display = 'block';
-    });
-    return;
-  }
-  // If filtering by informes by role (OD/Admin)
-  if (type && type.indexOf('__inf-') === 0) {
-    var infRoleType = type.replace('__inf-', '');
-    document.getElementById('export-btn').style.display = 'none';
-    document.getElementById('th-cb').style.display = 'none';
-    gas('listInformes', [App.token, infRoleType]).then(function(res) {
-      document.getElementById('arquivo-loading').style.display = 'none';
-      if (!res.ok || !res.informes || !res.informes.length) { document.getElementById('arquivo-empty').style.display = 'block'; return; }
-      var tbody = document.getElementById('arquivo-tbody');
-      tbody.innerHTML = '';
-      res.informes.forEach(function(inf) {
-        tbody.innerHTML += '<tr><td>' + escHtml(inf.dataLabel || fmtDate(inf.createdAt)) + '</td>' +
-          '<td><span style="font-size:12px;font-weight:600;">Informe</span></td>' +
-          '<td>' + escHtml(inf.autorNome || '') + (inf.autorPatente ? ' <span style="color:var(--text2);">(' + escHtml(inf.autorPatente) + ')</span>' : '') + '</td>' +
-          '<td><span class="badge badge-green">Guardado</span></td>' +
-          '<td style="text-align:right;"><a href="#" onclick="App.informeRoleType=\'' + infRoleType + '\';navigate(\'informe\',{roleType:\'' + infRoleType + '\',mode:\'view\',id:' + inf.id + '});return false;" style="font-size:12px;color:var(--green2);font-weight:600;text-decoration:none;">Ver →</a></td></tr>';
-      });
-    }).catch(function() {
-      document.getElementById('arquivo-loading').style.display = 'none';
-      document.getElementById('arquivo-empty').style.display = 'block';
-    });
-    return;
-  }
-  var filters = type ? { type: type } : {};
-  document.getElementById('export-btn').style.display = canExport ? 'inline-flex' : 'none';
-  document.getElementById('th-cb').style.display = canExport ? '' : 'none';
-  gas('listReports', [App.token, filters]).then(function(res) {
+
+  gas('getServicoAberto', [App.token]).then(function(res) {
     document.getElementById('arquivo-loading').style.display = 'none';
-    if (!res.ok || !res.reports.length) { document.getElementById('arquivo-empty').style.display = 'block'; return; }
-    App.archiveReports = res.reports;
+    if (!res.ok) { document.getElementById('arquivo-empty').style.display = 'block'; return; }
+    App.currentServico = res.servico;
+
+    if (!res.servico) {
+      document.getElementById('arquivo-empty').textContent = 'Não há nenhum serviço em curso. Assim que alguém guardar um relatório, informe ou registo diário, um novo serviço de guarda abre automaticamente (das 08:00 às 08:00).';
+      document.getElementById('arquivo-empty').style.display = 'block';
+      App.archiveReports = [];
+      return;
+    }
+
+    // 'Os Meus Informes'
+    if (type === '__inf') {
+      var ownRoleType = _nivelToRoleType[App.user.nivel] || '';
+      renderArquivoInformes_(res.servico.informes.filter(function(i){ return i.roleType === ownRoleType; }));
+      return;
+    }
+    // Informes por perfil (só OD/Admin veem este filtro)
+    if (type && type.indexOf('__inf-') === 0) {
+      var infRoleType = type.replace('__inf-', '');
+      renderArquivoInformes_(res.servico.informes.filter(function(i){ return i.roleType === infRoleType; }));
+      return;
+    }
+    // Registos Diários
+    if (type === 'registos-diarios') {
+      renderArquivoRegistos_(res.servico.registos);
+      return;
+    }
+    // Relatórios (todos os do serviço em curso, ou só de um tipo)
+    var reports = type ? res.servico.relatorios.filter(function(r){ return r.type === type; }) : res.servico.relatorios;
+    App.archiveReports = reports;
     App.selectedIds = new Set();
+    if (!reports.length) { document.getElementById('arquivo-empty').style.display = 'block'; return; }
+    document.getElementById('export-btn').style.display = canExport ? 'inline-flex' : 'none';
+    document.getElementById('th-cb').style.display = canExport ? '' : 'none';
     renderArquivoTable(); updateSelectionBar(); updateExportBtn();
   }).catch(function() {
     document.getElementById('arquivo-loading').style.display = 'none';
@@ -2157,6 +2159,103 @@ function loadArquivo() {
   });
 }
 
+function renderArquivoInformes_(list) {
+  var tbody = document.getElementById('arquivo-tbody');
+  tbody.innerHTML = '';
+  if (!list || !list.length) { document.getElementById('arquivo-empty').style.display = 'block'; return; }
+  list.forEach(function(inf) {
+    tbody.innerHTML += '<tr>' +
+      '<td>' + escHtml(inf.dataLabel || fmtDate(inf.createdAt)) + '</td>' +
+      '<td><span style="font-size:12px;font-weight:600;">Informe</span></td>' +
+      '<td>' + escHtml(inf.autorNome || '') + (inf.autorPatente ? ' <span style="color:var(--text2);">(' + escHtml(inf.autorPatente) + ')</span>' : '') + '</td>' +
+      '<td><span class="badge badge-green">Guardado</span></td>' +
+      '<td style="text-align:right;"><a href="#" onclick="App.informeRoleType=\'' + inf.roleType + '\';navigate(\'informe\',{roleType:\'' + inf.roleType + '\',mode:\'view\',id:' + inf.id + '});return false;" style="font-size:12px;color:var(--green2);font-weight:600;text-decoration:none;">Ver →</a></td></tr>';
+  });
+}
+
+function renderArquivoRegistos_(list) {
+  var tbody = document.getElementById('arquivo-tbody');
+  tbody.innerHTML = '';
+  if (!list || !list.length) { document.getElementById('arquivo-empty').style.display = 'block'; return; }
+  list.forEach(function(rd) {
+    tbody.innerHTML += '<tr>' +
+      '<td>' + fmtDate(rd.createdAt) + '</td>' +
+      '<td><span style="font-size:12px;font-weight:600;">Registos Diários</span></td>' +
+      '<td>' + escHtml(rd.autorNome || '') + '</td>' +
+      '<td><span class="badge badge-green">Guardado</span></td>' +
+      '<td style="text-align:right;"><a href="#" onclick="openRegistosDiarios(' + rd.id + ');return false;" style="font-size:12px;color:var(--green2);font-weight:600;text-decoration:none;">Ver →</a></td></tr>';
+  });
+}
+
+// ─── Painel de Serviços Exportados ──────────────────────────────────────────
+function loadPainel() {
+  document.getElementById('painel-loading').style.display = 'block';
+  document.getElementById('painel-tbody').innerHTML = '';
+  document.getElementById('painel-empty').style.display = 'none';
+  gas('listServicos', [App.token]).then(function(res) {
+    document.getElementById('painel-loading').style.display = 'none';
+    if (!res.ok) { alert(res.error || 'Erro ao carregar.'); return; }
+    if (!res.servicos.length) { document.getElementById('painel-empty').style.display = 'block'; return; }
+    var tbody = document.getElementById('painel-tbody');
+    res.servicos.forEach(function(sv) {
+      tbody.innerHTML += '<tr>' +
+        '<td>' + escHtml(sv.dataServico) + '</td>' +
+        '<td>' + fmtDate(sv.fechadoEm) + '</td>' +
+        '<td>' + escHtml(sv.fechadoPor || '') + '</td>' +
+        '<td>' + sv.relatorios + '</td>' +
+        '<td>' + sv.informes + '</td>' +
+        '<td>' + sv.registos + '</td>' +
+        '<td style="text-align:right;"><a href="#" onclick="navigate(\'painel-servico\',{id:' + sv.id + '});return false;" style="font-size:12px;color:var(--green2);font-weight:600;text-decoration:none;">Ver →</a></td></tr>';
+    });
+  }).catch(function(err) {
+    document.getElementById('painel-loading').style.display = 'none';
+    alert('Erro de comunicação: ' + (err && err.message ? err.message : String(err)));
+  });
+}
+
+function loadPainelServico(id) {
+  document.getElementById('painel-servico-loading').style.display = 'block';
+  document.getElementById('painel-servico-tbody').innerHTML = '';
+  document.getElementById('painel-servico-titulo').textContent = 'Serviço';
+  gas('getServico', [App.token, id]).then(function(res) {
+    document.getElementById('painel-servico-loading').style.display = 'none';
+    if (!res.ok) { alert(res.error || 'Serviço não encontrado.'); navigate('painel'); return; }
+    var sv = res.servico;
+    document.getElementById('painel-servico-titulo').textContent = 'Serviço de ' + sv.dataServico;
+    var tbody = document.getElementById('painel-servico-tbody');
+    var linhas = [];
+    sv.relatorios.forEach(function(r) {
+      var openFn = r.type === 'oficial-dia' ? 'openReport(' + r.id + ')' : 'openArchiveReport(\'' + r.type + '\',' + r.id + ')';
+      linhas.push({ createdAt: r.createdAt, tipo: TYPE_LABELS[r.type] || r.type, quem: r.oficialDia,
+        estado: badgeForStatus_(r.status), openFn: openFn });
+    });
+    sv.informes.forEach(function(inf) {
+      linhas.push({ createdAt: inf.createdAt, tipo: 'Informe', quem: inf.autorNome,
+        estado: '<span class="badge badge-green">Guardado</span>',
+        openFn: "App.informeRoleType='" + inf.roleType + "';navigate('informe',{roleType:'" + inf.roleType + "',mode:'view',id:" + inf.id + "})" });
+    });
+    sv.registos.forEach(function(rd) {
+      linhas.push({ createdAt: rd.createdAt, tipo: 'Registos Diários', quem: rd.autorNome,
+        estado: '<span class="badge badge-green">Guardado</span>', openFn: 'openRegistosDiarios(' + rd.id + ')' });
+    });
+    linhas.sort(function(a,b){ return new Date(a.createdAt) - new Date(b.createdAt); });
+    linhas.forEach(function(l) {
+      tbody.innerHTML += '<tr>' +
+        '<td>' + fmtDate(l.createdAt) + '</td>' +
+        '<td><span style="font-size:12px;font-weight:600;">' + l.tipo + '</span></td>' +
+        '<td>' + escHtml(l.quem || '') + '</td>' +
+        '<td>' + l.estado + '</td>' +
+        '<td style="text-align:right;"><a href="#" onclick="' + l.openFn + ';return false;" style="font-size:12px;color:var(--green2);font-weight:600;text-decoration:none;">Ver →</a></td></tr>';
+    });
+  }).catch(function(err) {
+    document.getElementById('painel-servico-loading').style.display = 'none';
+    alert('Erro de comunicação: ' + (err && err.message ? err.message : String(err)));
+  });
+}
+
+function badgeForStatus_(status) {
+  return status === 'Submetido' ? '<span class="badge badge-green">Submetido</span>' : '<span class="badge">Rascunho</span>';
+}
 
 function renderArquivoTable() {
   var canExport    = App.user.nivel === 'Oficial Dia' || App.user.nivel === 'Administrador';
@@ -3181,6 +3280,10 @@ function exportSinglePDF() {
   });
 }
 function exportSelectedPDFs() {
+  if (App.currentServico && App.currentServico.rascunhos > 0) {
+    alert('Ainda há ' + App.currentServico.rascunhos + ' relatório(s) em Rascunho neste serviço. Todos têm de estar Submetidos antes de exportar.');
+    return;
+  }
   var ids = App.selectedIds.size > 0 ? Array.from(App.selectedIds) : App.archiveReports.map(function(r){ return r.id; });
   if (!ids.length) return;
   var btn = document.getElementById('export-btn');
@@ -3243,12 +3346,24 @@ function exportSelectedPDFs() {
       var filename = 'Relatorio_de_Servico_do_dia_' + dateStr + '.pdf';
       var base64 = doc.output('datauristring').split(',')[1];
       gas('savePdfToDrive', [App.token, filename, base64]).then(function(res) {
-        resetBtn_();
-        if (res.ok) {
-          alert('Relatório do dia enviado por email com sucesso.');
-        } else {
+        if (!res.ok) {
+          resetBtn_();
           alert('Erro ao enviar por email: ' + (res.error || 'Verifique as permissões.'));
+          return;
         }
+        gas('fecharServico', [App.token]).then(function(fres) {
+          resetBtn_();
+          if (fres.ok) {
+            alert('Relatório do dia enviado por email. O serviço foi arquivado.');
+            App.selectedIds = new Set();
+            loadArquivo();
+          } else {
+            alert('O email foi enviado, mas o serviço não foi arquivado: ' + (fres.error || 'Erro desconhecido') + '. Contacta o Administrador.');
+          }
+        }).catch(function(err) {
+          resetBtn_();
+          alert('O email foi enviado, mas houve um erro de comunicação ao arquivar o serviço: ' + (err && err.message ? err.message : String(err)));
+        });
       }).catch(function(err) {
         resetBtn_();
         alert('Erro de comunicação ao enviar por email: ' + (err && err.message ? err.message : String(err)));
