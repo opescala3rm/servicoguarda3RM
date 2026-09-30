@@ -977,7 +977,7 @@
     <div id="view-sg-saida-pracas" class="view">
       <div class="page-header">
         <div><div class="page-subtitle">Sargento da Guarda</div><h1 class="page-title">Saída de Praças</h1></div>
-        <div style="display:flex;gap:0.75rem;"><button class="btn btn-primary" onclick="openSgModal('saida-pracas',null)">+ Novo Registo</button></div>
+        <div style="display:flex;gap:0.75rem;"><button id="sg-saida-pracas-add-btn" class="btn btn-primary" onclick="openSgModal('saida-pracas',null)">+ Novo Registo</button></div>
       </div>
       <div class="card" style="padding:0;">
         <div id="sg-saida-pracas-loading" style="padding:2rem;text-align:center;"><div class="loader" style="margin:0 auto;"></div></div>
@@ -993,7 +993,7 @@
     <div id="view-sg-viaturas-mil" class="view">
       <div class="page-header">
         <div><div class="page-subtitle">Sargento da Guarda</div><h1 class="page-title">Viaturas Militar</h1></div>
-        <div style="display:flex;gap:0.75rem;"><button class="btn btn-primary" onclick="openSgModal('viaturas-mil',null)">+ Novo Registo</button></div>
+        <div style="display:flex;gap:0.75rem;"><button id="sg-viaturas-mil-add-btn" class="btn btn-primary" onclick="openSgModal('viaturas-mil',null)">+ Novo Registo</button></div>
       </div>
       <div class="card" style="padding:0;">
         <div id="sg-viaturas-mil-loading" style="padding:2rem;text-align:center;"><div class="loader" style="margin:0 auto;"></div></div>
@@ -1009,7 +1009,7 @@
     <div id="view-sg-viaturas-civ" class="view">
       <div class="page-header">
         <div><div class="page-subtitle">Sargento da Guarda</div><h1 class="page-title">Viaturas Civil</h1></div>
-        <div style="display:flex;gap:0.75rem;"><button class="btn btn-primary" onclick="openSgModal('viaturas-civ',null)">+ Novo Registo</button></div>
+        <div style="display:flex;gap:0.75rem;"><button id="sg-viaturas-civ-add-btn" class="btn btn-primary" onclick="openSgModal('viaturas-civ',null)">+ Novo Registo</button></div>
       </div>
       <div class="card" style="padding:0;">
         <div id="sg-viaturas-civ-loading" style="padding:2rem;text-align:center;"><div class="loader" style="margin:0 auto;"></div></div>
@@ -1025,7 +1025,7 @@
     <div id="view-sg-visitantes" class="view">
       <div class="page-header">
         <div><div class="page-subtitle">Sargento da Guarda</div><h1 class="page-title">Visitantes</h1></div>
-        <div style="display:flex;gap:0.75rem;"><button class="btn btn-primary" onclick="openSgModal('visitantes',null)">+ Novo Registo</button></div>
+        <div style="display:flex;gap:0.75rem;"><button id="sg-visitantes-add-btn" class="btn btn-primary" onclick="openSgModal('visitantes',null)">+ Novo Registo</button></div>
       </div>
       <div class="card" style="padding:0;">
         <div id="sg-visitantes-loading" style="padding:2rem;text-align:center;"><div class="loader" style="margin:0 auto;"></div></div>
@@ -1041,7 +1041,7 @@
     <div id="view-sg-consultas" class="view">
       <div class="page-header">
         <div><div class="page-subtitle">Sargento da Guarda</div><h1 class="page-title">Lista de Marcação de Consulta</h1></div>
-        <div style="display:flex;gap:0.75rem;"><button class="btn btn-primary" onclick="openSgModal('consultas',null)">+ Novo Registo</button></div>
+        <div style="display:flex;gap:0.75rem;"><button id="sg-consultas-add-btn" class="btn btn-primary" onclick="openSgModal('consultas',null)">+ Novo Registo</button></div>
       </div>
       <div class="card" style="padding:0;">
         <div id="sg-consultas-loading" style="padding:2rem;text-align:center;"><div class="loader" style="margin:0 auto;"></div></div>
@@ -3180,7 +3180,17 @@ function loadSgView(tipo) {
   gas('getSgRegistos', [App.token, tipo]).then(function(res) {
     if (loading) loading.style.display = 'none';
     if (!res.ok) return;
+    var addBtn = document.getElementById(prefix + '-add-btn');
+    if (addBtn) {
+      addBtn.disabled = !!res.fechado;
+      addBtn.title = res.fechado ? 'Os Registos Diários deste serviço já foram guardados.' : '';
+    }
     renderSgTable(tipo, res.registos);
+    if (res.fechado && empty) {
+      empty.textContent = 'Os Registos Diários deste serviço já foram guardados — a lista fica limpa para o próximo serviço. Podes consultar o histórico em "Serviços Exportados".';
+    } else if (empty) {
+      empty.textContent = 'Sem registos.';
+    }
   });
 }
 
