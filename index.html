@@ -347,6 +347,41 @@
       </div>
     </div>
 
+    <!-- ── Registos Diários (texto livre, todos os perfis) ── -->
+    <div id="view-registos-diarios" class="view">
+      <div class="page-header">
+        <div>
+          <div class="page-subtitle">Serviço em curso</div>
+          <h1 class="page-title">Registos Diários</h1>
+        </div>
+        <div id="rd-guardar-wrap" style="display:none;">
+          <button class="btn btn-gold" onclick="guardarRegistosDiarios()">Guardar Todos os Registos Diários</button>
+        </div>
+      </div>
+
+      <div id="rd-sem-servico" class="card" style="display:none;padding:3rem;text-align:center;color:var(--text2);font-size:13px;">
+        Não há nenhum serviço em curso. Assim que alguém guardar um relatório, informe ou registo diário, um novo serviço abre automaticamente.
+      </div>
+
+      <div id="rd-fechado" class="card" style="display:none;padding:3rem;text-align:center;">
+        <div style="font-size:32px;">✅</div>
+        <div style="font-weight:600;margin-top:0.5rem;">Registos Diários guardados</div>
+        <div style="color:var(--text2);font-size:13px;margin-top:0.25rem;">Já não é possível inserir, editar ou apagar registos diários neste serviço.</div>
+      </div>
+
+      <div id="rd-aberto">
+        <div class="card" style="margin-bottom:1rem;">
+          <textarea id="rd-texto-novo" rows="3" placeholder="Escreva o seu registo diário…" style="width:100%;resize:vertical;"></textarea>
+          <div style="display:flex;justify-content:flex-end;margin-top:0.5rem;">
+            <button class="btn btn-primary" onclick="adicionarRegistoDiario()">+ Adicionar</button>
+          </div>
+        </div>
+        <div id="rd-lista"></div>
+      </div>
+
+      <div id="rd-loading" style="padding:3rem;text-align:center;"><div class="loader" style="margin:0 auto;"></div></div>
+    </div>
+
     <div id="view-arquivo" class="view">
       <div class="page-header">
         <div>
@@ -362,7 +397,6 @@
             <option value="sargento-ronda">Sargento Ronda</option>
             <option value="sargento-piquete">Sargento Piquete</option>
             <option value="__inf" id="filter-inf-own">Os Meus Informes</option>
-            <option value="registos-diarios" id="filter-rd" style="display:none;">Registos Diários (SG)</option>
             <option value="__inf-oficial-dia" id="filter-inf-od" style="display:none;">Informes — Oficial de Dia</option>
             <option value="__inf-sargento-guarda" id="filter-inf-sg" style="display:none;">Informes — Sargento da Guarda</option>
             <option value="__inf-sargento-dia" id="filter-inf-sdia" style="display:none;">Informes — Sargento Dia</option>
@@ -943,7 +977,7 @@
     <div id="view-sg-saida-pracas" class="view">
       <div class="page-header">
         <div><div class="page-subtitle">Sargento da Guarda</div><h1 class="page-title">Saída de Praças</h1></div>
-        <div style="display:flex;gap:0.75rem;"><button class="btn btn-primary" onclick="openSgModal('saida-pracas',null)">+ Novo Registo</button><button class="btn btn-gold" onclick="saveRegistosDiarios()">Guardar Registos Diários</button></div>
+        <div style="display:flex;gap:0.75rem;"><button class="btn btn-primary" onclick="openSgModal('saida-pracas',null)">+ Novo Registo</button></div>
       </div>
       <div class="card" style="padding:0;">
         <div id="sg-saida-pracas-loading" style="padding:2rem;text-align:center;"><div class="loader" style="margin:0 auto;"></div></div>
@@ -959,7 +993,7 @@
     <div id="view-sg-viaturas-mil" class="view">
       <div class="page-header">
         <div><div class="page-subtitle">Sargento da Guarda</div><h1 class="page-title">Viaturas Militar</h1></div>
-        <div style="display:flex;gap:0.75rem;"><button class="btn btn-primary" onclick="openSgModal('viaturas-mil',null)">+ Novo Registo</button><button class="btn btn-gold" onclick="saveRegistosDiarios()">Guardar Registos Diários</button></div>
+        <div style="display:flex;gap:0.75rem;"><button class="btn btn-primary" onclick="openSgModal('viaturas-mil',null)">+ Novo Registo</button></div>
       </div>
       <div class="card" style="padding:0;">
         <div id="sg-viaturas-mil-loading" style="padding:2rem;text-align:center;"><div class="loader" style="margin:0 auto;"></div></div>
@@ -975,7 +1009,7 @@
     <div id="view-sg-viaturas-civ" class="view">
       <div class="page-header">
         <div><div class="page-subtitle">Sargento da Guarda</div><h1 class="page-title">Viaturas Civil</h1></div>
-        <div style="display:flex;gap:0.75rem;"><button class="btn btn-primary" onclick="openSgModal('viaturas-civ',null)">+ Novo Registo</button><button class="btn btn-gold" onclick="saveRegistosDiarios()">Guardar Registos Diários</button></div>
+        <div style="display:flex;gap:0.75rem;"><button class="btn btn-primary" onclick="openSgModal('viaturas-civ',null)">+ Novo Registo</button></div>
       </div>
       <div class="card" style="padding:0;">
         <div id="sg-viaturas-civ-loading" style="padding:2rem;text-align:center;"><div class="loader" style="margin:0 auto;"></div></div>
@@ -991,7 +1025,7 @@
     <div id="view-sg-visitantes" class="view">
       <div class="page-header">
         <div><div class="page-subtitle">Sargento da Guarda</div><h1 class="page-title">Visitantes</h1></div>
-        <div style="display:flex;gap:0.75rem;"><button class="btn btn-primary" onclick="openSgModal('visitantes',null)">+ Novo Registo</button><button class="btn btn-gold" onclick="saveRegistosDiarios()">Guardar Registos Diários</button></div>
+        <div style="display:flex;gap:0.75rem;"><button class="btn btn-primary" onclick="openSgModal('visitantes',null)">+ Novo Registo</button></div>
       </div>
       <div class="card" style="padding:0;">
         <div id="sg-visitantes-loading" style="padding:2rem;text-align:center;"><div class="loader" style="margin:0 auto;"></div></div>
@@ -1007,7 +1041,7 @@
     <div id="view-sg-consultas" class="view">
       <div class="page-header">
         <div><div class="page-subtitle">Sargento da Guarda</div><h1 class="page-title">Lista de Marcação de Consulta</h1></div>
-        <div style="display:flex;gap:0.75rem;"><button class="btn btn-primary" onclick="openSgModal('consultas',null)">+ Novo Registo</button><button class="btn btn-gold" onclick="saveRegistosDiarios()">Guardar Registos Diários</button></div>
+        <div style="display:flex;gap:0.75rem;"><button class="btn btn-primary" onclick="openSgModal('consultas',null)">+ Novo Registo</button></div>
       </div>
       <div class="card" style="padding:0;">
         <div id="sg-consultas-loading" style="padding:2rem;text-align:center;"><div class="loader" style="margin:0 auto;"></div></div>
@@ -1283,7 +1317,7 @@ var SECTION_ACCESS = {
 // Nunca colar aqui a chave "secret" ou "service_role".
 var CONFIG = {
   SUPABASE_URL: 'https://deetfdtcgjapddeviipb.supabase.co',
-  SUPABASE_KEY: 'sb_publishable_luqznyJw1bZR706o7CkGPg_Q1SDkUbp',
+  SUPABASE_KEY: 'COLA_AQUI_A_CHAVE_PUBLISHABLE',
   EMAIL_URL:    'https://script.google.com/macros/s/AKfycbzSVxUDjjpkPoY8fwTq0tDjqysxKNKg8JSbaaZIPGICdTPszrjGe_ul7l3EdR1jBDLj/exec'
 };
 
@@ -1421,6 +1455,7 @@ function renderSidebar() {
   nav.innerHTML = '';
   nav.innerHTML += '<button class="nav-flat" id="nav-dashboard" onclick="navigate(\'dashboard\')">Painel</button>';
   nav.innerHTML += '<button class="nav-flat" id="nav-arquivo" onclick="navigate(\'arquivo\')">Arquivo</button>';
+  nav.innerHTML += '<button class="nav-flat" id="nav-registos-diarios-novo" onclick="navigate(\'registos-diarios\')">Registos Diários</button>';
   if (n.nivel === 'Oficial Dia' || n.nivel === 'Administrador') {
     nav.innerHTML += '<button class="nav-flat" id="nav-painel" onclick="navigate(\'painel\')">Serviços Exportados</button>';
   }
@@ -1452,7 +1487,7 @@ function renderSidebar() {
   nav.innerHTML += [
     '<div class="nav-section" id="ns-registos-diarios">',
       '<button class="nav-section-btn" id="sec-registos-diarios" onclick="toggleSection(\'registos-diarios\')">',
-        '<span>Registos Diários</span>',
+        '<span>Registos SG</span>',
         '<span id="chevron-registos-diarios" style="transition:transform 0.2s;flex-shrink:0;font-size:10px;">▾</span>',
       '</button>',
       '<div class="nav-section-children" id="children-registos-diarios">',
@@ -1475,8 +1510,6 @@ function renderSidebar() {
   var _isODadm = _nivel_s === 'Oficial Dia' || _nivel_s === 'Administrador';
   // 'Os Meus Informes' always visible to all
   // registos-diarios visible to SG + OD + Admin
-  var _rdEl = document.getElementById('filter-rd');
-  if (_rdEl) _rdEl.style.display = (_isSG || _isODadm) ? '' : 'none';
   // role-specific informe filters only for OD and Admin
   ['filter-inf-od','filter-inf-sg','filter-inf-sdia','filter-inf-sronda','filter-inf-spiq'].forEach(function(fid) {
     var el = document.getElementById(fid);
@@ -1505,6 +1538,7 @@ function navigate(view, params) {
   if (navEl) navEl.classList.add('active');
   if (view === 'dashboard')         loadDashboard();
   if (view === 'arquivo')           loadArquivo();
+  if (view === 'registos-diarios')  loadRegistosDiariosView();
   if (view === 'painel')            loadPainel();
   if (view === 'painel-servico')    loadPainelServico(params && params.id);
   if (view === 'relatorio-od')      initOD(params);
@@ -1932,9 +1966,10 @@ function populateSgrForm(relatorio) {
 }
 
 function saveSgRelatorio(status) {
-  var data = collectSgrData();
   var alertEl = document.getElementById('sgr-alert');
   alertEl.style.display = 'none';
+  if (!validarCamposObrigatorios('view-sg-relatorio', 'sgr-alert')) return;
+  var data = collectSgrData();
   if (!data.comandanteGuarda) { alertEl.textContent = 'O Comandante da Guarda é obrigatório.'; alertEl.style.display = 'block'; goToSgrStep(1); return; }
   var payload = { id: _sgrCurrentId, comandanteGuarda: data.comandanteGuarda, status: status, data: data };
   gas('saveSGRelatorio', [App.token, payload]).then(function(res) {
@@ -2070,20 +2105,6 @@ function buildSgRelatorioPDF(relatorio) {
 }
 
 // ─── Registos Diários ────────────────────────────────────────────────────────────────────
-function saveRegistosDiarios() {
-  if (!confirm('Guardar um registo dos diários de hoje no Arquivo?')) return;
-  gas('saveRegistosDiarios', [App.token]).then(function(res) {
-    if (res && res.ok) {
-      alert('Registos diários guardados no Arquivo.');
-      navigate('arquivo');
-    } else {
-      alert('Erro ao guardar: ' + (res && res.error ? res.error : 'Verifique o servidor.'));
-    }
-  }).catch(function() {
-    alert('Erro de comunicação com o servidor.');
-  });
-}
-
 // ─── Dashboard ───────────────────────────────────────────────────────────────
 function loadDashboard() {
   gas('getStats', [App.token]).then(function(res) {
@@ -2102,6 +2123,147 @@ function loadDashboard() {
 }
 
 // ─── Arquivo ─────────────────────────────────────────────────────────────────
+// ─── Registos Diários (texto livre, todos os perfis) ────────────────────────
+// ─── Validação genérica: todos os campos do relatório são obrigatórios ─────
+// Verifica todos os .form-input / .form-select / .form-textarea visíveis
+// dentro do ecrã indicado (ignora o que estiver dentro de modais, escondido,
+// ou de leitura). Devolve true se estiver tudo preenchido; caso contrário
+// mostra o alerta indicado e devolve false.
+function validarCamposObrigatorios(viewId, alertElId) {
+  var container = document.getElementById(viewId);
+  if (!container) return true;
+  var campos = container.querySelectorAll('.form-input, .form-select, .form-textarea');
+  var faltam = [];
+  var primeiro = null;
+  campos.forEach(function(el) {
+    if (el.type === 'checkbox' || el.type === 'radio' || el.type === 'hidden' || el.disabled) return;
+    if (el.closest('.modal-overlay')) return;   // modais (ex.: adicionar item) não contam
+    if (el.offsetParent === null) return;       // escondido (display:none / painel fechado)
+    var val = (el.value == null ? '' : String(el.value)).trim();
+    if (val !== '') return;
+    var label = null;
+    var wrap = el.closest('div');
+    if (wrap) { var lab = wrap.querySelector('.form-label'); if (lab) label = lab.textContent.trim(); }
+    if (!label && el.placeholder) label = el.placeholder;
+    faltam.push(label || 'Campo sem nome');
+    if (!primeiro) primeiro = el;
+  });
+  if (faltam.length) {
+    var alertEl = alertElId ? document.getElementById(alertElId) : null;
+    var msg = 'Preencha todos os campos antes de continuar. Em falta: ' +
+      faltam.slice(0, 6).join(', ') + (faltam.length > 6 ? ' e mais ' + (faltam.length - 6) + '…' : '') + '.';
+    if (alertEl) {
+      alertEl.className = alertEl.className.indexOf('alert-red') >= 0 ? alertEl.className : (alertEl.className + ' alert-red').trim();
+      alertEl.textContent = msg;
+      alertEl.style.display = 'block';
+    } else {
+      alert(msg);
+    }
+    if (primeiro && primeiro.scrollIntoView) primeiro.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (primeiro && primeiro.focus) primeiro.focus();
+    return false;
+  }
+  return true;
+}
+
+function loadRegistosDiariosView() {
+  ['rd-sem-servico','rd-fechado','rd-aberto'].forEach(function(id){ document.getElementById(id).style.display = 'none'; });
+  document.getElementById('rd-guardar-wrap').style.display = 'none';
+  document.getElementById('rd-loading').style.display = 'block';
+  document.getElementById('rd-lista').innerHTML = '';
+  document.getElementById('rd-texto-novo').value = '';
+
+  gas('listRegistosDiarios', [App.token]).then(function(res) {
+    document.getElementById('rd-loading').style.display = 'none';
+    if (!res.ok) { alert(res.error || 'Erro ao carregar.'); return; }
+
+    var podeGuardar = App.user.nivel === 'Sargento da Guarda' || App.user.nivel === 'Administrador';
+
+    if (!res.registos.length && !res.fechado) {
+      // pode não haver serviço aberto ainda — distinguir dos dois casos é indiferente aqui,
+      // mostra-se sempre o formulário de inserir (o serviço abre sozinho ao gravar o 1º registo).
+      document.getElementById('rd-aberto').style.display = 'block';
+      if (podeGuardar) document.getElementById('rd-guardar-wrap').style.display = 'block';
+      return;
+    }
+
+    if (res.fechado) {
+      document.getElementById('rd-fechado').style.display = 'block';
+      return;
+    }
+
+    document.getElementById('rd-aberto').style.display = 'block';
+    if (podeGuardar) document.getElementById('rd-guardar-wrap').style.display = 'block';
+    var lista = document.getElementById('rd-lista');
+    res.registos.forEach(function(r) {
+      var acoes = r.souAutor ? (
+        '<a href="#" onclick="editarRegistoDiario(' + r.id + ');return false;" style="font-size:12px;color:var(--green2);font-weight:600;text-decoration:none;margin-right:12px;">Editar</a>' +
+        '<a href="#" onclick="apagarRegistoDiario(' + r.id + ');return false;" style="font-size:12px;color:#e05252;font-weight:600;text-decoration:none;">Apagar</a>'
+      ) : '';
+      lista.innerHTML += '<div class="card" style="margin-bottom:0.75rem;" id="rd-item-' + r.id + '">' +
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;">' +
+          '<div>' +
+            '<div style="font-weight:600;font-size:13px;">' + escHtml(r.autorNome || '') + (r.autorPatente ? ' <span style="color:var(--text2);font-weight:400;">(' + escHtml(r.autorPatente) + ')</span>' : '') + '</div>' +
+            '<div style="color:var(--text2);font-size:11px;">' + fmtDate(r.createdAt) + (r.updatedAt ? ' · editado' : '') + '</div>' +
+          '</div>' +
+          '<div>' + acoes + '</div>' +
+        '</div>' +
+        '<div style="margin-top:0.5rem;white-space:pre-wrap;font-size:13px;">' + escHtml(r.texto) + '</div>' +
+      '</div>';
+    });
+  }).catch(function(err) {
+    document.getElementById('rd-loading').style.display = 'none';
+    alert('Erro de comunicação: ' + (err && err.message ? err.message : String(err)));
+  });
+}
+
+function adicionarRegistoDiario() {
+  var texto = document.getElementById('rd-texto-novo').value.trim();
+  if (!texto) { alert('Escreva o registo antes de adicionar.'); return; }
+  gas('saveRegistoDiario', [App.token, { texto: texto }]).then(function(res) {
+    if (!res.ok) { alert(res.error || 'Erro ao guardar.'); return; }
+    loadRegistosDiariosView();
+  }).catch(function(err) {
+    alert('Erro de comunicação: ' + (err && err.message ? err.message : String(err)));
+  });
+}
+
+function editarRegistoDiario(id) {
+  var el = document.getElementById('rd-item-' + id);
+  var atual = el ? el.querySelector('div[style*="white-space"]').textContent : '';
+  var novo = prompt('Editar registo:', atual);
+  if (novo === null) return;
+  novo = novo.trim();
+  if (!novo) { alert('O texto não pode ficar vazio.'); return; }
+  gas('saveRegistoDiario', [App.token, { id: id, texto: novo }]).then(function(res) {
+    if (!res.ok) { alert(res.error || 'Erro ao guardar.'); return; }
+    loadRegistosDiariosView();
+  }).catch(function(err) {
+    alert('Erro de comunicação: ' + (err && err.message ? err.message : String(err)));
+  });
+}
+
+function apagarRegistoDiario(id) {
+  if (!confirm('Apagar este registo diário?')) return;
+  gas('deleteRegistoDiario', [App.token, id]).then(function(res) {
+    if (!res.ok) { alert(res.error || 'Erro ao apagar.'); return; }
+    loadRegistosDiariosView();
+  }).catch(function(err) {
+    alert('Erro de comunicação: ' + (err && err.message ? err.message : String(err)));
+  });
+}
+
+function guardarRegistosDiarios() {
+  if (!confirm('Guardar todos os Registos Diários deste serviço? Depois de guardados, já não podem ser alterados.')) return;
+  gas('guardarRegistosDiarios', [App.token]).then(function(res) {
+    if (!res.ok) { alert(res.error || 'Erro ao guardar.'); return; }
+    alert('Registos Diários guardados.');
+    loadRegistosDiariosView();
+  }).catch(function(err) {
+    alert('Erro de comunicação: ' + (err && err.message ? err.message : String(err)));
+  });
+}
+
 function loadArquivo() {
   var type = document.getElementById('arquivo-filter-type').value;
   document.getElementById('arquivo-loading').style.display = 'block';
@@ -2140,11 +2302,6 @@ function loadArquivo() {
       renderArquivoInformes_(res.servico.informes.filter(function(i){ return i.roleType === infRoleType; }));
       return;
     }
-    // Registos Diários
-    if (type === 'registos-diarios') {
-      renderArquivoRegistos_(res.servico.registos);
-      return;
-    }
     // Relatórios (todos os do serviço em curso, ou só de um tipo)
     var reports = type ? res.servico.relatorios.filter(function(r){ return r.type === type; }) : res.servico.relatorios;
     App.archiveReports = reports;
@@ -2170,20 +2327,6 @@ function renderArquivoInformes_(list) {
       '<td>' + escHtml(inf.autorNome || '') + (inf.autorPatente ? ' <span style="color:var(--text2);">(' + escHtml(inf.autorPatente) + ')</span>' : '') + '</td>' +
       '<td><span class="badge badge-green">Guardado</span></td>' +
       '<td style="text-align:right;"><a href="#" onclick="App.informeRoleType=\'' + inf.roleType + '\';navigate(\'informe\',{roleType:\'' + inf.roleType + '\',mode:\'view\',id:' + inf.id + '});return false;" style="font-size:12px;color:var(--green2);font-weight:600;text-decoration:none;">Ver →</a></td></tr>';
-  });
-}
-
-function renderArquivoRegistos_(list) {
-  var tbody = document.getElementById('arquivo-tbody');
-  tbody.innerHTML = '';
-  if (!list || !list.length) { document.getElementById('arquivo-empty').style.display = 'block'; return; }
-  list.forEach(function(rd) {
-    tbody.innerHTML += '<tr>' +
-      '<td>' + fmtDate(rd.createdAt) + '</td>' +
-      '<td><span style="font-size:12px;font-weight:600;">Registos Diários</span></td>' +
-      '<td>' + escHtml(rd.autorNome || '') + '</td>' +
-      '<td><span class="badge badge-green">Guardado</span></td>' +
-      '<td style="text-align:right;"><a href="#" onclick="openRegistosDiarios(' + rd.id + ');return false;" style="font-size:12px;color:var(--green2);font-weight:600;text-decoration:none;">Ver →</a></td></tr>';
   });
 }
 
@@ -2236,7 +2379,7 @@ function loadPainelServico(id) {
     });
     sv.registos.forEach(function(rd) {
       linhas.push({ createdAt: rd.createdAt, tipo: 'Registos Diários', quem: rd.autorNome,
-        estado: '<span class="badge badge-green">Guardado</span>', openFn: 'openRegistosDiarios(' + rd.id + ')' });
+        estado: '<span class="badge badge-green">Guardado</span>', openFn: 'openRegistosDiarios(' + rd.id + ',' + JSON.stringify(rd.texto||'') + ')' });
     });
     linhas.sort(function(a,b){ return new Date(a.createdAt) - new Date(b.createdAt); });
     linhas.forEach(function(l) {
@@ -2324,7 +2467,7 @@ function openArchiveReport(type, id) {
   else if (type === 'sargento-ronda')    navigate('sronda-relatorio',{ mode: 'view', id: id });
   else navigate('em-construcao');
 }
-function openRegistosDiarios(id) { navigate('em-construcao'); }
+function openRegistosDiarios(id, texto) { alert(texto || 'Sem texto.'); }
 
 // ─── Relatório OD ─────────────────────────────────────────────────────────────
 var OD_STEP_LABELS = ['Identificação','Rondas','Ocorrências','Consumos','Comunicações','Mat. Guerra','Mat. Aquartelamento','Encerramento'];
@@ -2472,10 +2615,11 @@ function populateODForm(report) {
   (d.movimentosAquartelamento||[]).forEach(function(m){ var r=document.getElementById('mat-rec-'+m.id); if(r){r.value=m.recebido||0;updateSaldo(m.id);} var e=document.getElementById('mat-ent-'+m.id); if(e){e.value=m.entregue||0;updateSaldo(m.id);} });
 }
 function saveReport(status) {
-  var data = collectODData();
-  var oficialDia = data.identificacao.oficialDia || App.user.nome;
   var alertEl = document.getElementById('od-alert');
   alertEl.style.display = 'none';
+  if (!validarCamposObrigatorios('view-relatorio-od', 'od-alert')) return;
+  var data = collectODData();
+  var oficialDia = data.identificacao.oficialDia || App.user.nome;
   var reportData = { type:'oficial-dia', oficialDia:oficialDia, status:status, data:data, inicio:data.identificacao.inicio||null, fim:data.identificacao.fim||null };
   var fn = App.odReportId ? 'updateReport' : 'createReport';
   var args = App.odReportId ? [App.token, App.odReportId, reportData] : [App.token, reportData];
@@ -2689,9 +2833,10 @@ function initSdRelatorio(params) {
 }
 
 function saveSdRelatorio(status) {
-  var data = collectSdrData();
   var alertEl = document.getElementById('sdr-alert');
   alertEl.style.display = 'none';
+  if (!validarCamposObrigatorios('view-sd-relatorio', 'sdr-alert')) return;
+  var data = collectSdrData();
   if (!data.sargentodia) { alertEl.textContent = 'O Sargento Dia é obrigatório.'; alertEl.style.display = 'block'; goToSdrStep(1); return; }
   var payload = { id: _sdrCurrentId, sargentodia: data.sargentodia, status: status, data: data };
   gas('saveSDRelatorio', [App.token, payload]).then(function(res) {
@@ -3869,10 +4014,11 @@ function initSpiqRelatorio(params) {
   });
 }
 function saveSpiqRelatorio(status) {
-  var data = collectSpiqData();
   var alertEl = document.getElementById('spiq-alert');
   alertEl.className = 'alert alert-red';
   alertEl.style.display = 'none';
+  if (!validarCamposObrigatorios('view-spiq-relatorio', 'spiq-alert')) return;
+  var data = collectSpiqData();
   if (!data.sargento) { alertEl.textContent = 'O Sargento Piquete é obrigatório.'; alertEl.style.display = 'block'; goToSpiqStep(1); return; }
   var payload = { id: _spiqCurrentId, sargento: data.sargento, status: status, data: data };
   gas('saveSpiqRelatorio', [App.token, payload]).then(function(res) {
@@ -4203,10 +4349,11 @@ function initSrondaRelatorio(params) {
   });
 }
 function saveSrondaRelatorio(status) {
-  var data = collectSrondaData();
   var alertEl = document.getElementById('sronda-alert');
   alertEl.className = 'alert alert-red';
   alertEl.style.display = 'none';
+  if (!validarCamposObrigatorios('view-sronda-relatorio', 'sronda-alert')) return;
+  var data = collectSrondaData();
   if (!data.sargento) { alertEl.textContent = 'O Sargento Ronda é obrigatório.'; alertEl.style.display = 'block'; goToSrondaStep(1); return; }
   var payload = { id: _srondaCurrentId, sargento: data.sargento, status: status, data: data };
   gas('saveSrondaRelatorio', [App.token, payload]).then(function(res) {
