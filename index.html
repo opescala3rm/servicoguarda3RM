@@ -347,41 +347,6 @@
       </div>
     </div>
 
-    <!-- ── Registos Diários (texto livre, todos os perfis) ── -->
-    <div id="view-registos-diarios" class="view">
-      <div class="page-header">
-        <div>
-          <div class="page-subtitle">Serviço em curso</div>
-          <h1 class="page-title">Registos Diários</h1>
-        </div>
-        <div id="rd-guardar-wrap" style="display:none;">
-          <button class="btn btn-gold" onclick="guardarRegistosDiarios()">Guardar Todos os Registos Diários</button>
-        </div>
-      </div>
-
-      <div id="rd-sem-servico" class="card" style="display:none;padding:3rem;text-align:center;color:var(--text2);font-size:13px;">
-        Não há nenhum serviço em curso. Assim que alguém guardar um relatório, informe ou registo diário, um novo serviço abre automaticamente.
-      </div>
-
-      <div id="rd-fechado" class="card" style="display:none;padding:3rem;text-align:center;">
-        <div style="font-size:32px;">✅</div>
-        <div style="font-weight:600;margin-top:0.5rem;">Registos Diários guardados</div>
-        <div style="color:var(--text2);font-size:13px;margin-top:0.25rem;">Já não é possível inserir, editar ou apagar registos diários neste serviço.</div>
-      </div>
-
-      <div id="rd-aberto">
-        <div class="card" style="margin-bottom:1rem;">
-          <textarea id="rd-texto-novo" rows="3" placeholder="Escreva o seu registo diário…" style="width:100%;resize:vertical;"></textarea>
-          <div style="display:flex;justify-content:flex-end;margin-top:0.5rem;">
-            <button class="btn btn-primary" onclick="adicionarRegistoDiario()">+ Adicionar</button>
-          </div>
-        </div>
-        <div id="rd-lista"></div>
-      </div>
-
-      <div id="rd-loading" style="padding:3rem;text-align:center;"><div class="loader" style="margin:0 auto;"></div></div>
-    </div>
-
     <div id="view-arquivo" class="view">
       <div class="page-header">
         <div>
@@ -977,7 +942,7 @@
     <div id="view-sg-saida-pracas" class="view">
       <div class="page-header">
         <div><div class="page-subtitle">Sargento da Guarda</div><h1 class="page-title">Saída de Praças</h1></div>
-        <div style="display:flex;gap:0.75rem;"><button id="sg-saida-pracas-add-btn" class="btn btn-primary" onclick="openSgModal('saida-pracas',null)">+ Novo Registo</button></div>
+        <div style="display:flex;gap:0.75rem;"><button id="sg-saida-pracas-add-btn" class="btn btn-primary" onclick="openSgModal('saida-pracas',null)">+ Novo Registo</button><button id="sg-saida-pracas-submit-btn" class="btn btn-gold" style="display:none;" onclick="submeterRegistosSG()">Submeter Registos SG</button></div>
       </div>
       <div class="card" style="padding:0;">
         <div id="sg-saida-pracas-loading" style="padding:2rem;text-align:center;"><div class="loader" style="margin:0 auto;"></div></div>
@@ -993,7 +958,7 @@
     <div id="view-sg-viaturas-mil" class="view">
       <div class="page-header">
         <div><div class="page-subtitle">Sargento da Guarda</div><h1 class="page-title">Viaturas Militar</h1></div>
-        <div style="display:flex;gap:0.75rem;"><button id="sg-viaturas-mil-add-btn" class="btn btn-primary" onclick="openSgModal('viaturas-mil',null)">+ Novo Registo</button></div>
+        <div style="display:flex;gap:0.75rem;"><button id="sg-viaturas-mil-add-btn" class="btn btn-primary" onclick="openSgModal('viaturas-mil',null)">+ Novo Registo</button><button id="sg-viaturas-mil-submit-btn" class="btn btn-gold" style="display:none;" onclick="submeterRegistosSG()">Submeter Registos SG</button></div>
       </div>
       <div class="card" style="padding:0;">
         <div id="sg-viaturas-mil-loading" style="padding:2rem;text-align:center;"><div class="loader" style="margin:0 auto;"></div></div>
@@ -1009,7 +974,7 @@
     <div id="view-sg-viaturas-civ" class="view">
       <div class="page-header">
         <div><div class="page-subtitle">Sargento da Guarda</div><h1 class="page-title">Viaturas Civil</h1></div>
-        <div style="display:flex;gap:0.75rem;"><button id="sg-viaturas-civ-add-btn" class="btn btn-primary" onclick="openSgModal('viaturas-civ',null)">+ Novo Registo</button></div>
+        <div style="display:flex;gap:0.75rem;"><button id="sg-viaturas-civ-add-btn" class="btn btn-primary" onclick="openSgModal('viaturas-civ',null)">+ Novo Registo</button><button id="sg-viaturas-civ-submit-btn" class="btn btn-gold" style="display:none;" onclick="submeterRegistosSG()">Submeter Registos SG</button></div>
       </div>
       <div class="card" style="padding:0;">
         <div id="sg-viaturas-civ-loading" style="padding:2rem;text-align:center;"><div class="loader" style="margin:0 auto;"></div></div>
@@ -1025,7 +990,7 @@
     <div id="view-sg-visitantes" class="view">
       <div class="page-header">
         <div><div class="page-subtitle">Sargento da Guarda</div><h1 class="page-title">Visitantes</h1></div>
-        <div style="display:flex;gap:0.75rem;"><button id="sg-visitantes-add-btn" class="btn btn-primary" onclick="openSgModal('visitantes',null)">+ Novo Registo</button></div>
+        <div style="display:flex;gap:0.75rem;"><button id="sg-visitantes-add-btn" class="btn btn-primary" onclick="openSgModal('visitantes',null)">+ Novo Registo</button><button id="sg-visitantes-submit-btn" class="btn btn-gold" style="display:none;" onclick="submeterRegistosSG()">Submeter Registos SG</button></div>
       </div>
       <div class="card" style="padding:0;">
         <div id="sg-visitantes-loading" style="padding:2rem;text-align:center;"><div class="loader" style="margin:0 auto;"></div></div>
@@ -1041,7 +1006,7 @@
     <div id="view-sg-consultas" class="view">
       <div class="page-header">
         <div><div class="page-subtitle">Sargento da Guarda</div><h1 class="page-title">Lista de Marcação de Consulta</h1></div>
-        <div style="display:flex;gap:0.75rem;"><button id="sg-consultas-add-btn" class="btn btn-primary" onclick="openSgModal('consultas',null)">+ Novo Registo</button></div>
+        <div style="display:flex;gap:0.75rem;"><button id="sg-consultas-add-btn" class="btn btn-primary" onclick="openSgModal('consultas',null)">+ Novo Registo</button><button id="sg-consultas-submit-btn" class="btn btn-gold" style="display:none;" onclick="submeterRegistosSG()">Submeter Registos SG</button></div>
       </div>
       <div class="card" style="padding:0;">
         <div id="sg-consultas-loading" style="padding:2rem;text-align:center;"><div class="loader" style="margin:0 auto;"></div></div>
@@ -1317,7 +1282,7 @@ var SECTION_ACCESS = {
 // Nunca colar aqui a chave "secret" ou "service_role".
 var CONFIG = {
   SUPABASE_URL: 'https://deetfdtcgjapddeviipb.supabase.co',
-  SUPABASE_KEY: 'sb_publishable_luqznyJw1bZR706o7CkGPg_Q1SDkUbp',
+  SUPABASE_KEY: 'COLA_AQUI_A_CHAVE_PUBLISHABLE',
   EMAIL_URL:    'https://script.google.com/macros/s/AKfycbzSVxUDjjpkPoY8fwTq0tDjqysxKNKg8JSbaaZIPGICdTPszrjGe_ul7l3EdR1jBDLj/exec'
 };
 
@@ -1455,7 +1420,6 @@ function renderSidebar() {
   nav.innerHTML = '';
   nav.innerHTML += '<button class="nav-flat" id="nav-dashboard" onclick="navigate(\'dashboard\')">Painel</button>';
   nav.innerHTML += '<button class="nav-flat" id="nav-arquivo" onclick="navigate(\'arquivo\')">Arquivo</button>';
-  nav.innerHTML += '<button class="nav-flat" id="nav-registos-diarios-novo" onclick="navigate(\'registos-diarios\')">Registos Diários</button>';
   if (n.nivel === 'Oficial Dia' || n.nivel === 'Administrador') {
     nav.innerHTML += '<button class="nav-flat" id="nav-painel" onclick="navigate(\'painel\')">Serviços Exportados</button>';
   }
@@ -1538,7 +1502,6 @@ function navigate(view, params) {
   if (navEl) navEl.classList.add('active');
   if (view === 'dashboard')         loadDashboard();
   if (view === 'arquivo')           loadArquivo();
-  if (view === 'registos-diarios')  loadRegistosDiariosView();
   if (view === 'painel')            loadPainel();
   if (view === 'painel-servico')    loadPainelServico(params && params.id);
   if (view === 'relatorio-od')      initOD(params);
@@ -2132,13 +2095,15 @@ function loadDashboard() {
 function validarCamposObrigatorios(viewId, alertElId) {
   var container = document.getElementById(viewId);
   if (!container) return true;
+  // IMPORTANTE: não filtramos por "está visível agora" — estes formulários têm
+  // várias etapas (painéis escondidos um a um) e TODOS os campos de TODAS as
+  // etapas são obrigatórios, não só os da etapa em que a pessoa está.
   var campos = container.querySelectorAll('.form-input, .form-select, .form-textarea');
   var faltam = [];
   var primeiro = null;
   campos.forEach(function(el) {
     if (el.type === 'checkbox' || el.type === 'radio' || el.type === 'hidden' || el.disabled) return;
-    if (el.closest('.modal-overlay')) return;   // modais (ex.: adicionar item) não contam
-    if (el.offsetParent === null) return;       // escondido (display:none / painel fechado)
+    if (el.closest('.modal-overlay')) return;
     var val = (el.value == null ? '' : String(el.value)).trim();
     if (val !== '') return;
     var label = null;
@@ -2150,7 +2115,7 @@ function validarCamposObrigatorios(viewId, alertElId) {
   });
   if (faltam.length) {
     var alertEl = alertElId ? document.getElementById(alertElId) : null;
-    var msg = 'Preencha todos os campos antes de continuar. Em falta: ' +
+    var msg = 'Preencha todos os campos antes de continuar (incluindo os de outras etapas/páginas do formulário). Em falta: ' +
       faltam.slice(0, 6).join(', ') + (faltam.length > 6 ? ' e mais ' + (faltam.length - 6) + '…' : '') + '.';
     if (alertEl) {
       alertEl.className = alertEl.className.indexOf('alert-red') >= 0 ? alertEl.className : (alertEl.className + ' alert-red').trim();
@@ -2159,109 +2124,18 @@ function validarCamposObrigatorios(viewId, alertElId) {
     } else {
       alert(msg);
     }
-    if (primeiro && primeiro.scrollIntoView) primeiro.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    if (primeiro && primeiro.focus) primeiro.focus();
+    if (primeiro) {
+      var up = primeiro;
+      while (up && up !== container) {
+        if (up.style && up.style.display === 'none') up.style.display = '';
+        up = up.parentElement;
+      }
+      if (primeiro.scrollIntoView) primeiro.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (primeiro.focus) primeiro.focus();
+    }
     return false;
   }
   return true;
-}
-
-function loadRegistosDiariosView() {
-  ['rd-sem-servico','rd-fechado','rd-aberto'].forEach(function(id){ document.getElementById(id).style.display = 'none'; });
-  document.getElementById('rd-guardar-wrap').style.display = 'none';
-  document.getElementById('rd-loading').style.display = 'block';
-  document.getElementById('rd-lista').innerHTML = '';
-  document.getElementById('rd-texto-novo').value = '';
-
-  gas('listRegistosDiarios', [App.token]).then(function(res) {
-    document.getElementById('rd-loading').style.display = 'none';
-    if (!res.ok) { alert(res.error || 'Erro ao carregar.'); return; }
-
-    var podeGuardar = App.user.nivel === 'Sargento da Guarda' || App.user.nivel === 'Administrador';
-
-    if (!res.registos.length && !res.fechado) {
-      // pode não haver serviço aberto ainda — distinguir dos dois casos é indiferente aqui,
-      // mostra-se sempre o formulário de inserir (o serviço abre sozinho ao gravar o 1º registo).
-      document.getElementById('rd-aberto').style.display = 'block';
-      if (podeGuardar) document.getElementById('rd-guardar-wrap').style.display = 'block';
-      return;
-    }
-
-    if (res.fechado) {
-      document.getElementById('rd-fechado').style.display = 'block';
-      return;
-    }
-
-    document.getElementById('rd-aberto').style.display = 'block';
-    if (podeGuardar) document.getElementById('rd-guardar-wrap').style.display = 'block';
-    var lista = document.getElementById('rd-lista');
-    res.registos.forEach(function(r) {
-      var acoes = r.souAutor ? (
-        '<a href="#" onclick="editarRegistoDiario(' + r.id + ');return false;" style="font-size:12px;color:var(--green2);font-weight:600;text-decoration:none;margin-right:12px;">Editar</a>' +
-        '<a href="#" onclick="apagarRegistoDiario(' + r.id + ');return false;" style="font-size:12px;color:#e05252;font-weight:600;text-decoration:none;">Apagar</a>'
-      ) : '';
-      lista.innerHTML += '<div class="card" style="margin-bottom:0.75rem;" id="rd-item-' + r.id + '">' +
-        '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;">' +
-          '<div>' +
-            '<div style="font-weight:600;font-size:13px;">' + escHtml(r.autorNome || '') + (r.autorPatente ? ' <span style="color:var(--text2);font-weight:400;">(' + escHtml(r.autorPatente) + ')</span>' : '') + '</div>' +
-            '<div style="color:var(--text2);font-size:11px;">' + fmtDate(r.createdAt) + (r.updatedAt ? ' · editado' : '') + '</div>' +
-          '</div>' +
-          '<div>' + acoes + '</div>' +
-        '</div>' +
-        '<div style="margin-top:0.5rem;white-space:pre-wrap;font-size:13px;">' + escHtml(r.texto) + '</div>' +
-      '</div>';
-    });
-  }).catch(function(err) {
-    document.getElementById('rd-loading').style.display = 'none';
-    alert('Erro de comunicação: ' + (err && err.message ? err.message : String(err)));
-  });
-}
-
-function adicionarRegistoDiario() {
-  var texto = document.getElementById('rd-texto-novo').value.trim();
-  if (!texto) { alert('Escreva o registo antes de adicionar.'); return; }
-  gas('saveRegistoDiario', [App.token, { texto: texto }]).then(function(res) {
-    if (!res.ok) { alert(res.error || 'Erro ao guardar.'); return; }
-    loadRegistosDiariosView();
-  }).catch(function(err) {
-    alert('Erro de comunicação: ' + (err && err.message ? err.message : String(err)));
-  });
-}
-
-function editarRegistoDiario(id) {
-  var el = document.getElementById('rd-item-' + id);
-  var atual = el ? el.querySelector('div[style*="white-space"]').textContent : '';
-  var novo = prompt('Editar registo:', atual);
-  if (novo === null) return;
-  novo = novo.trim();
-  if (!novo) { alert('O texto não pode ficar vazio.'); return; }
-  gas('saveRegistoDiario', [App.token, { id: id, texto: novo }]).then(function(res) {
-    if (!res.ok) { alert(res.error || 'Erro ao guardar.'); return; }
-    loadRegistosDiariosView();
-  }).catch(function(err) {
-    alert('Erro de comunicação: ' + (err && err.message ? err.message : String(err)));
-  });
-}
-
-function apagarRegistoDiario(id) {
-  if (!confirm('Apagar este registo diário?')) return;
-  gas('deleteRegistoDiario', [App.token, id]).then(function(res) {
-    if (!res.ok) { alert(res.error || 'Erro ao apagar.'); return; }
-    loadRegistosDiariosView();
-  }).catch(function(err) {
-    alert('Erro de comunicação: ' + (err && err.message ? err.message : String(err)));
-  });
-}
-
-function guardarRegistosDiarios() {
-  if (!confirm('Guardar todos os Registos Diários deste serviço? Depois de guardados, já não podem ser alterados.')) return;
-  gas('guardarRegistosDiarios', [App.token]).then(function(res) {
-    if (!res.ok) { alert(res.error || 'Erro ao guardar.'); return; }
-    alert('Registos Diários guardados.');
-    loadRegistosDiariosView();
-  }).catch(function(err) {
-    alert('Erro de comunicação: ' + (err && err.message ? err.message : String(err)));
-  });
 }
 
 function loadArquivo() {
@@ -3167,7 +3041,17 @@ function deleteInvItem(itemId) {
 // ─── Sargento da Guarda — Views ──────────────────────────────────────────────
 
 var _sgCurrentId    = null; // id do registo em edição
-var _sgCriadorNivel = null; // nivel de quem criou o registo (para controlo de permissões)
+
+function submeterRegistosSG() {
+  if (!confirm('Submeter todos os Registos SG deste serviço? Depois de submetidos, já não podem ser alterados.')) return;
+  gas('guardarRegistosDiarios', [App.token]).then(function(res) {
+    if (!res.ok) { alert(res.error || 'Erro ao submeter.'); return; }
+    alert('Registos SG submetidos.');
+    if (App.currentView && App.currentView.indexOf('sg-') === 0) loadSgView(App.currentView.replace('sg-', ''));
+  }).catch(function(err) {
+    alert('Erro de comunicação: ' + (err && err.message ? err.message : String(err)));
+  });
+}
 
 function loadSgView(tipo) {
   var prefix = 'sg-' + tipo;
@@ -3180,14 +3064,17 @@ function loadSgView(tipo) {
   gas('getSgRegistos', [App.token, tipo]).then(function(res) {
     if (loading) loading.style.display = 'none';
     if (!res.ok) return;
+    var podeSubmeter = App.user.nivel === 'Sargento da Guarda' || App.user.nivel === 'Administrador';
     var addBtn = document.getElementById(prefix + '-add-btn');
     if (addBtn) {
       addBtn.disabled = !!res.fechado;
-      addBtn.title = res.fechado ? 'Os Registos Diários deste serviço já foram guardados.' : '';
+      addBtn.title = res.fechado ? 'Os Registos SG deste serviço já foram submetidos.' : '';
     }
+    var subBtn = document.getElementById(prefix + '-submit-btn');
+    if (subBtn) subBtn.style.display = (podeSubmeter && !res.fechado) ? 'inline-flex' : 'none';
     renderSgTable(tipo, res.registos);
     if (res.fechado && empty) {
-      empty.textContent = 'Os Registos Diários deste serviço já foram guardados — a lista fica limpa para o próximo serviço. Podes consultar o histórico em "Serviços Exportados".';
+      empty.textContent = 'Os Registos SG deste serviço já foram submetidos — a lista fica limpa para o próximo serviço. Podes consultar o histórico em "Serviços Exportados".';
     } else if (empty) {
       empty.textContent = 'Sem registos.';
     }
@@ -3222,8 +3109,7 @@ function renderSgTable(tipo, registos) {
     } else if (tipo === 'consultas') {
       cells = '<td>' + escHtml(r.nome||'') + '</td><td>' + escHtml(r.familiar||'') + '</td><td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + escHtml(r.obs||'') + '</td>';
     }
-    var _canManage = App.user.nivel === 'Sargento da Guarda' || App.user.nivel === 'Administrador' ||
-                     !r._criadorNivel || r._criadorNivel === App.user.nivel;
+    var _canManage = r.souAutor;
     var _editBtn   = _canManage ? '<button class="btn btn-ghost" style="padding:4px 10px;font-size:10px;" onclick="openSgModal(\'' + tipo + '\',' + r.id + ')">Editar</button>' : '';
     var _delBtn    = _canManage ? '<button class="btn btn-danger" style="padding:4px 10px;font-size:10px;" onclick="deleteSgRecord(\'' + tipo + '\',' + r.id + ')">Apagar</button>' : '';
     tbody.innerHTML += '<tr>' + cells +
@@ -3235,7 +3121,6 @@ function renderSgTable(tipo, registos) {
 
 function openSgModal(tipo, id) {
   _sgCurrentId    = id || null;
-  _sgCriadorNivel = null; // reset; será preenchido abaixo se for edição
   var prefix = 'sg-' + tipo;
   var modalTitle = document.getElementById(prefix + '-modal-title');
   var alertEl    = document.getElementById(prefix + '-alert');
@@ -3288,7 +3173,6 @@ function openSgModal(tipo, id) {
       if (!res.ok) return;
       var r = res.registos.find(function(x){ return x.id === id; });
       if (!r) return;
-      _sgCriadorNivel = r._criadorNivel || null; // preservar criador ao editar
       if (tipo === 'saida-pracas') {
         document.getElementById('sp-posto').value      = r.posto||'';
         document.getElementById('sp-nome').value       = r.nome||'';
@@ -3354,7 +3238,7 @@ function submitSgForm(tipo) {
   var btn     = document.getElementById(btnId);
   if (alertEl) alertEl.style.display = 'none';
 
-  var registo = { id: _sgCurrentId || null, _criadorNivel: _sgCriadorNivel || App.user.nivel };
+  var registo = { id: _sgCurrentId || null };
 
   if (tipo === 'saida-pracas') {
     var nome = document.getElementById('sp-nome').value.trim();
