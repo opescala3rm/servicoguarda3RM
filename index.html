@@ -368,28 +368,20 @@
             <option value="__inf-sargento-ronda" id="filter-inf-sronda" style="display:none;">Informes — Sargento Ronda</option>
             <option value="__inf-sargento-piquete" id="filter-inf-spiq" style="display:none;">Informes — Sargento Piquete</option>
           </select>
-          <button id="export-btn" class="btn btn-gold" style="display:none;" onclick="exportSelectedPDFs()">
-            <span id="export-btn-text">Exportar por email</span>
+          <button id="export-btn" class="btn btn-gold" style="display:none;" onclick="exportServico()">
+            <span id="export-btn-text">Exportar Serviço</span>
           </button>
         </div>
       </div>
       <div class="card" style="padding:0;">
         <table class="table">
           <thead><tr>
-            <th id="th-cb" style="display:none;width:40px;"><input type="checkbox" class="cb" id="cb-all" onchange="toggleAllCb()"/></th>
             <th>Data</th><th>Perfil</th><th>Oficial</th><th>Estado</th><th style="text-align:right;">Ação</th>
           </tr></thead>
           <tbody id="arquivo-tbody"></tbody>
         </table>
         <div id="arquivo-empty" style="display:none;padding:3rem;text-align:center;color:var(--text2);font-size:13px;">Sem relatórios encontrados.</div>
         <div id="arquivo-loading" style="padding:3rem;text-align:center;"><div class="loader" style="margin:0 auto;"></div></div>
-        <div id="sel-bar" style="display:none;padding:10px 14px;border-top:1px solid var(--border);background:#f8fafc;align-items:center;justify-content:space-between;">
-          <span style="font-size:12px;color:var(--gold);font-weight:600;" id="sel-count"></span>
-          <div style="display:flex;gap:0.75rem;">
-            <button class="btn btn-ghost" style="padding:5px 12px;" onclick="clearSelection()">Limpar</button>
-            <button class="btn btn-gold" style="padding:5px 12px;" onclick="exportSelectedPDFs()">Exportar Selecionados</button>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -598,6 +590,7 @@
           <div><label class="form-label">Sargento Dia</label><input class="form-input" id="sdr-sargento-dia" placeholder="Nome completo e posto"/></div>
           <div><label class="form-label">Reserva</label><input class="form-input" id="sdr-reserva" placeholder="Nome e posto"/></div>
           <div><label class="form-label">Cabo Dia</label><input class="form-input" id="sdr-cabo-dia" placeholder="Nome e posto"/></div>
+          <div><label class="form-label">Sargento Entrante</label><input class="form-input" id="sdr-entrante" placeholder="Nome e posto"/></div>
         </div>
       </div>
 
@@ -680,6 +673,7 @@
           <div><label class="form-label">Sargento Piquete</label><input class="form-input" id="spiq-sargento" placeholder="Nome completo e posto"/></div>
           <div><label class="form-label">Reserva</label><input class="form-input" id="spiq-reserva" placeholder="Nome e posto"/></div>
           <div><label class="form-label">Auxiliar</label><input class="form-input" id="spiq-auxiliar" placeholder="Nome e posto"/></div>
+          <div><label class="form-label">Sargento Entrante</label><input class="form-input" id="spiq-entrante" placeholder="Nome e posto"/></div>
         </div>
       </div>
 
@@ -760,6 +754,7 @@
           <div><label class="form-label">Sargento Ronda</label><input class="form-input" id="sronda-sargento" placeholder="Nome completo e posto"/></div>
           <div><label class="form-label">Reserva</label><input class="form-input" id="sronda-reserva" placeholder="Nome e posto"/></div>
           <div><label class="form-label">Auxiliar</label><input class="form-input" id="sronda-auxiliar" placeholder="Nome e posto"/></div>
+          <div><label class="form-label">Sargento Entrante</label><input class="form-input" id="sronda-entrante" placeholder="Nome e posto"/></div>
         </div>
       </div>
 
@@ -865,6 +860,7 @@
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
           <div><label class="form-label">Comandante da Guarda</label><input class="form-input" id="sgr-comandante" placeholder="Nome completo"/></div>
           <div><label class="form-label">Reserva</label><input class="form-input" id="sgr-reserva" placeholder="Nome e posto"/></div>
+          <div><label class="form-label">Sargento Entrante</label><input class="form-input" id="sgr-entrante" placeholder="Nome e posto"/></div>
         </div>
       </div>
 
@@ -1254,7 +1250,6 @@ var App = {
   sdInventory: [],
   archiveReports: [],
   currentServico: null,
-  selectedIds: new Set(),
   editUserId:  null,
 };
 
@@ -1282,7 +1277,7 @@ var SECTION_ACCESS = {
 // Nunca colar aqui a chave "secret" ou "service_role".
 var CONFIG = {
   SUPABASE_URL: 'https://deetfdtcgjapddeviipb.supabase.co',
-  SUPABASE_KEY: 'sb_publishable_luqznyJw1bZR706o7CkGPg_Q1SDkUbp',
+  SUPABASE_KEY: 'COLA_AQUI_A_CHAVE_PUBLISHABLE',
   EMAIL_URL:    'https://script.google.com/macros/s/AKfycbzSVxUDjjpkPoY8fwTq0tDjqysxKNKg8JSbaaZIPGICdTPszrjGe_ul7l3EdR1jBDLj/exec'
 };
 
@@ -1767,7 +1762,7 @@ function initSgRelatorio(params) {
 }
 
 function resetSgrForm() {
-  ['sgr-comandante','sgr-reserva','sgr-ocorrencias'].forEach(function(id){ document.getElementById(id).value = ''; });
+  ['sgr-comandante','sgr-reserva','sgr-entrante','sgr-ocorrencias'].forEach(function(id){ document.getElementById(id).value = ''; });
   ['sgr-forca-sargento','sgr-forca-auxiliar','sgr-forca-sentinelas'].forEach(function(id){ document.getElementById(id).value = '0'; });
   fillSelect_('sgr-posto-porta-arma',       POSTO_LETRAS_, 'A');
   fillSelect_('sgr-posto-observacao',        POSTO_LETRAS_, 'B');
@@ -1879,6 +1874,7 @@ function collectSgrData() {
   return {
     comandanteGuarda: document.getElementById('sgr-comandante').value,
     reserva: document.getElementById('sgr-reserva').value,
+    entrante: document.getElementById('sgr-entrante').value,
     forcas: {
       sargento: parseFloat(document.getElementById('sgr-forca-sargento').value)||0,
       auxiliar: parseFloat(document.getElementById('sgr-forca-auxiliar').value)||0,
@@ -1904,6 +1900,7 @@ function populateSgrForm(relatorio) {
   var d = relatorio.data || {};
   document.getElementById('sgr-comandante').value = d.comandanteGuarda || '';
   document.getElementById('sgr-reserva').value = d.reserva || '';
+  document.getElementById('sgr-entrante').value = d.entrante || '';
   var f = d.forcas || {};
   document.getElementById('sgr-forca-sargento').value = f.sargento || 0;
   document.getElementById('sgr-forca-auxiliar').value = f.auxiliar || 0;
@@ -2049,6 +2046,9 @@ function buildSgRelatorioPDF(relatorio) {
   sectionTitle('Ocorrências');
   row('Ocorrências', d.ocorrencias);
 
+  sectionTitle('Encerramento');
+  twoCol('Comandante Cessante', d.comandanteGuarda, 'Comandante Entrante', d.entrante);
+
   checkPage(50); y += 12;
   var sigW = 68;
   doc.setDrawColor.apply(doc, GREEN); doc.setLineWidth(0.3);
@@ -2145,7 +2145,6 @@ function loadArquivo() {
   document.getElementById('arquivo-empty').style.display = 'none';
   document.getElementById('arquivo-empty').textContent = 'Sem relatórios encontrados.';
   document.getElementById('export-btn').style.display = 'none';
-  document.getElementById('th-cb').style.display = 'none';
   var canExport = App.user.nivel === 'Oficial Dia' || App.user.nivel === 'Administrador';
   var _nivelToRoleType = {
     'Oficial Dia':'oficial-dia','Sargento da Guarda':'sargento-guarda',
@@ -2179,11 +2178,9 @@ function loadArquivo() {
     // Relatórios (todos os do serviço em curso, ou só de um tipo)
     var reports = type ? res.servico.relatorios.filter(function(r){ return r.type === type; }) : res.servico.relatorios;
     App.archiveReports = reports;
-    App.selectedIds = new Set();
     if (!reports.length) { document.getElementById('arquivo-empty').style.display = 'block'; return; }
     document.getElementById('export-btn').style.display = canExport ? 'inline-flex' : 'none';
-    document.getElementById('th-cb').style.display = canExport ? '' : 'none';
-    renderArquivoTable(); updateSelectionBar(); updateExportBtn();
+    renderArquivoTable(); updateExportBtn();
   }).catch(function() {
     document.getElementById('arquivo-loading').style.display = 'none';
     document.getElementById('arquivo-empty').style.display = 'block';
@@ -2275,9 +2272,8 @@ function badgeForStatus_(status) {
 }
 
 function renderArquivoTable() {
-  var canExport    = App.user.nivel === 'Oficial Dia' || App.user.nivel === 'Administrador';
+  var _isOdOrAdmin = App.user.nivel === 'Oficial Dia' || App.user.nivel === 'Administrador';
   var _nivel       = App.user.nivel;
-  var _isOdOrAdmin = canExport;
   var _nivelToType = {
     'Oficial Dia':       'oficial-dia',
     'Sargento da Guarda':'sargento-guarda',
@@ -2289,7 +2285,6 @@ function renderArquivoTable() {
   var tbody = document.getElementById('arquivo-tbody');
   tbody.innerHTML = '';
   App.archiveReports.forEach(function(r) {
-    var cbCell   = canExport ? '<td><input type="checkbox" class="cb" id="cb-' + r.id + '" onchange="toggleCb(' + r.id + ')" ' + (App.selectedIds.has(r.id) ? 'checked' : '') + '/></td>' : '';
     var _canView = _isOdOrAdmin || r.type === _ownType;
     var _openFn  = r.type === 'oficial-dia'
       ? 'openReport(' + r.id + ')'
@@ -2297,40 +2292,13 @@ function renderArquivoTable() {
     var editBtn  = _canView
       ? '<a href="#" onclick="' + _openFn + ';return false;" style="font-size:12px;color:var(--green2);font-weight:600;text-decoration:none;">Ver →</a>'
       : '<span style="font-size:12px;color:var(--text2);">—</span>';
-    tbody.innerHTML += '<tr>' + cbCell + '<td>' + fmtDate(r.createdAt) + '</td><td><span style="font-size:12px;font-weight:600;">' + (TYPE_LABELS[r.type] || r.type) + '</span></td><td>' + escHtml(r.oficialDia) + '</td><td>' + badgeStatus(r.status) + '</td><td style="text-align:right;">' + editBtn + '</td></tr>';
+    tbody.innerHTML += '<tr><td>' + fmtDate(r.createdAt) + '</td><td><span style="font-size:12px;font-weight:600;">' + (TYPE_LABELS[r.type] || r.type) + '</span></td><td>' + escHtml(r.oficialDia) + '</td><td>' + badgeStatus(r.status) + '</td><td style="text-align:right;">' + editBtn + '</td></tr>';
   });
 }
 
-function toggleCb(id) {
-  if (App.selectedIds.has(id)) App.selectedIds.delete(id); else App.selectedIds.add(id);
-  updateSelectionBar(); updateExportBtn();
-  document.getElementById('cb-all').checked = App.archiveReports.length > 0 && App.archiveReports.every(function(r){ return App.selectedIds.has(r.id); });
-}
-function toggleAllCb() {
-  var checked = document.getElementById('cb-all').checked;
-  App.selectedIds = new Set();
-  if (checked) App.archiveReports.forEach(function(r){ App.selectedIds.add(r.id); });
-  App.archiveReports.forEach(function(r){ var cb = document.getElementById('cb-' + r.id); if (cb) cb.checked = checked; });
-  updateSelectionBar(); updateExportBtn();
-}
-function clearSelection() {
-  App.selectedIds = new Set();
-  document.getElementById('cb-all').checked = false;
-  App.archiveReports.forEach(function(r){ var cb = document.getElementById('cb-' + r.id); if(cb) cb.checked = false; });
-  updateSelectionBar(); updateExportBtn();
-}
-function updateSelectionBar() {
-  var bar = document.getElementById('sel-bar');
-  var n = App.selectedIds.size;
-  if (n > 0) { bar.style.display = 'flex'; document.getElementById('sel-count').textContent = n + ' relatório' + (n > 1 ? 's' : '') + ' selecionado' + (n > 1 ? 's' : ''); }
-  else { bar.style.display = 'none'; }
-}
 function updateExportBtn() {
-  var n = App.selectedIds.size;
   var total = App.archiveReports.length;
-  var btn = document.getElementById('export-btn-text');
-  if (n > 0) btn.textContent = 'Exportar ' + n + ' PDF' + (n > 1 ? 's' : '');
-  else btn.textContent = 'Exportar Todos (' + total + ')';
+  document.getElementById('export-btn-text').textContent = 'Exportar Serviço (' + total + ')';
 }
 function openReport(id) { navigate('relatorio-od', { mode: 'view', id: id }); }
 function openArchiveReport(type, id) {
@@ -2575,7 +2543,7 @@ function goToSdrStep(step) { App.sdStep = step; renderSdrSteps(); showSdrPanel(s
 function sdrStepNav(dir) { var next = App.sdStep + dir; if (next < 1 || next > SDR_STEPS_.length) return; goToSdrStep(next); }
 
 function resetSdrForm() {
-  ['sdr-sargento-dia','sdr-reserva','sdr-cabo-dia',
+  ['sdr-sargento-dia','sdr-reserva','sdr-cabo-dia','sdr-entrante',
    'sdr-generos-recebidos','sdr-alimentacao','sdr-limpeza-conservacao','sdr-agua-doce','sdr-gas',
    'sdr-ocorrencias'].forEach(function(id){ var el = document.getElementById(id); if (el) el.value = ''; });
 }
@@ -2627,6 +2595,7 @@ function collectSdrData() {
     sargentodia:   document.getElementById('sdr-sargento-dia').value,
     reserva:       document.getElementById('sdr-reserva').value,
     caboDia:       document.getElementById('sdr-cabo-dia').value,
+    entrante:      document.getElementById('sdr-entrante').value,
     generosRecebidos:    document.getElementById('sdr-generos-recebidos').value,
     alimentacao:         document.getElementById('sdr-alimentacao').value,
     limpezaConservacao:  document.getElementById('sdr-limpeza-conservacao').value,
@@ -2643,6 +2612,7 @@ function populateSdrForm(relatorio) {
   document.getElementById('sdr-sargento-dia').value = d.sargentodia || '';
   document.getElementById('sdr-reserva').value = d.reserva || '';
   document.getElementById('sdr-cabo-dia').value = d.caboDia || '';
+  document.getElementById('sdr-entrante').value = d.entrante || '';
   document.getElementById('sdr-generos-recebidos').value = d.generosRecebidos || '';
   document.getElementById('sdr-alimentacao').value = d.alimentacao || '';
   document.getElementById('sdr-limpeza-conservacao').value = d.limpezaConservacao || '';
@@ -2821,6 +2791,9 @@ function buildSdRelatorioPDF(relatorio) {
 
   sectionTitle('Ocorrências');
   row('Ocorrências', d.ocorrencias);
+
+  sectionTitle('Encerramento');
+  twoCol('Sargento Cessante', d.sargentodia, 'Sargento Entrante', d.entrante);
 
   checkPage(50); y += 12;
   var sigW = 68;
@@ -3318,41 +3291,40 @@ function exportSinglePDF() {
     doc.save('relatorio-' + String(res.report.id).slice(-6) + '.pdf');
   });
 }
-function exportSelectedPDFs() {
+var SG_REGISTO_TIPOS_ = ['saida-pracas', 'viaturas-mil', 'viaturas-civ', 'visitantes', 'consultas'];
+var INFORME_ROLES_    = ['oficial-dia', 'sargento-guarda', 'sargento-dia', 'sargento-ronda', 'sargento-piquete'];
+
+// Exporta TODO o conteúdo do serviço em curso (não depende de nenhuma seleção):
+// todos os relatórios submetidos, os informes e os Registos SG. Um único clique.
+function exportServico() {
   if (App.currentServico && App.currentServico.rascunhos > 0) {
     alert('Ainda há ' + App.currentServico.rascunhos + ' relatório(s) em Rascunho neste serviço. Todos têm de estar Submetidos antes de exportar.');
     return;
   }
-  var ids = App.selectedIds.size > 0 ? Array.from(App.selectedIds) : App.archiveReports.map(function(r){ return r.id; });
-  if (!ids.length) return;
+  if (!App.archiveReports.length) { alert('Não há nada para exportar neste serviço.'); return; }
+
   var btn = document.getElementById('export-btn');
   var btnHtml = btn.innerHTML;
   function resetBtn_() { btn.innerHTML = btnHtml; btn.disabled = false; updateExportBtn(); }
   btn.disabled = true;
   btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 0.8s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> A gerar e enviar por email…';
 
-  var odIds = [], sgrIds = [];
-  ids.forEach(function(id) {
-    var r = App.archiveReports.find(function(x){ return x.id === id; });
-    if (!r) return;
-    if (r.type === 'oficial-dia') odIds.push(id);
-    else if (r.type === 'sargento-guarda') sgrIds.push(id);
-  });
+  var porTipo = {};
+  App.archiveReports.forEach(function(r) { (porTipo[r.type] = porTipo[r.type] || []).push(r.id); });
 
-  var fetchedOD = [], fetchedSGR = [];
-  function fetchAllOD(i) {
-    if (i >= odIds.length) return Promise.resolve();
-    return gas('getReport', [App.token, odIds[i]]).then(function(res) {
-      if (res.ok) fetchedOD.push(res.report);
-      return fetchAllOD(i + 1);
-    }).catch(function() { return fetchAllOD(i + 1); });
-  }
-  function fetchAllSGR(i) {
-    if (i >= sgrIds.length) return Promise.resolve();
-    return gas('getSGRelatorio', [App.token, sgrIds[i]]).then(function(res) {
-      if (res.ok) fetchedSGR.push(res.relatorio);
-      return fetchAllSGR(i + 1);
-    }).catch(function() { return fetchAllSGR(i + 1); });
+  var dados = { od: [], sgr: [], sd: [], spiq: [], sronda: [], informes: [], sgRegistos: {} };
+
+  function fetchLista(ids, fn, campo, destino) {
+    var i = 0;
+    function next() {
+      if (i >= ids.length) return Promise.resolve();
+      var id = ids[i++];
+      return gas(fn, [App.token, id]).then(function(res) {
+        if (res.ok) destino.push(res[campo]);
+        return next();
+      }).catch(next);
+    }
+    return next();
   }
 
   function loadHeaderImg(callback) {
@@ -3370,18 +3342,30 @@ function exportSelectedPDFs() {
     img.src = 'https://i.postimg.cc/rF0QVDBM/Logo-3-RM.png';
   }
 
-  Promise.all([fetchAllOD(0), fetchAllSGR(0)]).then(function() {
-    var allReports = fetchedOD.concat(fetchedSGR);
-    if (!allReports.length) { resetBtn_(); alert('Nenhum relatório encontrado para exportar.'); return; }
-    var startDate = null;
-    allReports.forEach(function(r) {
-      var iso = (r.data && r.data.identificacao && r.data.identificacao.inicio) || r.createdAt;
-      var d = new Date(iso);
-      if (!isNaN(d) && (!startDate || d < startDate)) startDate = d;
-    });
+  var tarefas = [
+    fetchLista(porTipo['oficial-dia']      || [], 'getReport',          'report',    dados.od),
+    fetchLista(porTipo['sargento-guarda']  || [], 'getSGRelatorio',     'relatorio', dados.sgr),
+    fetchLista(porTipo['sargento-dia']     || [], 'getSDRelatorio',     'relatorio', dados.sd),
+    fetchLista(porTipo['sargento-piquete'] || [], 'getSpiqRelatorio',   'relatorio', dados.spiq),
+    fetchLista(porTipo['sargento-ronda']   || [], 'getSrondaRelatorio', 'relatorio', dados.sronda)
+  ];
+  INFORME_ROLES_.forEach(function(role) {
+    tarefas.push(gas('listInformes', [App.token, role, true]).then(function(res) {
+      if (res.ok) dados.informes = dados.informes.concat(res.informes);
+    }).catch(function(){}));
+  });
+  SG_REGISTO_TIPOS_.forEach(function(tipo) {
+    tarefas.push(gas('getSgRegistos', [App.token, tipo]).then(function(res) {
+      dados.sgRegistos[tipo] = res.ok ? res.registos : [];
+    }).catch(function(){ dados.sgRegistos[tipo] = []; }));
+  });
+
+  Promise.all(tarefas).then(function() {
     loadHeaderImg(function(imgData) {
-      var doc = buildCombinedServicePDF(fetchedOD, fetchedSGR, imgData);
-      var dateStr = startDate ? fmtDateFile(startDate.toISOString()) : fmtDateFile(new Date().toISOString());
+      var doc = buildCombinedServicePDF(dados, imgData);
+      var dateStr = App.currentServico && App.currentServico.dataServico
+        ? App.currentServico.dataServico
+        : fmtDateFile(new Date().toISOString());
       var filename = 'Relatorio_de_Servico_do_dia_' + dateStr + '.pdf';
       var base64 = doc.output('datauristring').split(',')[1];
       gas('savePdfToDrive', [App.token, filename, base64]).then(function(res) {
@@ -3393,8 +3377,7 @@ function exportSelectedPDFs() {
         gas('fecharServico', [App.token]).then(function(fres) {
           resetBtn_();
           if (fres.ok) {
-            alert('Relatório do dia enviado por email. O serviço foi arquivado.');
-            App.selectedIds = new Set();
+            alert('Serviço enviado por email e arquivado com sucesso.');
             loadArquivo();
           } else {
             alert('O email foi enviado, mas o serviço não foi arquivado: ' + (fres.error || 'Erro desconhecido') + '. Contacta o Administrador.');
@@ -3414,7 +3397,14 @@ function exportSelectedPDFs() {
   });
 }
 
-function buildCombinedServicePDF(odReports, sgrReports, imgData) {
+function buildCombinedServicePDF(dados, imgData) {
+  var odReports     = dados.od || [];
+  var sgrReports    = dados.sgr || [];
+  var sdReports     = dados.sd || [];
+  var spiqReports   = dados.spiq || [];
+  var srondaReports = dados.sronda || [];
+  var informes      = dados.informes || [];
+  var sgRegistos    = dados.sgRegistos || {};
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   var L = 14, R = 196, PW = 210, PH = 297;
@@ -3596,10 +3586,150 @@ function buildCombinedServicePDF(odReports, sgrReports, imgData) {
 
     sectionTitle('9. Ocorrências');
     rowF('Ocorrências', d.ocorrencias);
+
+    sectionTitle('10. Encerramento');
+    twoColF('Comandante Cessante', d.comandanteGuarda, 'Comandante Entrante', d.entrante);
   });
 
+  // ── Função partilhada para secção de material (SD/Piquete/Ronda) ────────────
+  function matSectionSimples(title, items) {
+    sectionTitle(title);
+    var mc = [{ label: 'Designação', w: 95 }, { label: 'Exist.', w: 22 }, { label: 'Rec.', w: 22 }, { label: 'Ent.', w: 22 }, { label: 'Estado', w: 24 }];
+    if (items && items.length) { tableHeadF(mc); items.forEach(function(m, i) { tableRowF(mc, [m.designacao, String(m.existente || 0), String(m.recebido || 0), String(m.entregue || 0), m.estado || 'Bom'], i); }); }
+    else noData('Sem itens.');
+  }
+
+  // ── Sargento Dia reports ────────────────────────────────────────────────────
+  sdReports.forEach(function(relatorio) {
+    var d = relatorio.data || {};
+    reportDivider('RELATÓRIO DE SARGENTO DIA');
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(100, 100, 100);
+    doc.text('Nº ' + String(relatorio.id).slice(-6) + '   •   ' + fmtDate(relatorio.createdAt) + '   •   Sargento: ' + (d.sargentodia || '—'), PW / 2, y, { align: 'center' }); y += 8;
+
+    sectionTitle('1. Identificação');
+    twoColF('Sargento Dia', d.sargentodia, 'Reserva', d.reserva);
+    rowF('Cabo Dia', d.caboDia);
+
+    sectionTitle('2. Informações');
+    rowF('Géneros Recebidos', d.generosRecebidos);
+    rowF('Alimentação', d.alimentacao);
+    rowF('Limpeza e Conservação', d.limpezaConservacao);
+    rowF('Abastecimento de Água Doce', d.aguaDoce);
+    rowF('Reabastecimento de Gás', d.gas);
+
+    matSectionSimples('3. Material de Guerra', d.materialGuerra);
+    matSectionSimples('4. Materiais de Aquartelamento', d.materialAquartelamento);
+
+    sectionTitle('5. Ocorrências');
+    rowF('Ocorrências', d.ocorrencias);
+
+    sectionTitle('6. Encerramento');
+    twoColF('Sargento Cessante', d.sargentodia, 'Sargento Entrante', d.entrante);
+  });
+
+  // ── Sargento Piquete reports ────────────────────────────────────────────────
+  spiqReports.forEach(function(relatorio) {
+    var d = relatorio.data || {};
+    reportDivider('RELATÓRIO DE SARGENTO PIQUETE');
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(100, 100, 100);
+    doc.text('Nº ' + String(relatorio.id).slice(-6) + '   •   ' + fmtDate(relatorio.createdAt) + '   •   Sargento: ' + (d.sargento || '—'), PW / 2, y, { align: 'center' }); y += 8;
+
+    sectionTitle('1. Identificação');
+    twoColF('Sargento Piquete', d.sargento, 'Reserva', d.reserva);
+    rowF('Auxiliar', d.auxiliar);
+
+    matSectionSimples('2. Material de Guerra', d.materialGuerra);
+    matSectionSimples('3. Material de Aquartelamento', d.materialAquartelamento);
+
+    sectionTitle('4. Conferência a Carga'); rowF('', d.conferenciaCarga);
+    sectionTitle('5. Ocorrências'); rowF('', d.ocorrencias);
+    sectionTitle('6. Diversos'); rowF('', d.diversos);
+
+    sectionTitle('7. Encerramento');
+    twoColF('Sargento Cessante', d.sargento, 'Sargento Entrante', d.entrante);
+  });
+
+  // ── Sargento Ronda reports ──────────────────────────────────────────────────
+  srondaReports.forEach(function(relatorio) {
+    var d = relatorio.data || {};
+    reportDivider('RELATÓRIO DE SARGENTO DA RONDA');
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(100, 100, 100);
+    doc.text('Nº ' + String(relatorio.id).slice(-6) + '   •   ' + fmtDate(relatorio.createdAt) + '   •   Sargento: ' + (d.sargento || '—'), PW / 2, y, { align: 'center' }); y += 8;
+
+    sectionTitle('1. Identificação');
+    twoColF('Sargento Ronda', d.sargento, 'Reserva', d.reserva);
+    rowF('Auxiliar', d.auxiliar);
+
+    sectionTitle('2. Grupo de Ronda');
+    var grupoCols = [{ label: 'Posto', w: 40 }, { label: 'Nome', w: 70 }, { label: 'Unidade / Função', w: 72 }];
+    if (d.grupoRonda && d.grupoRonda.length) { tableHeadF(grupoCols); d.grupoRonda.forEach(function(g, i) { tableRowF(grupoCols, [g.posto, g.nome, g.unidade], i); }); }
+    else noData('Sem registos.');
+
+    matSectionSimples('3. Material de Guerra', d.materialGuerra);
+    matSectionSimples('4. Material de Guerra BCV', d.materialGuerraBcv);
+    matSectionSimples('5. Material de Aquartelamento', d.materialAquartelamento);
+
+    sectionTitle('6. Zonas Patrulhadas');
+    var zonasCols = [{ label: 'Nome da Zona', w: 130 }, { label: 'Horário', w: 52 }];
+    if (d.zonas && d.zonas.length) { tableHeadF(zonasCols); d.zonas.forEach(function(z, i) { tableRowF(zonasCols, [z.zona, z.horario], i); }); }
+    else noData('Sem zonas registadas.');
+
+    sectionTitle('7. Ocorrências'); rowF('', d.ocorrencias);
+    sectionTitle('8. Documentos Anexados'); rowF('', d.documentos);
+
+    sectionTitle('9. Encerramento');
+    twoColF('Sargento Cessante', d.sargento, 'Sargento Entrante', d.entrante);
+  });
+
+  // ── Informes (um por página, estilo carta) ──────────────────────────────────
+  var INF_ROLE_LABEL_ = {
+    'oficial-dia': 'Oficial de Dia', 'sargento-guarda': 'Sargento da Guarda',
+    'sargento-dia': 'Sargento Dia', 'sargento-ronda': 'Sargento Ronda', 'sargento-piquete': 'Sargento Piquete'
+  };
+  informes.forEach(function(inf) {
+    reportDivider('INFORME — ' + (INF_ROLE_LABEL_[inf.roleType] || inf.roleType || '').toUpperCase());
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(100, 100, 100);
+    doc.text((inf.autorNome || '—') + (inf.autorPatente ? ' (' + inf.autorPatente + ')' : '') + '   •   ' + (inf.dataLabel || fmtDate(inf.createdAt)), PW / 2, y, { align: 'center' }); y += 10;
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(0, 0, 0);
+    var infLines = doc.splitTextToSize(inf.texto || '', R - L);
+    infLines.forEach(function(line) { checkPage(7); doc.text(line, L, y); y += 6; });
+  });
+
+  // ── Registos SG (Saída de Praças, Viaturas, Visitantes, Consultas) ──────────
+  var SG_REG_LABEL_ = {
+    'saida-pracas': 'Saída de Praças', 'viaturas-mil': 'Viaturas Militares',
+    'viaturas-civ': 'Viaturas Civis', 'visitantes': 'Visitantes', 'consultas': 'Lista de Consulta'
+  };
+  var temRegistosSg = Object.keys(sgRegistos).some(function(t) { return (sgRegistos[t] || []).length > 0; });
+  if (temRegistosSg) {
+    reportDivider('REGISTOS SG');
+    SG_REGISTO_TIPOS_.forEach(function(tipo) {
+      var itens = sgRegistos[tipo] || [];
+      sectionTitle(SG_REG_LABEL_[tipo] || tipo);
+      if (!itens.length) { noData('Sem registos.'); return; }
+      if (tipo === 'saida-pracas') {
+        var c1 = [{label:'Posto',w:22},{label:'Nome',w:45},{label:'Subunidade',w:35},{label:'Saída',w:20},{label:'Entrada',w:20},{label:'Autorizou',w:40}];
+        tableHeadF(c1); itens.forEach(function(r, i) { tableRowF(c1, [r.posto, r.nome, r.subunidade, r.hSaida, r.hEntrada, r.autorizou], i); });
+      } else if (tipo === 'viaturas-mil') {
+        var c2 = [{label:'Matrícula',w:24},{label:'Condutor',w:38},{label:'S.Hora',w:16},{label:'S.Km',w:16},{label:'E.Hora',w:16},{label:'E.Km',w:16},{label:'Total',w:16},{label:'Itinerário',w:40}];
+        tableHeadF(c2); itens.forEach(function(r, i) { var total = Math.max(0,(parseFloat(r.entradaKm)||0)-(parseFloat(r.saidaKm)||0)); tableRowF(c2, [r.matricula, r.condutor, r.saidaHora, String(r.saidaKm||0), r.entradaHora, String(r.entradaKm||0), String(total), r.itinerario], i); });
+      } else if (tipo === 'viaturas-civ') {
+        var c3 = [{label:'Data',w:20},{label:'Matrícula',w:24},{label:'Condutor',w:36},{label:'BI',w:24},{label:'Carga',w:30},{label:'Destino',w:30},{label:'Entrada',w:16},{label:'Saída',w:16}];
+        tableHeadF(c3); itens.forEach(function(r, i) { tableRowF(c3, [r.data, r.matricula, r.condutor, r.bi, r.carga, r.destino, r.hEntrada, r.hSaida], i); });
+      } else if (tipo === 'visitantes') {
+        var c4 = [{label:'Nome',w:45},{label:'BI',w:28},{label:'Entidade',w:40},{label:'Entrada',w:22},{label:'Saída',w:22},{label:'Matrícula',w:25}];
+        tableHeadF(c4); itens.forEach(function(r, i) { tableRowF(c4, [r.nome, r.bi, r.entidade, r.hEntrada, r.hSaida, r.matricula], i); });
+      } else if (tipo === 'consultas') {
+        var c5 = [{label:'Nome',w:60},{label:'Familiar',w:60},{label:'Observações',w:62}];
+        tableHeadF(c5); itens.forEach(function(r, i) { tableRowF(c5, [r.nome, r.familiar, r.obs], i); });
+      }
+    });
+    sectionTitle('Submetido por');
+    rowF('Sargento da Guarda', (sgrReports[0] && sgrReports[0].data && sgrReports[0].data.comandanteGuarda) || '—');
+  }
+
   // ── Signatures on last page ────────────────────────────────────────────────
-  if (odReports.length > 0 || sgrReports.length > 0) {
+  if (odReports.length + sgrReports.length + sdReports.length + spiqReports.length + srondaReports.length > 0) {
     checkPage(50); y += 12;
     var sigW = 68;
     doc.setDrawColor.apply(doc, GREEN); doc.setLineWidth(0.3);
@@ -3795,7 +3925,7 @@ function goToSpiqStep(step) { App.spiqStep = step; renderSpiqSteps(); showSpiqPa
 function spiqStepNav(dir) { var next = App.spiqStep + dir; if (next < 1 || next > SPIQ_STEPS_.length) return; goToSpiqStep(next); }
 
 function resetSpiqForm() {
-  ['spiq-sargento','spiq-reserva','spiq-auxiliar',
+  ['spiq-sargento','spiq-reserva','spiq-auxiliar','spiq-entrante',
    'spiq-conferencia-carga','spiq-ocorrencias','spiq-diversos'].forEach(function(id){ var el = document.getElementById(id); if (el) el.value = ''; });
 }
 function lockSpiqInputs(lock) {
@@ -3842,6 +3972,7 @@ function collectSpiqData() {
     sargento:          document.getElementById('spiq-sargento').value,
     reserva:           document.getElementById('spiq-reserva').value,
     auxiliar:          document.getElementById('spiq-auxiliar').value,
+    entrante:          document.getElementById('spiq-entrante').value,
     conferenciaCarga:  document.getElementById('spiq-conferencia-carga').value,
     ocorrencias:       document.getElementById('spiq-ocorrencias').value,
     diversos:          document.getElementById('spiq-diversos').value,
@@ -3854,6 +3985,7 @@ function populateSpiqForm(relatorio) {
   document.getElementById('spiq-sargento').value = d.sargento || '';
   document.getElementById('spiq-reserva').value = d.reserva || '';
   document.getElementById('spiq-auxiliar').value = d.auxiliar || '';
+  document.getElementById('spiq-entrante').value = d.entrante || '';
   document.getElementById('spiq-conferencia-carga').value = d.conferenciaCarga || '';
   document.getElementById('spiq-ocorrencias').value = d.ocorrencias || '';
   document.getElementById('spiq-diversos').value = d.diversos || '';
@@ -4008,6 +4140,8 @@ function buildSpiqRelatorioPDF(relatorio) {
   sectionTitle('4. Conferência a Carga'); rowPDF('', d.conferenciaCarga);
   sectionTitle('5. Ocorrências'); rowPDF('', d.ocorrencias);
   sectionTitle('6. Diversos'); rowPDF('', d.diversos);
+  sectionTitle('7. Encerramento');
+  twoCol('Sargento Cessante', d.sargento, 'Sargento Entrante', d.entrante);
   checkPage(50); y += 12;
   var sigW = 68;
   doc.setDrawColor.apply(doc, GREEN); doc.setLineWidth(0.3);
@@ -4099,7 +4233,7 @@ function addSrondaZonaRow() {
   '</tr>';
 }
 function resetSrondaForm() {
-  ['sronda-sargento','sronda-reserva','sronda-auxiliar',
+  ['sronda-sargento','sronda-reserva','sronda-auxiliar','sronda-entrante',
    'sronda-ocorrencias','sronda-documentos'].forEach(function(id){ var el = document.getElementById(id); if (el) el.value = ''; });
   var gt = document.getElementById('sronda-grupo-tbody'); if (gt) gt.innerHTML = '';
   var zt = document.getElementById('sronda-zonas-tbody'); if (zt) zt.innerHTML = '';
@@ -4159,6 +4293,7 @@ function collectSrondaData() {
     sargento:    document.getElementById('sronda-sargento').value,
     reserva:     document.getElementById('sronda-reserva').value,
     auxiliar:    document.getElementById('sronda-auxiliar').value,
+    entrante:    document.getElementById('sronda-entrante').value,
     grupoRonda:  grupo,
     zonas:       zonas,
     ocorrencias: document.getElementById('sronda-ocorrencias').value,
@@ -4173,6 +4308,7 @@ function populateSrondaForm(relatorio) {
   document.getElementById('sronda-sargento').value = d.sargento || '';
   document.getElementById('sronda-reserva').value = d.reserva || '';
   document.getElementById('sronda-auxiliar').value = d.auxiliar || '';
+  document.getElementById('sronda-entrante').value = d.entrante || '';
   document.getElementById('sronda-ocorrencias').value = d.ocorrencias || '';
   document.getElementById('sronda-documentos').value = d.documentos || '';
   var gt = document.getElementById('sronda-grupo-tbody'); gt.innerHTML = '';
@@ -4351,6 +4487,8 @@ function buildSrondaRelatorioPDF(relatorio) {
   else { doc.setFont('helvetica','italic'); doc.setFontSize(9); doc.setTextColor(150,150,150); doc.text('Sem zonas registadas.', L, y); y+=6; }
   sectionTitle('7. Ocorrências'); rowPDF('', d.ocorrencias);
   sectionTitle('8. Documentos Anexados'); rowPDF('', d.documentos);
+  sectionTitle('9. Encerramento');
+  twoCol('Sargento Cessante', d.sargento, 'Sargento Entrante', d.entrante);
   checkPage(50); y += 12;
   var sigW = 68;
   doc.setDrawColor.apply(doc, GREEN); doc.setLineWidth(0.3);
