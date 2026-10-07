@@ -354,20 +354,6 @@
           <h1 class="page-title">Registo de Operações</h1>
         </div>
         <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;">
-          <select id="arquivo-filter-type" class="form-input form-select" style="width:200px;" onchange="loadArquivo()">
-            <option value="">Todos os Relatórios</option>
-            <option value="oficial-dia">Oficial de Dia</option>
-            <option value="sargento-guarda">Sargento da Guarda</option>
-            <option value="sargento-dia">Sargento Dia</option>
-            <option value="sargento-ronda">Sargento Ronda</option>
-            <option value="sargento-piquete">Sargento Piquete</option>
-            <option value="__inf" id="filter-inf-own">Os Meus Informes</option>
-            <option value="__inf-oficial-dia" id="filter-inf-od" style="display:none;">Informes — Oficial de Dia</option>
-            <option value="__inf-sargento-guarda" id="filter-inf-sg" style="display:none;">Informes — Sargento da Guarda</option>
-            <option value="__inf-sargento-dia" id="filter-inf-sdia" style="display:none;">Informes — Sargento Dia</option>
-            <option value="__inf-sargento-ronda" id="filter-inf-sronda" style="display:none;">Informes — Sargento Ronda</option>
-            <option value="__inf-sargento-piquete" id="filter-inf-spiq" style="display:none;">Informes — Sargento Piquete</option>
-          </select>
           <button id="export-btn" class="btn btn-gold" style="display:none;" onclick="exportServico()">
             <span id="export-btn-text">Exportar Serviço</span>
           </button>
@@ -443,15 +429,15 @@
       <div id="od-panel-4" class="od-panel" style="display:none;">
         <div class="section-header">4. Mapa de Consumos</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
-          <div><label class="form-label">Energia — Leitura Anterior (kW)</label><input class="form-input" type="number" id="od-energia-anterior" value="0" onchange="calcConsumos()"/></div>
-          <div><label class="form-label">Energia — Leitura Actual (kW)</label><input class="form-input" type="number" id="od-energia-atual" value="0" onchange="calcConsumos()"/></div>
+          <div><label class="form-label">Energia — Leitura Anterior (kW)</label><input class="form-input" type="number" id="od-energia-anterior" onchange="calcConsumos()"/></div>
+          <div><label class="form-label">Energia — Leitura Actual (kW)</label><input class="form-input" type="number" id="od-energia-atual" onchange="calcConsumos()"/></div>
         </div>
         <div style="background:#f0fdf4;border:1px solid #bbf7d0;padding:10px 14px;font-size:13px;margin-bottom:1.5rem;border-radius:6px;">
           Consumo Energia: <strong id="consumo-energia">0</strong> kW
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
-          <div><label class="form-label">Água — Leitura Anterior (m³)</label><input class="form-input" type="number" id="od-agua-anterior" value="0" onchange="calcConsumos()"/></div>
-          <div><label class="form-label">Água — Leitura Actual (m³)</label><input class="form-input" type="number" id="od-agua-atual" value="0" onchange="calcConsumos()"/></div>
+          <div><label class="form-label">Água — Leitura Anterior (m³)</label><input class="form-input" type="number" id="od-agua-anterior" onchange="calcConsumos()"/></div>
+          <div><label class="form-label">Água — Leitura Actual (m³)</label><input class="form-input" type="number" id="od-agua-atual" onchange="calcConsumos()"/></div>
         </div>
         <div style="background:#f0fdf4;border:1px solid #bbf7d0;padding:10px 14px;font-size:13px;border-radius:6px;">
           Consumo Água: <strong id="consumo-agua">0</strong> m³
@@ -867,9 +853,9 @@
       <div id="sgr-panel-2" class="sgr-panel" style="display:none;">
         <div class="section-header">2. Corpo da Guarda</div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;">
-          <div><label class="form-label">Sargento</label><input class="form-input" type="number" min="0" id="sgr-forca-sargento" value="0"/></div>
-          <div><label class="form-label">Auxiliar</label><input class="form-input" type="number" min="0" id="sgr-forca-auxiliar" value="0"/></div>
-          <div><label class="form-label">Sentinelas</label><input class="form-input" type="number" min="0" id="sgr-forca-sentinelas" value="0"/></div>
+          <div><label class="form-label">Sargento</label><input class="form-input" type="number" min="0" id="sgr-forca-sargento"/></div>
+          <div><label class="form-label">Auxiliar</label><input class="form-input" type="number" min="0" id="sgr-forca-auxiliar"/></div>
+          <div><label class="form-label">Sentinelas</label><input class="form-input" type="number" min="0" id="sgr-forca-sentinelas"/></div>
         </div>
         <div class="section-header">Posto dos Sentinelas</div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem;">
@@ -1079,9 +1065,9 @@
       <div><label class="form-label">Matrícula da Viatura</label><input class="form-input" id="vm-matricula" placeholder="AA-00-BB"/></div>
       <div><label class="form-label">Condutor</label><input class="form-input" id="vm-condutor" placeholder="Nome e posto"/></div>
       <div><label class="form-label">Saída — Hora</label><input class="form-input" type="time" id="vm-saida-hora"/></div>
-      <div><label class="form-label">Saída — KM</label><input class="form-input" type="number" id="vm-saida-km" value="0" min="0" oninput="calcKmTotal()"/></div>
+      <div><label class="form-label">Saída — KM</label><input class="form-input" type="number" id="vm-saida-km" min="0" oninput="calcKmTotal()"/></div>
       <div><label class="form-label">Entrada — Hora</label><input class="form-input" type="time" id="vm-entrada-hora"/></div>
-      <div><label class="form-label">Entrada — KM</label><input class="form-input" type="number" id="vm-entrada-km" value="0" min="0" oninput="calcKmTotal()"/></div>
+      <div><label class="form-label">Entrada — KM</label><input class="form-input" type="number" id="vm-entrada-km" min="0" oninput="calcKmTotal()"/></div>
       <div><label class="form-label">Total Percorrido (KM)</label><input class="form-input" id="vm-total-km" value="0" readonly style="background:#f9fafb;color:var(--green);font-weight:700;"/></div>
       <div><label class="form-label">Entidade que Autoriza</label><input class="form-input" id="vm-autoriza" placeholder="Nome e posto"/></div>
       <div style="grid-column:1/-1;"><label class="form-label">Itinerário</label><input class="form-input" id="vm-itinerario" placeholder="Percurso / Destino"/></div>
@@ -1463,17 +1449,6 @@ function renderSidebar() {
     nav.innerHTML += '<button class="nav-flat" id="nav-admin-users" onclick="navigate(\'admin-users\')">Utilizadores</button>';
     nav.innerHTML += '<button class="nav-flat" id="nav-admin-inventory" onclick="navigate(\'admin-inventory\')">Inventário</button>';
   }
-  // Informe / registos filter visibility in arquivo
-  var _nivel_s = App.user.nivel;
-  var _isSG    = _nivel_s === 'Sargento da Guarda';
-  var _isODadm = _nivel_s === 'Oficial Dia' || _nivel_s === 'Administrador';
-  // 'Os Meus Informes' always visible to all
-  // registos-diarios visible to SG + OD + Admin
-  // role-specific informe filters only for OD and Admin
-  ['filter-inf-od','filter-inf-sg','filter-inf-sdia','filter-inf-sronda','filter-inf-spiq'].forEach(function(fid) {
-    var el = document.getElementById(fid);
-    if (el) el.style.display = _isODadm ? '' : 'none';
-  });
 }
 
 
@@ -1553,11 +1528,11 @@ function loadInformeList(roleType) {
     loading.style.display = 'none';
     if (!res.ok || !res.informes.length) { empty.style.display = 'block'; return; }
     res.informes.forEach(function(inf) {
-      tbody.innerHTML += '<tr><td>' + escHtml(inf.dataLabel || fmtDate(inf.createdAt)) + '</td><td>' + escHtml(inf.autorNome||'') + (inf.autorPatente ? ' <span style="color:var(--text2);">(' + escHtml(inf.autorPatente) + ')</span>' : '') + '</td>' +
+      tbody.insertAdjacentHTML('beforeend', '<tr><td>' + escHtml(inf.dataLabel || fmtDate(inf.createdAt)) + '</td><td>' + escHtml(inf.autorNome||'') + (inf.autorPatente ? ' <span style="color:var(--text2);">(' + escHtml(inf.autorPatente) + ')</span>' : '') + '</td>' +
         '<td style="text-align:right;"><div style="display:flex;gap:6px;justify-content:flex-end;">' +
           '<button class="btn btn-ghost" style="padding:5px 10px;" onclick="openInforme(' + inf.id + ')">Ver</button>' +
           '<button class="btn btn-danger" style="padding:5px 10px;" onclick="deleteInformeRecord(' + inf.id + ')">Apagar</button>' +
-        '</div></td></tr>';
+        '</div></td></tr>');
     });
   }).catch(function() { loading.style.display = 'none'; empty.style.display = 'block'; });
 }
@@ -1670,11 +1645,11 @@ function loadSgRelatorioList() {
     loading.style.display = 'none';
     if (!res.ok || !res.relatorios.length) { empty.style.display = 'block'; return; }
     res.relatorios.forEach(function(r) {
-      tbody.innerHTML += '<tr><td>' + fmtDate(r.createdAt) + '</td><td>' + escHtml(r.comandanteGuarda||'') + '</td><td>' + badgeStatus(r.status) + '</td>' +
+      tbody.insertAdjacentHTML('beforeend', '<tr><td>' + fmtDate(r.createdAt) + '</td><td>' + escHtml(r.comandanteGuarda||'') + '</td><td>' + badgeStatus(r.status) + '</td>' +
         '<td style="text-align:right;"><div style="display:flex;gap:6px;justify-content:flex-end;">' +
           '<button class="btn btn-ghost" style="padding:5px 10px;" onclick="openSgRelatorio(' + r.id + ')">Ver</button>' +
           '<button class="btn btn-danger" style="padding:5px 10px;" onclick="deleteSgRelatorioRecord(' + r.id + ')">Apagar</button>' +
-        '</div></td></tr>';
+        '</div></td></tr>');
     });
   }).catch(function() { loading.style.display = 'none'; empty.style.display = 'block'; });
 }
@@ -1795,7 +1770,7 @@ function _sgrHoraSelect(val) {
 function addSgrCorpoRow(r) {
   r = r || {};
   var tbody = document.getElementById('sgr-corpo-tbody');
-  tbody.innerHTML += '<tr>' +
+  tbody.insertAdjacentHTML('beforeend', '<tr>' +
     '<td><input class="form-input" value="'+escHtml(r.unidade||'')+'" placeholder="Unidade" style="min-width:65px;"/></td>' +
     '<td><input class="form-input" value="'+escHtml(r.posto||'')+'" placeholder="Posto" style="min-width:65px;"/></td>' +
     '<td><input class="form-input" value="'+escHtml(r.nome||'')+'" placeholder="Nome" style="min-width:80px;"/></td>' +
@@ -1805,13 +1780,13 @@ function addSgrCorpoRow(r) {
     '<td>' + _sgrHoraSelect(r.hora4||'') + '</td>' +
     '<td><input class="form-input" value="'+escHtml(r.postoLetra||'')+'" placeholder="A" style="width:52px;text-transform:uppercase;" maxlength="4"/></td>' +
     '<td><button class="btn btn-danger" style="padding:4px 6px;font-size:10px;" onclick="this.closest(\'tr\').remove()">✕</button></td>' +
-  '</tr>';
+  '</tr>');
 }
 
 function addSgrPresoRow(r) {
   r = r || {};
   var tbody = document.getElementById('sgr-presos-tbody');
-  tbody.innerHTML += '<tr>' +
+  tbody.insertAdjacentHTML('beforeend', '<tr>' +
     '<td><input class="form-input" value="'+escHtml(r.unidade||'')+'" placeholder="Unidade"/></td>' +
     '<td><input class="form-input" value="'+escHtml(r.posto||'')+'" placeholder="Posto"/></td>' +
     '<td><input class="form-input" value="'+escHtml(r.numMec||'')+'" placeholder="Nº Mec."/></td>' +
@@ -1820,7 +1795,7 @@ function addSgrPresoRow(r) {
     '<td><input class="form-input" type="date" value="'+escHtml(r.dataSaida||'')+'"/></td>' +
     '<td><input class="form-input" value="'+escHtml(r.situacao||'')+'" placeholder="Situação"/></td>' +
     '<td><button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="this.closest(\'tr\').remove()">✕</button></td>' +
-  '</tr>';
+  '</tr>');
 }
 
 function renderSgrMatTable(cat) {
@@ -1829,13 +1804,13 @@ function renderSgrMatTable(cat) {
   tbody.innerHTML = '';
   _sgrInventory.filter(function(it){ return it.category === cat; }).forEach(function(item) {
     var estadoOpts = ESTADO_OPCOES_.map(function(e){ return '<option value="'+e+'">'+e+'</option>'; }).join('');
-    tbody.innerHTML += '<tr>' +
+    tbody.insertAdjacentHTML('beforeend', '<tr>' +
       '<td>' + escHtml(item.designacao) + '</td>' +
       '<td style="color:var(--text2);text-align:center;">' + item.existente + '</td>' +
-      '<td><input class="form-input" type="number" min="0" value="0" style="width:75px;" id="sgr-rec-' + item.id + '" onchange="updateSgrSaldo(\'' + item.id + '\')"/></td>' +
-      '<td><input class="form-input" type="number" min="0" value="0" style="width:75px;" id="sgr-ent-' + item.id + '" onchange="updateSgrSaldo(\'' + item.id + '\')"/></td>' +
+      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="sgr-rec-' + item.id + '" onchange="updateSgrSaldo(\'' + item.id + '\')"/></td>' +
+      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="sgr-ent-' + item.id + '" onchange="updateSgrSaldo(\'' + item.id + '\')"/></td>' +
       '<td><select class="form-input form-select" id="sgr-estado-' + item.id + '">' + estadoOpts + '</select></td>' +
-    '</tr>';
+    '</tr>');
   });
 }
 
@@ -2080,7 +2055,7 @@ function loadDashboard() {
     tbody.innerHTML = '';
     if (!s.recent.length) { tbody.innerHTML = '<tr><td colspan="4" style="color:var(--text2);text-align:center;padding:1.5rem;font-size:13px;">Sem registos recentes.</td></tr>'; return; }
     s.recent.forEach(function(r) {
-      tbody.innerHTML += '<tr><td>' + fmtDate(r.createdAt) + '</td><td>' + (TYPE_LABELS[r.type] || r.type) + '</td><td>' + escHtml(r.oficialDia) + '</td><td>' + badgeStatus(r.status) + '</td></tr>';
+      tbody.insertAdjacentHTML('beforeend', '<tr><td>' + fmtDate(r.createdAt) + '</td><td>' + (TYPE_LABELS[r.type] || r.type) + '</td><td>' + escHtml(r.oficialDia) + '</td><td>' + badgeStatus(r.status) + '</td></tr>');
     });
   });
 }
@@ -2102,7 +2077,7 @@ function validarCamposObrigatorios(viewId, alertElId) {
   var faltam = [];
   var primeiro = null;
   campos.forEach(function(el) {
-    if (el.type === 'checkbox' || el.type === 'radio' || el.type === 'hidden' || el.disabled) return;
+    if (el.type === 'checkbox' || el.type === 'radio' || el.type === 'hidden' || el.disabled || el.readOnly) return;
     if (el.closest('.modal-overlay')) return;
     var val = (el.value == null ? '' : String(el.value)).trim();
     if (val !== '') return;
@@ -2139,17 +2114,12 @@ function validarCamposObrigatorios(viewId, alertElId) {
 }
 
 function loadArquivo() {
-  var type = document.getElementById('arquivo-filter-type').value;
   document.getElementById('arquivo-loading').style.display = 'block';
   document.getElementById('arquivo-tbody').innerHTML = '';
   document.getElementById('arquivo-empty').style.display = 'none';
   document.getElementById('arquivo-empty').textContent = 'Sem relatórios encontrados.';
   document.getElementById('export-btn').style.display = 'none';
   var canExport = App.user.nivel === 'Oficial Dia' || App.user.nivel === 'Administrador';
-  var _nivelToRoleType = {
-    'Oficial Dia':'oficial-dia','Sargento da Guarda':'sargento-guarda',
-    'Sargento Dia':'sargento-dia','Sargento Ronda':'sargento-ronda','Sargento Piquete':'sargento-piquete'
-  };
 
   gas('getServicoAberto', [App.token]).then(function(res) {
     document.getElementById('arquivo-loading').style.display = 'none';
@@ -2163,41 +2133,23 @@ function loadArquivo() {
       return;
     }
 
-    // 'Os Meus Informes'
-    if (type === '__inf') {
-      var ownRoleType = _nivelToRoleType[App.user.nivel] || '';
-      renderArquivoInformes_(res.servico.informes.filter(function(i){ return i.roleType === ownRoleType; }));
-      return;
-    }
-    // Informes por perfil (só OD/Admin veem este filtro)
-    if (type && type.indexOf('__inf-') === 0) {
-      var infRoleType = type.replace('__inf-', '');
-      renderArquivoInformes_(res.servico.informes.filter(function(i){ return i.roleType === infRoleType; }));
-      return;
-    }
-    // Relatórios (todos os do serviço em curso, ou só de um tipo)
-    var reports = type ? res.servico.relatorios.filter(function(r){ return r.type === type; }) : res.servico.relatorios;
-    App.archiveReports = reports;
-    if (!reports.length) { document.getElementById('arquivo-empty').style.display = 'block'; return; }
+    // Tudo junto: relatórios (todos os tipos, incluindo os Registos SG já submetidos) + informes.
+    App.archiveReports = res.servico.relatorios;
+    var linhas = res.servico.relatorios.map(function(r) {
+      return { createdAt: r.createdAt, kind: 'rel', tipo: TYPE_LABELS[r.type] || r.type, type: r.type,
+               quem: r.oficialDia, status: r.status, id: r.id };
+    }).concat(res.servico.informes.map(function(i) {
+      return { createdAt: i.createdAt, kind: 'inf', tipo: 'Informe', roleType: i.roleType,
+               quem: i.autorNome, status: i.status || 'Submetido', id: i.id };
+    }));
+    linhas.sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
+
+    if (!linhas.length) { document.getElementById('arquivo-empty').style.display = 'block'; return; }
     document.getElementById('export-btn').style.display = canExport ? 'inline-flex' : 'none';
-    renderArquivoTable(); updateExportBtn();
+    renderArquivoTable(linhas); updateExportBtn();
   }).catch(function() {
     document.getElementById('arquivo-loading').style.display = 'none';
     document.getElementById('arquivo-empty').style.display = 'block';
-  });
-}
-
-function renderArquivoInformes_(list) {
-  var tbody = document.getElementById('arquivo-tbody');
-  tbody.innerHTML = '';
-  if (!list || !list.length) { document.getElementById('arquivo-empty').style.display = 'block'; return; }
-  list.forEach(function(inf) {
-    tbody.innerHTML += '<tr>' +
-      '<td>' + escHtml(inf.dataLabel || fmtDate(inf.createdAt)) + '</td>' +
-      '<td><span style="font-size:12px;font-weight:600;">Informe</span></td>' +
-      '<td>' + escHtml(inf.autorNome || '') + (inf.autorPatente ? ' <span style="color:var(--text2);">(' + escHtml(inf.autorPatente) + ')</span>' : '') + '</td>' +
-      '<td><span class="badge badge-green">Guardado</span></td>' +
-      '<td style="text-align:right;"><a href="#" onclick="App.informeRoleType=\'' + inf.roleType + '\';navigate(\'informe\',{roleType:\'' + inf.roleType + '\',mode:\'view\',id:' + inf.id + '});return false;" style="font-size:12px;color:var(--green2);font-weight:600;text-decoration:none;">Ver →</a></td></tr>';
   });
 }
 
@@ -2212,14 +2164,14 @@ function loadPainel() {
     if (!res.servicos.length) { document.getElementById('painel-empty').style.display = 'block'; return; }
     var tbody = document.getElementById('painel-tbody');
     res.servicos.forEach(function(sv) {
-      tbody.innerHTML += '<tr>' +
+      tbody.insertAdjacentHTML('beforeend', '<tr>' +
         '<td>' + escHtml(sv.dataServico) + '</td>' +
         '<td>' + fmtDate(sv.fechadoEm) + '</td>' +
         '<td>' + escHtml(sv.fechadoPor || '') + '</td>' +
         '<td>' + sv.relatorios + '</td>' +
         '<td>' + sv.informes + '</td>' +
         '<td>' + sv.registos + '</td>' +
-        '<td style="text-align:right;"><a href="#" onclick="navigate(\'painel-servico\',{id:' + sv.id + '});return false;" style="font-size:12px;color:var(--green2);font-weight:600;text-decoration:none;">Ver →</a></td></tr>';
+        '<td style="text-align:right;"><a href="#" onclick="navigate(\'painel-servico\',{id:' + sv.id + '});return false;" style="font-size:12px;color:var(--green2);font-weight:600;text-decoration:none;">Ver →</a></td></tr>');
     });
   }).catch(function(err) {
     document.getElementById('painel-loading').style.display = 'none';
@@ -2254,12 +2206,12 @@ function loadPainelServico(id) {
     });
     linhas.sort(function(a,b){ return new Date(a.createdAt) - new Date(b.createdAt); });
     linhas.forEach(function(l) {
-      tbody.innerHTML += '<tr>' +
+      tbody.insertAdjacentHTML('beforeend', '<tr>' +
         '<td>' + fmtDate(l.createdAt) + '</td>' +
         '<td><span style="font-size:12px;font-weight:600;">' + l.tipo + '</span></td>' +
         '<td>' + escHtml(l.quem || '') + '</td>' +
         '<td>' + l.estado + '</td>' +
-        '<td style="text-align:right;"><a href="#" onclick="' + l.openFn + ';return false;" style="font-size:12px;color:var(--green2);font-weight:600;text-decoration:none;">Ver →</a></td></tr>';
+        '<td style="text-align:right;"><a href="#" onclick="' + l.openFn + ';return false;" style="font-size:12px;color:var(--green2);font-weight:600;text-decoration:none;">Ver →</a></td></tr>');
     });
   }).catch(function(err) {
     document.getElementById('painel-servico-loading').style.display = 'none';
@@ -2271,7 +2223,7 @@ function badgeForStatus_(status) {
   return status === 'Submetido' ? '<span class="badge badge-green">Submetido</span>' : '<span class="badge">Rascunho</span>';
 }
 
-function renderArquivoTable() {
+function renderArquivoTable(linhas) {
   var _isOdOrAdmin = App.user.nivel === 'Oficial Dia' || App.user.nivel === 'Administrador';
   var _nivel       = App.user.nivel;
   var _nivelToType = {
@@ -2284,15 +2236,20 @@ function renderArquivoTable() {
   var _ownType = _nivelToType[_nivel] || '';
   var tbody = document.getElementById('arquivo-tbody');
   tbody.innerHTML = '';
-  App.archiveReports.forEach(function(r) {
-    var _canView = _isOdOrAdmin || r.type === _ownType;
-    var _openFn  = r.type === 'oficial-dia'
-      ? 'openReport(' + r.id + ')'
-      : 'openArchiveReport(\'' + r.type + '\',' + r.id + ')';
-    var editBtn  = _canView
-      ? '<a href="#" onclick="' + _openFn + ';return false;" style="font-size:12px;color:var(--green2);font-weight:600;text-decoration:none;">Ver →</a>'
-      : '<span style="font-size:12px;color:var(--text2);">—</span>';
-    tbody.innerHTML += '<tr><td>' + fmtDate(r.createdAt) + '</td><td><span style="font-size:12px;font-weight:600;">' + (TYPE_LABELS[r.type] || r.type) + '</span></td><td>' + escHtml(r.oficialDia) + '</td><td>' + badgeStatus(r.status) + '</td><td style="text-align:right;">' + editBtn + '</td></tr>';
+  linhas.forEach(function(r) {
+    var editBtn;
+    if (r.kind === 'inf') {
+      editBtn = '<a href="#" onclick="App.informeRoleType=\'' + r.roleType + '\';navigate(\'informe\',{roleType:\'' + r.roleType + '\',mode:\'view\',id:' + r.id + '});return false;" style="font-size:12px;color:var(--green2);font-weight:600;text-decoration:none;">Ver →</a>';
+    } else if (r.type === 'registos-diarios') {
+      editBtn = '<span style="font-size:12px;color:var(--text2);">—</span>';
+    } else {
+      var _canView = _isOdOrAdmin || r.type === _ownType;
+      var _openFn  = r.type === 'oficial-dia' ? 'openReport(' + r.id + ')' : 'openArchiveReport(\'' + r.type + '\',' + r.id + ')';
+      editBtn = _canView
+        ? '<a href="#" onclick="' + _openFn + ';return false;" style="font-size:12px;color:var(--green2);font-weight:600;text-decoration:none;">Ver →</a>'
+        : '<span style="font-size:12px;color:var(--text2);">—</span>';
+    }
+    tbody.insertAdjacentHTML('beforeend', '<tr><td>' + fmtDate(r.createdAt) + '</td><td><span style="font-size:12px;font-weight:600;">' + escHtml(r.tipo) + '</span></td><td>' + escHtml(r.quem || '') + '</td><td>' + badgeStatus(r.status) + '</td><td style="text-align:right;">' + editBtn + '</td></tr>');
   });
 }
 
@@ -2399,17 +2356,17 @@ function stepNav(dir) { var next = App.odStep + dir; if (next < 1 || next > 8) r
 function addRonda() {
   if (App.odReadOnly) return;
   var tbody = document.getElementById('rondas-tbody'), i = tbody.rows.length;
-  tbody.innerHTML += '<tr><td><input class="form-input" name="ronda-graduado-' + i + '" placeholder="Graduado"/></td><td><input class="form-input" name="ronda-horario-' + i + '" placeholder="HH:MM"/></td><td><button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="this.closest(\'tr\').remove()">✕</button></td></tr>';
+  tbody.insertAdjacentHTML('beforeend', '<tr><td><input class="form-input" name="ronda-graduado-' + i + '" placeholder="Graduado"/></td><td><input class="form-input" name="ronda-horario-' + i + '" placeholder="HH:MM"/></td><td><button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="this.closest(\'tr\').remove()">✕</button></td></tr>');
 }
 function addDetido() {
   if (App.odReadOnly) return;
   var tbody = document.getElementById('detidos-tbody'), i = tbody.rows.length;
-  tbody.innerHTML += '<tr><td><input class="form-input" name="detido-horario-' + i + '" placeholder="HH:MM"/></td><td><input class="form-input" name="detido-faltas-' + i + '" placeholder="Descrição"/></td><td><button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="this.closest(\'tr\').remove()">✕</button></td></tr>';
+  tbody.insertAdjacentHTML('beforeend', '<tr><td><input class="form-input" name="detido-horario-' + i + '" placeholder="HH:MM"/></td><td><input class="form-input" name="detido-faltas-' + i + '" placeholder="Descrição"/></td><td><button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="this.closest(\'tr\').remove()">✕</button></td></tr>');
 }
 function addChamada() {
   if (App.odReadOnly) return;
   var tbody = document.getElementById('chamadas-tbody'), i = tbody.rows.length;
-  tbody.innerHTML += '<tr><td><input class="form-input" name="chamada-horario-' + i + '" placeholder="HH:MM"/></td><td><input class="form-input" name="chamada-dest-' + i + '" placeholder="Destinatário"/></td><td><input class="form-input" name="chamada-assunto-' + i + '" placeholder="Assunto"/></td><td><button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="this.closest(\'tr\').remove()">✕</button></td></tr>';
+  tbody.insertAdjacentHTML('beforeend', '<tr><td><input class="form-input" name="chamada-horario-' + i + '" placeholder="HH:MM"/></td><td><input class="form-input" name="chamada-dest-' + i + '" placeholder="Destinatário"/></td><td><input class="form-input" name="chamada-assunto-' + i + '" placeholder="Assunto"/></td><td><button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="this.closest(\'tr\').remove()">✕</button></td></tr>');
 }
 function calcConsumos() {
   var ea = parseFloat(document.getElementById('od-energia-anterior').value)||0, eu = parseFloat(document.getElementById('od-energia-atual').value)||0;
@@ -2421,10 +2378,10 @@ function renderMatTable(cat) {
   var tbody = document.getElementById('mat-' + (cat === 'guerra' ? 'guerra' : 'aq') + '-tbody');
   tbody.innerHTML = '';
   App.odInventory.filter(function(it){ return it.category === cat; }).forEach(function(item) {
-    tbody.innerHTML += '<tr><td>' + escHtml(item.designacao) + '</td><td style="color:var(--text2);">' + item.existente + '</td>' +
-      '<td><input class="form-input" type="number" value="0" min="0" id="mat-rec-' + item.id + '" style="width:80px;"/></td>' +
-      '<td><input class="form-input" type="number" value="0" min="0" id="mat-ent-' + item.id + '" style="width:80px;"/></td>' +
-      '</tr>';
+    tbody.insertAdjacentHTML('beforeend', '<tr><td>' + escHtml(item.designacao) + '</td><td style="color:var(--text2);">' + item.existente + '</td>' +
+      '<td><input class="form-input" type="number" min="0" id="mat-rec-' + item.id + '" style="width:80px;"/></td>' +
+      '<td><input class="form-input" type="number" min="0" id="mat-ent-' + item.id + '" style="width:80px;"/></td>' +
+      '</tr>');
   });
 }
 function updateSaldo(itemId) {
@@ -2501,11 +2458,11 @@ function loadSdRelatorioList() {
     loading.style.display = 'none';
     if (!res.ok || !res.relatorios.length) { empty.style.display = 'block'; return; }
     res.relatorios.forEach(function(r) {
-      tbody.innerHTML += '<tr><td>' + fmtDate(r.createdAt) + '</td><td>' + escHtml(r.sargentodia||'') + '</td><td>' + badgeStatus(r.status) + '</td>' +
+      tbody.insertAdjacentHTML('beforeend', '<tr><td>' + fmtDate(r.createdAt) + '</td><td>' + escHtml(r.sargentodia||'') + '</td><td>' + badgeStatus(r.status) + '</td>' +
         '<td style="text-align:right;"><div style="display:flex;gap:6px;justify-content:flex-end;">' +
           '<button class="btn btn-ghost" style="padding:5px 10px;" onclick="openSdRelatorio(' + r.id + ')">Ver</button>' +
           '<button class="btn btn-danger" style="padding:5px 10px;" onclick="deleteSdRelatorioRecord(' + r.id + ')">Apagar</button>' +
-        '</div></td></tr>';
+        '</div></td></tr>');
     });
   }).catch(function() { loading.style.display = 'none'; empty.style.display = 'block'; });
 }
@@ -2562,13 +2519,13 @@ function renderSdrMatTable(cat) {
   tbody.innerHTML = '';
   App.sdInventory.filter(function(it){ return it.category === cat; }).forEach(function(item) {
     var estadoOpts = ESTADO_OPCOES_.map(function(e){ return '<option value="'+e+'">'+e+'</option>'; }).join('');
-    tbody.innerHTML += '<tr>' +
+    tbody.insertAdjacentHTML('beforeend', '<tr>' +
       '<td>' + escHtml(item.designacao) + '</td>' +
       '<td style="color:var(--text2);text-align:center;">' + item.existente + '</td>' +
-      '<td><input class="form-input" type="number" min="0" value="0" style="width:75px;" id="sdr-rec-' + item.id + '" onchange="updateSdrSaldo(\'' + item.id + '\')"/></td>' +
-      '<td><input class="form-input" type="number" min="0" value="0" style="width:75px;" id="sdr-ent-' + item.id + '" onchange="updateSdrSaldo(\'' + item.id + '\')"/></td>' +
+      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="sdr-rec-' + item.id + '" onchange="updateSdrSaldo(\'' + item.id + '\')"/></td>' +
+      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="sdr-ent-' + item.id + '" onchange="updateSdrSaldo(\'' + item.id + '\')"/></td>' +
       '<td><select class="form-input form-select" id="sdr-estado-' + item.id + '">' + estadoOpts + '</select></td>' +
-    '</tr>';
+    '</tr>');
   });
 }
 
@@ -2823,7 +2780,7 @@ function loadUsers() {
     var tbody = document.getElementById('users-tbody');
     tbody.innerHTML = '';
     res.users.forEach(function(u) {
-      tbody.innerHTML += '<tr><td><code style="font-size:12px;color:var(--green2);font-weight:600;">' + escHtml(u.username) + '</code></td><td>' + escHtml(u.nome) + (u.patente ? ' <span style="color:var(--text2);font-size:12px;">('+escHtml(u.patente)+')</span>' : '') + '</td><td><span class="badge badge-green">' + escHtml(u.nivel) + '</span></td><td style="font-size:12px;color:var(--text2);">' + fmtDate(u.createdAt) + '</td><td style="text-align:right;"><div style="display:flex;gap:6px;justify-content:flex-end;"><button class="btn btn-ghost" style="padding:5px 10px;" onclick="openUserModal(' + u.id + ')">Editar</button>' + (u.id !== App.user.id ? '<button class="btn btn-danger" style="padding:5px 10px;" onclick="deleteUser(' + u.id + ')">Apagar</button>' : '') + '</div></td></tr>';
+      tbody.insertAdjacentHTML('beforeend', '<tr><td><code style="font-size:12px;color:var(--green2);font-weight:600;">' + escHtml(u.username) + '</code></td><td>' + escHtml(u.nome) + (u.patente ? ' <span style="color:var(--text2);font-size:12px;">('+escHtml(u.patente)+')</span>' : '') + '</td><td><span class="badge badge-green">' + escHtml(u.nivel) + '</span></td><td style="font-size:12px;color:var(--text2);">' + fmtDate(u.createdAt) + '</td><td style="text-align:right;"><div style="display:flex;gap:6px;justify-content:flex-end;"><button class="btn btn-ghost" style="padding:5px 10px;" onclick="openUserModal(' + u.id + ')">Editar</button>' + (u.id !== App.user.id ? '<button class="btn btn-danger" style="padding:5px 10px;" onclick="deleteUser(' + u.id + ')">Apagar</button>' : '') + '</div></td></tr>');
     });
   }).catch(function() { document.getElementById('users-loading').style.display = 'none'; });
 }
@@ -3085,10 +3042,10 @@ function renderSgTable(tipo, registos) {
     var _canManage = r.souAutor;
     var _editBtn   = _canManage ? '<button class="btn btn-ghost" style="padding:4px 10px;font-size:10px;" onclick="openSgModal(\'' + tipo + '\',' + r.id + ')">Editar</button>' : '';
     var _delBtn    = _canManage ? '<button class="btn btn-danger" style="padding:4px 10px;font-size:10px;" onclick="deleteSgRecord(\'' + tipo + '\',' + r.id + ')">Apagar</button>' : '';
-    tbody.innerHTML += '<tr>' + cells +
+    tbody.insertAdjacentHTML('beforeend', '<tr>' + cells +
       '<td style="text-align:right;"><div style="display:flex;gap:6px;justify-content:flex-end;">' +
         _editBtn + _delBtn +
-      '</div></td></tr>';
+      '</div></td></tr>');
   });
 }
 
@@ -3883,11 +3840,11 @@ function loadSpiqRelatorioList() {
     loading.style.display = 'none';
     if (!res.ok || !res.relatorios || !res.relatorios.length) { empty.style.display = 'block'; return; }
     res.relatorios.forEach(function(r) {
-      tbody.innerHTML += '<tr><td>' + fmtDate(r.createdAt) + '</td><td>' + escHtml(r.sargento||'') + '</td><td>' + badgeStatus(r.status) + '</td>' +
+      tbody.insertAdjacentHTML('beforeend', '<tr><td>' + fmtDate(r.createdAt) + '</td><td>' + escHtml(r.sargento||'') + '</td><td>' + badgeStatus(r.status) + '</td>' +
         '<td style="text-align:right;"><div style="display:flex;gap:6px;justify-content:flex-end;">' +
           '<button class="btn btn-ghost" style="padding:5px 10px;" onclick="openSpiqRelatorio(' + r.id + ')">Ver</button>' +
           '<button class="btn btn-danger" style="padding:5px 10px;" onclick="deleteSpiqRelatorioRecord(' + r.id + ')">Apagar</button>' +
-        '</div></td></tr>';
+        '</div></td></tr>');
     });
   }).catch(function() { loading.style.display = 'none'; empty.style.display = 'block'; });
 }
@@ -3941,13 +3898,13 @@ function renderSpiqMatTable(cat) {
   tbody.innerHTML = '';
   App.spiqInventory.filter(function(it){ return it.category === cat; }).forEach(function(item) {
     var estadoOpts = ESTADO_OPCOES_.map(function(e){ return '<option value="'+e+'">'+e+'</option>'; }).join('');
-    tbody.innerHTML += '<tr>' +
+    tbody.insertAdjacentHTML('beforeend', '<tr>' +
       '<td>' + escHtml(item.designacao) + '</td>' +
       '<td style="color:var(--text2);text-align:center;">' + item.existente + '</td>' +
-      '<td><input class="form-input" type="number" min="0" value="0" style="width:75px;" id="spiq-rec-' + item.id + '" onchange="updateSpiqSaldo(\'' + item.id + '\')"/></td>' +
-      '<td><input class="form-input" type="number" min="0" value="0" style="width:75px;" id="spiq-ent-' + item.id + '" onchange="updateSpiqSaldo(\'' + item.id + '\')"/></td>' +
+      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="spiq-rec-' + item.id + '" onchange="updateSpiqSaldo(\'' + item.id + '\')"/></td>' +
+      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="spiq-ent-' + item.id + '" onchange="updateSpiqSaldo(\'' + item.id + '\')"/></td>' +
       '<td><select class="form-input form-select" id="spiq-estado-' + item.id + '">' + estadoOpts + '</select></td>' +
-    '</tr>';
+    '</tr>');
   });
 }
 function updateSpiqSaldo(itemId) {
@@ -4174,11 +4131,11 @@ function loadSrondaRelatorioList() {
     loading.style.display = 'none';
     if (!res.ok || !res.relatorios || !res.relatorios.length) { empty.style.display = 'block'; return; }
     res.relatorios.forEach(function(r) {
-      tbody.innerHTML += '<tr><td>' + fmtDate(r.createdAt) + '</td><td>' + escHtml(r.sargento||'') + '</td><td>' + badgeStatus(r.status) + '</td>' +
+      tbody.insertAdjacentHTML('beforeend', '<tr><td>' + fmtDate(r.createdAt) + '</td><td>' + escHtml(r.sargento||'') + '</td><td>' + badgeStatus(r.status) + '</td>' +
         '<td style="text-align:right;"><div style="display:flex;gap:6px;justify-content:flex-end;">' +
           '<button class="btn btn-ghost" style="padding:5px 10px;" onclick="openSrondaRelatorio(' + r.id + ')">Ver</button>' +
           '<button class="btn btn-danger" style="padding:5px 10px;" onclick="deleteSrondaRelatorioRecord(' + r.id + ')">Apagar</button>' +
-        '</div></td></tr>';
+        '</div></td></tr>');
     });
   }).catch(function() { loading.style.display = 'none'; empty.style.display = 'block'; });
 }
@@ -4216,21 +4173,21 @@ function srondaStepNav(dir) { var next = App.srondaStep + dir; if (next < 1 || n
 function addSrondaGrupoRow() {
   if (_srondaReadOnly) return;
   var tbody = document.getElementById('sronda-grupo-tbody'), i = tbody.rows.length;
-  tbody.innerHTML += '<tr>' +
+  tbody.insertAdjacentHTML('beforeend', '<tr>' +
     '<td><input class="form-input" name="sronda-grupo-posto-'+i+'" placeholder="Posto"/></td>' +
     '<td><input class="form-input" name="sronda-grupo-nome-'+i+'" placeholder="Nome"/></td>' +
     '<td><input class="form-input" name="sronda-grupo-unidade-'+i+'" placeholder="Unidade / Função"/></td>' +
     '<td><button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="this.closest(\'tr\').remove()">✕</button></td>' +
-  '</tr>';
+  '</tr>');
 }
 function addSrondaZonaRow() {
   if (_srondaReadOnly) return;
   var tbody = document.getElementById('sronda-zonas-tbody'), i = tbody.rows.length;
-  tbody.innerHTML += '<tr>' +
+  tbody.insertAdjacentHTML('beforeend', '<tr>' +
     '<td><input class="form-input" name="sronda-zona-nome-'+i+'" placeholder="Nome da Zona"/></td>' +
     '<td><input class="form-input" name="sronda-zona-horario-'+i+'" placeholder="HH:MM"/></td>' +
     '<td><button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="this.closest(\'tr\').remove()">✕</button></td>' +
-  '</tr>';
+  '</tr>');
 }
 function resetSrondaForm() {
   ['sronda-sargento','sronda-reserva','sronda-auxiliar','sronda-entrante',
@@ -4252,13 +4209,13 @@ function renderSrondaMatTable(cat) {
   tbody.innerHTML = '';
   App.srondaInventory.filter(function(it){ return it.category === cat; }).forEach(function(item) {
     var estadoOpts = ESTADO_OPCOES_.map(function(e){ return '<option value="'+e+'">'+e+'</option>'; }).join('');
-    tbody.innerHTML += '<tr>' +
+    tbody.insertAdjacentHTML('beforeend', '<tr>' +
       '<td>' + escHtml(item.designacao) + '</td>' +
       '<td style="color:var(--text2);text-align:center;">' + item.existente + '</td>' +
-      '<td><input class="form-input" type="number" min="0" value="0" style="width:75px;" id="sronda-rec-' + item.id + '" onchange="updateSrondaSaldo(\'' + item.id + '\')"/></td>' +
-      '<td><input class="form-input" type="number" min="0" value="0" style="width:75px;" id="sronda-ent-' + item.id + '" onchange="updateSrondaSaldo(\'' + item.id + '\')"/></td>' +
+      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="sronda-rec-' + item.id + '" onchange="updateSrondaSaldo(\'' + item.id + '\')"/></td>' +
+      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="sronda-ent-' + item.id + '" onchange="updateSrondaSaldo(\'' + item.id + '\')"/></td>' +
       '<td><select class="form-input form-select" id="sronda-estado-' + item.id + '">' + estadoOpts + '</select></td>' +
-    '</tr>';
+    '</tr>');
   });
 }
 function updateSrondaSaldo(itemId) {
@@ -4313,20 +4270,20 @@ function populateSrondaForm(relatorio) {
   document.getElementById('sronda-documentos').value = d.documentos || '';
   var gt = document.getElementById('sronda-grupo-tbody'); gt.innerHTML = '';
   (d.grupoRonda||[]).forEach(function(g) {
-    gt.innerHTML += '<tr>' +
+    gt.insertAdjacentHTML('beforeend', '<tr>' +
       '<td><input class="form-input" value="'+escHtml(g.posto||'')+'"/></td>' +
       '<td><input class="form-input" value="'+escHtml(g.nome||'')+'"/></td>' +
       '<td><input class="form-input" value="'+escHtml(g.unidade||'')+'"/></td>' +
       '<td><button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="this.closest(\'tr\').remove()">✕</button></td>' +
-    '</tr>';
+    '</tr>');
   });
   var zt = document.getElementById('sronda-zonas-tbody'); zt.innerHTML = '';
   (d.zonas||[]).forEach(function(z) {
-    zt.innerHTML += '<tr>' +
+    zt.insertAdjacentHTML('beforeend', '<tr>' +
       '<td><input class="form-input" value="'+escHtml(z.zona||'')+'"/></td>' +
       '<td><input class="form-input" value="'+escHtml(z.horario||'')+'"/></td>' +
       '<td><button class="btn btn-danger" style="padding:4px 8px;font-size:11px;" onclick="this.closest(\'tr\').remove()">✕</button></td>' +
-    '</tr>';
+    '</tr>');
   });
   var allMat = (d.materialGuerra||[]).concat(d.materialGuerraBcv||[]).concat(d.materialAquartelamento||[]);
   allMat.forEach(function(m) {
