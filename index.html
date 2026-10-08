@@ -3254,16 +3254,30 @@ var INFORME_ROLES_    = ['oficial-dia', 'sargento-guarda', 'sargento-dia', 'sarg
 // Exporta TODO o conteúdo do serviço em curso (não depende de nenhuma seleção):
 // todos os relatórios submetidos, os informes e os Registos SG. Um único clique.
 function exportServico() {
-  if (App.currentServico && App.currentServico.rascunhos > 0) {
-    alert('Ainda há ' + App.currentServico.rascunhos + ' relatório(s) em Rascunho neste serviço. Todos têm de estar Submetidos antes de exportar.');
-    return;
-  }
   if (!App.archiveReports.length) { alert('Não há nada para exportar neste serviço.'); return; }
 
   var btn = document.getElementById('export-btn');
   var btnHtml = btn.innerHTML;
   function resetBtn_() { btn.innerHTML = btnHtml; btn.disabled = false; updateExportBtn(); }
   btn.disabled = true;
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 0.8s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> A verificar…';
+
+  // Verifica PRIMEIRO, no servidor, se está tudo completo — só gera e envia o
+  // PDF se esta verificação passar. Assim nada sai por email quando falta
+  // alguma peça (relatório, informe ou Registos SG).
+  gas('podeExportar', [App.token]).then(function(chk) {
+    if (!chk.ok) {
+      resetBtn_();
+      alert(chk.error || 'Ainda não é possível exportar este serviço.');
+      return;
+    }
+    continuarExportacao_();
+  }).catch(function(err) {
+    resetBtn_();
+    alert('Erro de comunicação ao verificar o serviço: ' + (err && err.message ? err.message : String(err)));
+  });
+
+  function continuarExportacao_() {
   btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 0.8s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> A gerar e enviar por email…';
 
   var porTipo = {};
@@ -3352,6 +3366,7 @@ function exportServico() {
     resetBtn_();
     alert('Erro ao gerar PDF: ' + (err && err.message ? err.message : String(err)));
   });
+  } // fim de continuarExportacao_
 }
 
 function buildCombinedServicePDF(dados, imgData) {
