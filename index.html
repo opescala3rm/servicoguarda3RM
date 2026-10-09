@@ -287,6 +287,7 @@
           <h1 class="page-title">Relatórios de Serviço</h1>
         </div>
       </div>
+      <div id="servico-preso-aviso" style="display:none;margin-bottom:1.5rem;padding:1rem 1.25rem;border-radius:10px;background:#fff7e6;border:1px solid var(--gold);color:#7a5200;font-size:13px;"></div>
       <div id="stats-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;">
         <div class="stat-card">
           <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;color:var(--gold);text-transform:uppercase;">Total</div>
@@ -2044,6 +2045,8 @@ function buildSgRelatorioPDF(relatorio) {
 
 // ─── Registos Diários ────────────────────────────────────────────────────────────────────
 // ─── Dashboard ───────────────────────────────────────────────────────────────
+var SERVICO_ABERTO_AVISO_HORAS_ = 30; // um serviço normal dura ~24h (08:00 às 08:00); acima disto, avisa
+
 function loadDashboard() {
   gas('getStats', [App.token]).then(function(res) {
     if (!res.ok) return;
@@ -2058,6 +2061,27 @@ function loadDashboard() {
       tbody.insertAdjacentHTML('beforeend', '<tr><td>' + fmtDate(r.createdAt) + '</td><td>' + (TYPE_LABELS[r.type] || r.type) + '</td><td>' + escHtml(r.oficialDia) + '</td><td>' + badgeStatus(r.status) + '</td></tr>');
     });
   });
+  verificarServicoPreso_();
+}
+
+// Avisa o Oficial Dia / Administrador se houver um serviço aberto há mais
+// tempo do que o normal (sinal de que ninguém o exportou ainda).
+function verificarServicoPreso_() {
+  var aviso = document.getElementById('servico-preso-aviso');
+  if (!aviso) return;
+  aviso.style.display = 'none';
+  var podeVer = App.user && (App.user.nivel === 'Oficial Dia' || App.user.nivel === 'Administrador');
+  if (!podeVer) return;
+  gas('getServicoAberto', [App.token]).then(function(res) {
+    if (!res.ok || !res.servico || !res.servico.abertoEm) return;
+    var horas = (Date.now() - new Date(res.servico.abertoEm).getTime()) / 3600000;
+    if (horas < SERVICO_ABERTO_AVISO_HORAS_) return;
+    var dias = Math.floor(horas / 24), restoHoras = Math.round(horas % 24);
+    var tempo = dias > 0 ? (dias + ' dia' + (dias > 1 ? 's' : '') + ' e ' + restoHoras + 'h') : Math.round(horas) + 'h';
+    aviso.innerHTML = '⚠️ Há um serviço aberto há <strong>' + tempo + '</strong> (desde ' + fmtDate(res.servico.abertoEm) +
+      ') que ainda não foi exportado. Vai ao <a href="#" onclick="navigate(\'arquivo\');return false;" style="color:#7a5200;font-weight:700;">Arquivo</a> para ver o que falta.';
+    aviso.style.display = 'block';
+  }).catch(function(){});
 }
 
 // ─── Arquivo ─────────────────────────────────────────────────────────────────
@@ -3334,9 +3358,10 @@ function exportServico() {
   Promise.all(tarefas).then(function() {
     loadHeaderImg(function(imgData) {
       var doc = buildCombinedServicePDF(dados, imgData);
-      var dateStr = App.currentServico && App.currentServico.dataServico
-        ? App.currentServico.dataServico
-        : fmtDateFile(new Date().toISOString());
+      // O serviço vai de um dia para o outro (08:00 às 08:00): quem exporta hoje
+      // está a fechar o serviço de ontem, por isso o ficheiro leva a data de ontem.
+      var ontem = new Date(); ontem.setDate(ontem.getDate() - 1);
+      var dateStr = fmtDateFile(ontem.toISOString());
       var filename = 'Relatorio_de_Servico_do_dia_' + dateStr + '.pdf';
       var base64 = doc.output('datauristring').split(',')[1];
       gas('savePdfToDrive', [App.token, filename, base64]).then(function(res) {
