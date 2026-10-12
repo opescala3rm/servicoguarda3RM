@@ -1775,10 +1775,10 @@ function addSgrCorpoRow(r) {
     '<td><input class="form-input" value="'+escHtml(r.unidade||'')+'" placeholder="Unidade" style="min-width:65px;"/></td>' +
     '<td><input class="form-input" value="'+escHtml(r.posto||'')+'" placeholder="Posto" style="min-width:65px;"/></td>' +
     '<td><input class="form-input" value="'+escHtml(r.nome||'')+'" placeholder="Nome" style="min-width:80px;"/></td>' +
-    '<td>' + _sgrHoraSelect(r.hora1||r.hora||'') + '</td>' +
-    '<td>' + _sgrHoraSelect(r.hora2||'') + '</td>' +
-    '<td>' + _sgrHoraSelect(r.hora3||'') + '</td>' +
-    '<td>' + _sgrHoraSelect(r.hora4||'') + '</td>' +
+    '<td>' + _sgrHoraSelect(r.hora1||r.hora||'08:00') + '</td>' +
+    '<td>' + _sgrHoraSelect(r.hora2||'10:00') + '</td>' +
+    '<td>' + _sgrHoraSelect(r.hora3||'12:00') + '</td>' +
+    '<td>' + _sgrHoraSelect(r.hora4||'14:00') + '</td>' +
     '<td><input class="form-input" value="'+escHtml(r.postoLetra||'')+'" placeholder="A" style="width:52px;text-transform:uppercase;" maxlength="4"/></td>' +
     '<td><button class="btn btn-danger" style="padding:4px 6px;font-size:10px;" onclick="this.closest(\'tr\').remove()">✕</button></td>' +
   '</tr>');
@@ -1808,8 +1808,8 @@ function renderSgrMatTable(cat) {
     tbody.insertAdjacentHTML('beforeend', '<tr>' +
       '<td>' + escHtml(item.designacao) + '</td>' +
       '<td style="color:var(--text2);text-align:center;">' + item.existente + '</td>' +
-      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="sgr-rec-' + item.id + '" onchange="updateSgrSaldo(\'' + item.id + '\')"/></td>' +
-      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="sgr-ent-' + item.id + '" onchange="updateSgrSaldo(\'' + item.id + '\')"/></td>' +
+      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="sgr-rec-' + item.id + '" value="' + item.existente + '" onchange="updateSgrSaldo(\'' + item.id + '\')"/></td>' +
+      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="sgr-ent-' + item.id + '" value="' + item.existente + '" onchange="updateSgrSaldo(\'' + item.id + '\')"/></td>' +
       '<td><select class="form-input form-select" id="sgr-estado-' + item.id + '">' + estadoOpts + '</select></td>' +
     '</tr>');
   });
@@ -2403,8 +2403,8 @@ function renderMatTable(cat) {
   tbody.innerHTML = '';
   App.odInventory.filter(function(it){ return it.category === cat; }).forEach(function(item) {
     tbody.insertAdjacentHTML('beforeend', '<tr><td>' + escHtml(item.designacao) + '</td><td style="color:var(--text2);">' + item.existente + '</td>' +
-      '<td><input class="form-input" type="number" min="0" id="mat-rec-' + item.id + '" style="width:80px;"/></td>' +
-      '<td><input class="form-input" type="number" min="0" id="mat-ent-' + item.id + '" style="width:80px;"/></td>' +
+      '<td><input class="form-input" type="number" min="0" id="mat-rec-' + item.id + '" style="width:80px;" value="' + item.existente + '"/></td>' +
+      '<td><input class="form-input" type="number" min="0" id="mat-ent-' + item.id + '" style="width:80px;" value="' + item.existente + '"/></td>' +
       '</tr>');
   });
 }
@@ -2546,8 +2546,8 @@ function renderSdrMatTable(cat) {
     tbody.insertAdjacentHTML('beforeend', '<tr>' +
       '<td>' + escHtml(item.designacao) + '</td>' +
       '<td style="color:var(--text2);text-align:center;">' + item.existente + '</td>' +
-      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="sdr-rec-' + item.id + '" onchange="updateSdrSaldo(\'' + item.id + '\')"/></td>' +
-      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="sdr-ent-' + item.id + '" onchange="updateSdrSaldo(\'' + item.id + '\')"/></td>' +
+      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="sdr-rec-' + item.id + '" value="' + item.existente + '" onchange="updateSdrSaldo(\'' + item.id + '\')"/></td>' +
+      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="sdr-ent-' + item.id + '" value="' + item.existente + '" onchange="updateSdrSaldo(\'' + item.id + '\')"/></td>' +
       '<td><select class="form-input form-select" id="sdr-estado-' + item.id + '">' + estadoOpts + '</select></td>' +
     '</tr>');
   });
@@ -3941,8 +3941,8 @@ function renderSpiqMatTable(cat) {
     tbody.insertAdjacentHTML('beforeend', '<tr>' +
       '<td>' + escHtml(item.designacao) + '</td>' +
       '<td style="color:var(--text2);text-align:center;">' + item.existente + '</td>' +
-      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="spiq-rec-' + item.id + '" onchange="updateSpiqSaldo(\'' + item.id + '\')"/></td>' +
-      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="spiq-ent-' + item.id + '" onchange="updateSpiqSaldo(\'' + item.id + '\')"/></td>' +
+      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="spiq-rec-' + item.id + '" value="' + item.existente + '" onchange="updateSpiqSaldo(\'' + item.id + '\')"/></td>' +
+      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="spiq-ent-' + item.id + '" value="' + item.existente + '" onchange="updateSpiqSaldo(\'' + item.id + '\')"/></td>' +
       '<td><select class="form-input form-select" id="spiq-estado-' + item.id + '">' + estadoOpts + '</select></td>' +
     '</tr>');
   });
@@ -4252,8 +4252,8 @@ function renderSrondaMatTable(cat) {
     tbody.insertAdjacentHTML('beforeend', '<tr>' +
       '<td>' + escHtml(item.designacao) + '</td>' +
       '<td style="color:var(--text2);text-align:center;">' + item.existente + '</td>' +
-      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="sronda-rec-' + item.id + '" onchange="updateSrondaSaldo(\'' + item.id + '\')"/></td>' +
-      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="sronda-ent-' + item.id + '" onchange="updateSrondaSaldo(\'' + item.id + '\')"/></td>' +
+      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="sronda-rec-' + item.id + '" value="' + item.existente + '" onchange="updateSrondaSaldo(\'' + item.id + '\')"/></td>' +
+      '<td><input class="form-input" type="number" min="0" style="width:75px;" id="sronda-ent-' + item.id + '" value="' + item.existente + '" onchange="updateSrondaSaldo(\'' + item.id + '\')"/></td>' +
       '<td><select class="form-input form-select" id="sronda-estado-' + item.id + '">' + estadoOpts + '</select></td>' +
     '</tr>');
   });
