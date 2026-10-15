@@ -473,8 +473,10 @@
       <div id="od-panel-8" class="od-panel" style="display:none;">
         <div class="section-header">8. Encerramento e Assinaturas</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-          <div><label class="form-label">Oficial Cessante</label><input class="form-input" id="od-oficialCessante" placeholder="Nome e posto"/></div>
-          <div><label class="form-label">Oficial Entrante</label><input class="form-input" id="od-oficialEntrante" placeholder="Nome e posto"/></div>
+          <div><label class="form-label">Oficial Cessante (Nome)</label><input class="form-input" id="od-oficialCessante" placeholder="Nome"/></div>
+          <div><label class="form-label">Oficial Entrante (Nome)</label><input class="form-input" id="od-oficialEntrante" placeholder="Nome"/></div>
+          <div><label class="form-label">Posto (Cessante)</label><input class="form-input" id="od-oficialCessantePosto" placeholder="Posto"/></div>
+          <div><label class="form-label">Posto (Entrante)</label><input class="form-input" id="od-oficialEntrantePosto" placeholder="Posto"/></div>
         </div>
         <div style="margin-top:1rem;"><label class="form-label">Anotações / Observações Finais</label><textarea class="form-input form-textarea" id="od-anotacoes" rows="4"></textarea></div>
       </div>
@@ -574,10 +576,12 @@
       <div id="sdr-panel-1" class="sgr-panel">
         <div class="section-header">1. Identificação</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-          <div><label class="form-label">Sargento Dia</label><input class="form-input" id="sdr-sargento-dia" placeholder="Nome completo e posto"/></div>
+          <div><label class="form-label">Sargento Dia (Nome)</label><input class="form-input" id="sdr-sargento-dia" placeholder="Nome completo"/></div>
+          <div><label class="form-label">Posto (Sargento Dia Cessante)</label><input class="form-input" id="sdr-sargento-dia-posto" placeholder="Posto"/></div>
           <div><label class="form-label">Reserva</label><input class="form-input" id="sdr-reserva" placeholder="Nome e posto"/></div>
           <div><label class="form-label">Cabo Dia</label><input class="form-input" id="sdr-cabo-dia" placeholder="Nome e posto"/></div>
-          <div><label class="form-label">Sargento Entrante</label><input class="form-input" id="sdr-entrante" placeholder="Nome e posto"/></div>
+          <div><label class="form-label">Sargento Entrante (Nome)</label><input class="form-input" id="sdr-entrante" placeholder="Nome"/></div>
+          <div><label class="form-label">Posto (Entrante)</label><input class="form-input" id="sdr-entrante-posto" placeholder="Posto"/></div>
         </div>
       </div>
 
@@ -657,10 +661,12 @@
       <div id="spiq-panel-1" class="sgr-panel">
         <div class="section-header">1. Identificação</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-          <div><label class="form-label">Sargento Piquete</label><input class="form-input" id="spiq-sargento" placeholder="Nome completo e posto"/></div>
+          <div><label class="form-label">Sargento Piquete (Nome)</label><input class="form-input" id="spiq-sargento" placeholder="Nome completo"/></div>
+          <div><label class="form-label">Posto (Sargento Piquete Cessante)</label><input class="form-input" id="spiq-sargento-posto" placeholder="Posto"/></div>
           <div><label class="form-label">Reserva</label><input class="form-input" id="spiq-reserva" placeholder="Nome e posto"/></div>
           <div><label class="form-label">Auxiliar</label><input class="form-input" id="spiq-auxiliar" placeholder="Nome e posto"/></div>
-          <div><label class="form-label">Sargento Entrante</label><input class="form-input" id="spiq-entrante" placeholder="Nome e posto"/></div>
+          <div><label class="form-label">Sargento Entrante (Nome)</label><input class="form-input" id="spiq-entrante" placeholder="Nome"/></div>
+          <div><label class="form-label">Posto (Entrante)</label><input class="form-input" id="spiq-entrante-posto" placeholder="Posto"/></div>
         </div>
       </div>
 
@@ -738,10 +744,12 @@
       <div id="sronda-panel-1" class="sgr-panel">
         <div class="section-header">1. Identificação</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-          <div><label class="form-label">Sargento Ronda</label><input class="form-input" id="sronda-sargento" placeholder="Nome completo e posto"/></div>
+          <div><label class="form-label">Sargento Ronda (Nome)</label><input class="form-input" id="sronda-sargento" placeholder="Nome completo"/></div>
+          <div><label class="form-label">Posto (Sargento Ronda Cessante)</label><input class="form-input" id="sronda-sargento-posto" placeholder="Posto"/></div>
           <div><label class="form-label">Reserva</label><input class="form-input" id="sronda-reserva" placeholder="Nome e posto"/></div>
           <div><label class="form-label">Auxiliar</label><input class="form-input" id="sronda-auxiliar" placeholder="Nome e posto"/></div>
-          <div><label class="form-label">Sargento Entrante</label><input class="form-input" id="sronda-entrante" placeholder="Nome e posto"/></div>
+          <div><label class="form-label">Sargento Entrante (Nome)</label><input class="form-input" id="sronda-entrante" placeholder="Nome"/></div>
+          <div><label class="form-label">Posto (Entrante)</label><input class="form-input" id="sronda-entrante-posto" placeholder="Posto"/></div>
         </div>
       </div>
 
@@ -845,9 +853,11 @@
       <div id="sgr-panel-1" class="sgr-panel">
         <div class="section-header">1. Comando da Guarda</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-          <div><label class="form-label">Comandante da Guarda</label><input class="form-input" id="sgr-comandante" placeholder="Nome completo"/></div>
+          <div><label class="form-label">Comandante da Guarda (Nome)</label><input class="form-input" id="sgr-comandante" placeholder="Nome completo"/></div>
+          <div><label class="form-label">Posto (Comandante Cessante)</label><input class="form-input" id="sgr-comandante-posto" placeholder="Posto"/></div>
           <div><label class="form-label">Reserva</label><input class="form-input" id="sgr-reserva" placeholder="Nome e posto"/></div>
-          <div><label class="form-label">Sargento Entrante</label><input class="form-input" id="sgr-entrante" placeholder="Nome e posto"/></div>
+          <div><label class="form-label">Sargento Entrante (Nome)</label><input class="form-input" id="sgr-entrante" placeholder="Nome"/></div>
+          <div><label class="form-label">Posto (Entrante)</label><input class="form-input" id="sgr-entrante-posto" placeholder="Posto"/></div>
         </div>
       </div>
 
@@ -1704,6 +1714,7 @@ function initSgRelatorio(params) {
   document.getElementById('sgr-submit').style.display = 'none';
   document.getElementById('sgr-mode-label').textContent = 'Novo Relatório';
   document.getElementById('sgr-comandante').value = App.user.nome || '';
+  document.getElementById('sgr-comandante-posto').value = App.user.patente || '';
   App.sgrStep = 1; renderSgrSteps(); showSgrPanel(1);
   var nextBtnInit = document.getElementById('sgr-next');
   if (nextBtnInit) nextBtnInit.style.display = '';
@@ -1738,8 +1749,8 @@ function initSgRelatorio(params) {
 }
 
 function resetSgrForm() {
-  ['sgr-comandante','sgr-reserva','sgr-entrante','sgr-ocorrencias'].forEach(function(id){ document.getElementById(id).value = ''; });
-  ['sgr-forca-sargento','sgr-forca-auxiliar','sgr-forca-sentinelas'].forEach(function(id){ document.getElementById(id).value = '0'; });
+  ['sgr-comandante','sgr-comandante-posto','sgr-reserva','sgr-entrante','sgr-entrante-posto','sgr-ocorrencias',
+   'sgr-forca-sargento','sgr-forca-auxiliar','sgr-forca-sentinelas'].forEach(function(id){ document.getElementById(id).value = ''; });
   fillSelect_('sgr-posto-porta-arma',       POSTO_LETRAS_, 'A');
   fillSelect_('sgr-posto-observacao',        POSTO_LETRAS_, 'B');
   fillSelect_('sgr-posto-mtransporte',       POSTO_LETRAS_, 'C');
@@ -1849,8 +1860,10 @@ function collectSgrData() {
   }
   return {
     comandanteGuarda: document.getElementById('sgr-comandante').value,
+    comandantePosto: document.getElementById('sgr-comandante-posto').value,
     reserva: document.getElementById('sgr-reserva').value,
     entrante: document.getElementById('sgr-entrante').value,
+    entrantePosto: document.getElementById('sgr-entrante-posto').value,
     forcas: {
       sargento: parseFloat(document.getElementById('sgr-forca-sargento').value)||0,
       auxiliar: parseFloat(document.getElementById('sgr-forca-auxiliar').value)||0,
@@ -1875,8 +1888,10 @@ function collectSgrData() {
 function populateSgrForm(relatorio) {
   var d = relatorio.data || {};
   document.getElementById('sgr-comandante').value = d.comandanteGuarda || '';
+  document.getElementById('sgr-comandante-posto').value = d.comandantePosto || '';
   document.getElementById('sgr-reserva').value = d.reserva || '';
   document.getElementById('sgr-entrante').value = d.entrante || '';
+  document.getElementById('sgr-entrante-posto').value = d.entrantePosto || '';
   var f = d.forcas || {};
   document.getElementById('sgr-forca-sargento').value = f.sargento || 0;
   document.getElementById('sgr-forca-auxiliar').value = f.auxiliar || 0;
@@ -2022,18 +2037,21 @@ function buildSgRelatorioPDF(relatorio) {
   sectionTitle('Ocorrências');
   row('Ocorrências', d.ocorrencias);
 
-  sectionTitle('Encerramento');
-  twoCol('Comandante Cessante', d.comandanteGuarda, 'Comandante Entrante', d.entrante);
+  y += 20; checkPage(26);
+  var mid = (L+R)/2;
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor.apply(doc, GREEN);
+  doc.text('O Comandante da Guarda Cessante', L, y);
+  doc.text('O Comandante da Guarda Entrante', mid, y);
+  y += 6;
+  doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(0,0,0);
+  doc.text(d.comandanteGuarda||'—', L, y);
+  doc.text(d.entrante||'—', mid, y);
+  y += 5;
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(100,100,100);
+  doc.text(d.comandantePosto||'—', L, y);
+  doc.text(d.entrantePosto||'—', mid, y);
+  y += 8;
 
-  checkPage(50); y += 12;
-  var sigW = 68;
-  doc.setDrawColor.apply(doc, GREEN); doc.setLineWidth(0.3);
-  doc.rect(L, y, sigW, 24); doc.line(L, y+17, L+sigW, y+17);
-  doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor.apply(doc, GREEN);
-  doc.text('SARGENTO CESSANTE', L+sigW/2, y+21, { align:'center' });
-  doc.rect(R-sigW, y, sigW, 24); doc.line(R-sigW, y+17, R, y+17);
-  doc.text('SARGENTO ENTRANTE', R-sigW/2, y+21, { align:'center' });
-  y += 28;
   var totalPages = doc.internal.pages.length - 1;
   for (var pg = 1; pg <= totalPages; pg++) {
     doc.setPage(pg);
@@ -2330,14 +2348,15 @@ function initOD(params) {
   } else {
     document.getElementById('od-oficialDia').value = App.user.nome || '';
     document.getElementById('od-oficialCessante').value = App.user.nome || '';
+    document.getElementById('od-oficialCessantePosto').value = App.user.patente || '';
   }
 }
 
 function resetODForm() {
   ['od-oficialDia','od-reservaDia','od-auxiliarDia','od-conferenciaCarga','od-inicio','od-fim',
    'od-ocorrenciasExtraordinarias','od-alteracoesPessoal','od-alimentacao','od-apresentacao','od-baixasMarchas',
-   'od-oficialCessante','od-oficialEntrante','od-anotacoes'].forEach(function(id){ var el = document.getElementById(id); if(el) el.value = ''; });
-  ['od-energia-anterior','od-energia-atual','od-agua-anterior','od-agua-atual'].forEach(function(id){ var el = document.getElementById(id); if(el) el.value = '0'; });
+   'od-oficialCessante','od-oficialEntrante','od-oficialCessantePosto','od-oficialEntrantePosto','od-anotacoes',
+   'od-energia-anterior','od-energia-atual','od-agua-anterior','od-agua-atual'].forEach(function(id){ var el = document.getElementById(id); if(el) el.value = ''; });
   document.getElementById('rondas-tbody').innerHTML = '';
   document.getElementById('detidos-tbody').innerHTML = '';
   document.getElementById('chamadas-tbody').innerHTML = '';
@@ -2423,17 +2442,17 @@ function collectODData() {
   document.querySelectorAll('#chamadas-tbody tr').forEach(function(tr){ var inp=tr.querySelectorAll('input'); if(inp[0]&&inp[1]&&inp[2]) chamadas.push({horario:inp[0].value,destinatario:inp[1].value,assunto:inp[2].value}); });
   var movGuerra = App.odInventory.filter(function(it){ return it.category==='guerra'; }).map(function(item){ return {id:item.id,designacao:item.designacao,existente:item.existente,recebido:parseFloat((document.getElementById('mat-rec-'+item.id)||{}).value)||0,entregue:parseFloat((document.getElementById('mat-ent-'+item.id)||{}).value)||0}; });
   var movAq = App.odInventory.filter(function(it){ return it.category==='aquartelamento'; }).map(function(item){ return {id:item.id,designacao:item.designacao,existente:item.existente,recebido:parseFloat((document.getElementById('mat-rec-'+item.id)||{}).value)||0,entregue:parseFloat((document.getElementById('mat-ent-'+item.id)||{}).value)||0}; });
-  return { identificacao:{oficialDia:document.getElementById('od-oficialDia').value,reservaDia:document.getElementById('od-reservaDia').value,auxiliarDia:document.getElementById('od-auxiliarDia').value,conferenciaCarga:document.getElementById('od-conferenciaCarga').value,inicio:document.getElementById('od-inicio').value,fim:document.getElementById('od-fim').value}, rondas:rondas, detidos:detidos, narrativas:{ocorrenciasExtraordinarias:document.getElementById('od-ocorrenciasExtraordinarias').value,alteracoesPessoal:document.getElementById('od-alteracoesPessoal').value,alimentacao:document.getElementById('od-alimentacao').value,apresentacao:document.getElementById('od-apresentacao').value,baixasMarchas:document.getElementById('od-baixasMarchas').value}, consumos:{energia:{anterior:parseFloat(document.getElementById('od-energia-anterior').value)||0,atual:parseFloat(document.getElementById('od-energia-atual').value)||0},agua:{anterior:parseFloat(document.getElementById('od-agua-anterior').value)||0,atual:parseFloat(document.getElementById('od-agua-atual').value)||0}}, chamadas:chamadas, movimentosGuerra:movGuerra, movimentosAquartelamento:movAq, encerramento:{oficialCessante:document.getElementById('od-oficialCessante').value,oficialEntrante:document.getElementById('od-oficialEntrante').value,anotacoes:document.getElementById('od-anotacoes').value} };
+  return { identificacao:{oficialDia:document.getElementById('od-oficialDia').value,reservaDia:document.getElementById('od-reservaDia').value,auxiliarDia:document.getElementById('od-auxiliarDia').value,conferenciaCarga:document.getElementById('od-conferenciaCarga').value,inicio:document.getElementById('od-inicio').value,fim:document.getElementById('od-fim').value}, rondas:rondas, detidos:detidos, narrativas:{ocorrenciasExtraordinarias:document.getElementById('od-ocorrenciasExtraordinarias').value,alteracoesPessoal:document.getElementById('od-alteracoesPessoal').value,alimentacao:document.getElementById('od-alimentacao').value,apresentacao:document.getElementById('od-apresentacao').value,baixasMarchas:document.getElementById('od-baixasMarchas').value}, consumos:{energia:{anterior:parseFloat(document.getElementById('od-energia-anterior').value)||0,atual:parseFloat(document.getElementById('od-energia-atual').value)||0},agua:{anterior:parseFloat(document.getElementById('od-agua-anterior').value)||0,atual:parseFloat(document.getElementById('od-agua-atual').value)||0}}, chamadas:chamadas, movimentosGuerra:movGuerra, movimentosAquartelamento:movAq, encerramento:{oficialCessante:document.getElementById('od-oficialCessante').value,oficialEntrante:document.getElementById('od-oficialEntrante').value,oficialCessantePosto:document.getElementById('od-oficialCessantePosto').value,oficialEntrantePosto:document.getElementById('od-oficialEntrantePosto').value,anotacoes:document.getElementById('od-anotacoes').value} };
 }
 function populateODForm(report) {
   var d=report.data||{}, id=d.identificacao||{};
   document.getElementById('od-oficialDia').value=id.oficialDia||report.oficialDia||''; document.getElementById('od-reservaDia').value=id.reservaDia||''; document.getElementById('od-auxiliarDia').value=id.auxiliarDia||''; document.getElementById('od-conferenciaCarga').value=id.conferenciaCarga||''; document.getElementById('od-inicio').value=id.inicio||''; document.getElementById('od-fim').value=id.fim||'';
   var n=d.narrativas||{}; ['ocorrenciasExtraordinarias','alteracoesPessoal','alimentacao','apresentacao','baixasMarchas'].forEach(function(k){ document.getElementById('od-'+k).value=n[k]||''; });
   var c=d.consumos||{}; document.getElementById('od-energia-anterior').value=(c.energia&&c.energia.anterior)||0; document.getElementById('od-energia-atual').value=(c.energia&&c.energia.atual)||0; document.getElementById('od-agua-anterior').value=(c.agua&&c.agua.anterior)||0; document.getElementById('od-agua-atual').value=(c.agua&&c.agua.atual)||0; calcConsumos();
-  (d.rondas||[]).forEach(function(r){ var tb=document.getElementById('rondas-tbody'),i=tb.rows.length; tb.innerHTML+='<tr><td><input class="form-input" value="'+escHtml(r.graduado||'')+'"/></td><td><input class="form-input" value="'+escHtml(r.horario||'')+'"/></td><td><button class="btn btn-danger" style="padding:4px 8px;" onclick="this.closest(\'tr\').remove()">✕</button></td></tr>'; });
-  (d.detidos||[]).forEach(function(r){ var tb=document.getElementById('detidos-tbody'),i=tb.rows.length; tb.innerHTML+='<tr><td><input class="form-input" value="'+escHtml(r.horario||'')+'"/></td><td><input class="form-input" value="'+escHtml(r.faltas||'')+'"/></td><td><button class="btn btn-danger" style="padding:4px 8px;" onclick="this.closest(\'tr\').remove()">✕</button></td></tr>'; });
-  (d.chamadas||[]).forEach(function(r){ var tb=document.getElementById('chamadas-tbody'),i=tb.rows.length; tb.innerHTML+='<tr><td><input class="form-input" value="'+escHtml(r.horario||'')+'"/></td><td><input class="form-input" value="'+escHtml(r.destinatario||'')+'"/></td><td><input class="form-input" value="'+escHtml(r.assunto||'')+'"/></td><td><button class="btn btn-danger" style="padding:4px 8px;" onclick="this.closest(\'tr\').remove()">✕</button></td></tr>'; });
-  var enc=d.encerramento||{}; document.getElementById('od-oficialCessante').value=enc.oficialCessante||report.oficialDia||''; document.getElementById('od-oficialEntrante').value=enc.oficialEntrante||''; document.getElementById('od-anotacoes').value=enc.anotacoes||'';
+  (d.rondas||[]).forEach(function(r){ var tb=document.getElementById('rondas-tbody'),i=tb.rows.length; tb.insertAdjacentHTML('beforeend', '<tr><td><input class="form-input" value="'+escHtml(r.graduado||'')+'"/></td><td><input class="form-input" value="'+escHtml(r.horario||'')+'"/></td><td><button class="btn btn-danger" style="padding:4px 8px;" onclick="this.closest(\'tr\').remove()">✕</button></td></tr>'); });
+  (d.detidos||[]).forEach(function(r){ var tb=document.getElementById('detidos-tbody'),i=tb.rows.length; tb.insertAdjacentHTML('beforeend', '<tr><td><input class="form-input" value="'+escHtml(r.horario||'')+'"/></td><td><input class="form-input" value="'+escHtml(r.faltas||'')+'"/></td><td><button class="btn btn-danger" style="padding:4px 8px;" onclick="this.closest(\'tr\').remove()">✕</button></td></tr>'); });
+  (d.chamadas||[]).forEach(function(r){ var tb=document.getElementById('chamadas-tbody'),i=tb.rows.length; tb.insertAdjacentHTML('beforeend', '<tr><td><input class="form-input" value="'+escHtml(r.horario||'')+'"/></td><td><input class="form-input" value="'+escHtml(r.destinatario||'')+'"/></td><td><input class="form-input" value="'+escHtml(r.assunto||'')+'"/></td><td><button class="btn btn-danger" style="padding:4px 8px;" onclick="this.closest(\'tr\').remove()">✕</button></td></tr>'); });
+  var enc=d.encerramento||{}; document.getElementById('od-oficialCessante').value=enc.oficialCessante||report.oficialDia||''; document.getElementById('od-oficialEntrante').value=enc.oficialEntrante||''; document.getElementById('od-oficialCessantePosto').value=enc.oficialCessantePosto||''; document.getElementById('od-oficialEntrantePosto').value=enc.oficialEntrantePosto||''; document.getElementById('od-anotacoes').value=enc.anotacoes||'';
   (d.movimentosGuerra||[]).forEach(function(m){ var r=document.getElementById('mat-rec-'+m.id); if(r){r.value=m.recebido||0;updateSaldo(m.id);} var e=document.getElementById('mat-ent-'+m.id); if(e){e.value=m.entregue||0;updateSaldo(m.id);} });
   (d.movimentosAquartelamento||[]).forEach(function(m){ var r=document.getElementById('mat-rec-'+m.id); if(r){r.value=m.recebido||0;updateSaldo(m.id);} var e=document.getElementById('mat-ent-'+m.id); if(e){e.value=m.entregue||0;updateSaldo(m.id);} });
 }
@@ -2524,7 +2543,7 @@ function goToSdrStep(step) { App.sdStep = step; renderSdrSteps(); showSdrPanel(s
 function sdrStepNav(dir) { var next = App.sdStep + dir; if (next < 1 || next > SDR_STEPS_.length) return; goToSdrStep(next); }
 
 function resetSdrForm() {
-  ['sdr-sargento-dia','sdr-reserva','sdr-cabo-dia','sdr-entrante',
+  ['sdr-sargento-dia','sdr-sargento-dia-posto','sdr-reserva','sdr-cabo-dia','sdr-entrante','sdr-entrante-posto',
    'sdr-generos-recebidos','sdr-alimentacao','sdr-limpeza-conservacao','sdr-agua-doce','sdr-gas',
    'sdr-ocorrencias'].forEach(function(id){ var el = document.getElementById(id); if (el) el.value = ''; });
 }
@@ -2574,9 +2593,11 @@ function collectSdrData() {
   }
   return {
     sargentodia:   document.getElementById('sdr-sargento-dia').value,
+    sargentodiaPosto: document.getElementById('sdr-sargento-dia-posto').value,
     reserva:       document.getElementById('sdr-reserva').value,
     caboDia:       document.getElementById('sdr-cabo-dia').value,
     entrante:      document.getElementById('sdr-entrante').value,
+    entrantePosto: document.getElementById('sdr-entrante-posto').value,
     generosRecebidos:    document.getElementById('sdr-generos-recebidos').value,
     alimentacao:         document.getElementById('sdr-alimentacao').value,
     limpezaConservacao:  document.getElementById('sdr-limpeza-conservacao').value,
@@ -2591,9 +2612,11 @@ function collectSdrData() {
 function populateSdrForm(relatorio) {
   var d = relatorio.data || {};
   document.getElementById('sdr-sargento-dia').value = d.sargentodia || '';
+  document.getElementById('sdr-sargento-dia-posto').value = d.sargentodiaPosto || '';
   document.getElementById('sdr-reserva').value = d.reserva || '';
   document.getElementById('sdr-cabo-dia').value = d.caboDia || '';
   document.getElementById('sdr-entrante').value = d.entrante || '';
+  document.getElementById('sdr-entrante-posto').value = d.entrantePosto || '';
   document.getElementById('sdr-generos-recebidos').value = d.generosRecebidos || '';
   document.getElementById('sdr-alimentacao').value = d.alimentacao || '';
   document.getElementById('sdr-limpeza-conservacao').value = d.limpezaConservacao || '';
@@ -2617,6 +2640,7 @@ function initSdRelatorio(params) {
   document.getElementById('sdr-pdf-btn').style.display = 'none';
   document.getElementById('sdr-mode-label').textContent = 'Novo Relatório';
   document.getElementById('sdr-sargento-dia').value = App.user.nome || '';
+  document.getElementById('sdr-sargento-dia-posto').value = App.user.patente || '';
   App.sdStep = 1; renderSdrSteps(); showSdrPanel(1);
   var nextBtnInit = document.getElementById('sdr-next');
   if (nextBtnInit) nextBtnInit.style.display = '';
@@ -2773,18 +2797,21 @@ function buildSdRelatorioPDF(relatorio) {
   sectionTitle('Ocorrências');
   row('Ocorrências', d.ocorrencias);
 
-  sectionTitle('Encerramento');
-  twoCol('Sargento Cessante', d.sargentodia, 'Sargento Entrante', d.entrante);
+  y += 20; checkPage(26);
+  var mid = (L+R)/2;
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor.apply(doc, GREEN);
+  doc.text('O Sargento Dia Cessante', L, y);
+  doc.text('O Sargento Dia Entrante', mid, y);
+  y += 6;
+  doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(0,0,0);
+  doc.text(d.sargentodia||'—', L, y);
+  doc.text(d.entrante||'—', mid, y);
+  y += 5;
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(100,100,100);
+  doc.text(d.sargentodiaPosto||'—', L, y);
+  doc.text(d.entrantePosto||'—', mid, y);
+  y += 8;
 
-  checkPage(50); y += 12;
-  var sigW = 68;
-  doc.setDrawColor.apply(doc, GREEN); doc.setLineWidth(0.3);
-  doc.rect(L, y, sigW, 24); doc.line(L, y+17, L+sigW, y+17);
-  doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor.apply(doc, GREEN);
-  doc.text('SARGENTO CESSANTE', L+sigW/2, y+21, { align:'center' });
-  doc.rect(R-sigW, y, sigW, 24); doc.line(R-sigW, y+17, R, y+17);
-  doc.text('SARGENTO ENTRANTE', R-sigW/2, y+21, { align:'center' });
-  y += 28;
   var totalPages = doc.internal.pages.length - 1;
   for (var pg = 1; pg <= totalPages; pg++) {
     doc.setPage(pg);
@@ -3455,6 +3482,25 @@ function buildCombinedServicePDF(dados, imgData) {
     doc.text(v2 || '—', mid + 38, y); y += 7;
   }
 
+  // Bloco de assinatura (sem retângulos): a 2 cm do conteúdo anterior, com o
+  // Cessante à esquerda e o Entrante à direita, cada um com Nome e Posto.
+  function assinaturaF(cargo, cNome, cPosto, eNome, ePosto) {
+    y += 20; checkPage(26);
+    var mid = (L + R) / 2;
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor.apply(doc, GREEN);
+    doc.text('O ' + cargo + ' Cessante', L, y);
+    doc.text('O ' + cargo + ' Entrante', mid, y);
+    y += 6;
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.setTextColor(0, 0, 0);
+    doc.text(cNome || '—', L, y);
+    doc.text(eNome || '—', mid, y);
+    y += 5;
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(100, 100, 100);
+    doc.text(cPosto || '—', L, y);
+    doc.text(ePosto || '—', mid, y);
+    y += 8;
+  }
+
   function tableHeadF(cols) {
     checkPage(14); doc.setFillColor(230, 240, 230); doc.rect(L, y, R - L, 6, 'F');
     doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5); doc.setTextColor.apply(doc, GREEN);
@@ -3531,9 +3577,9 @@ function buildCombinedServicePDF(dados, imgData) {
     matSectionOD('7. Material de Aquartelamento', d.movimentosAquartelamento);
 
     var enc = d.encerramento || {};
-    sectionTitle('8. Encerramento');
-    twoColF('Oficial Cessante', enc.oficialCessante || report.oficialDia, 'Oficial Entrante', enc.oficialEntrante);
-    if (enc.anotacoes) rowF('Anotações', enc.anotacoes);
+    if (enc.anotacoes) { sectionTitle('8. Encerramento'); rowF('Anotações', enc.anotacoes); }
+    assinaturaF('Oficial Dia', enc.oficialCessante || report.oficialDia, enc.oficialCessantePosto,
+                enc.oficialEntrante, enc.oficialEntrantePosto);
   });
 
   // ── Sargento da Guarda reports ─────────────────────────────────────────────
@@ -3584,8 +3630,7 @@ function buildCombinedServicePDF(dados, imgData) {
     sectionTitle('9. Ocorrências');
     rowF('Ocorrências', d.ocorrencias);
 
-    sectionTitle('10. Encerramento');
-    twoColF('Comandante Cessante', d.comandanteGuarda, 'Comandante Entrante', d.entrante);
+    assinaturaF('Comandante da Guarda', d.comandanteGuarda, d.comandantePosto, d.entrante, d.entrantePosto);
   });
 
   // ── Função partilhada para secção de material (SD/Piquete/Ronda) ────────────
@@ -3620,8 +3665,7 @@ function buildCombinedServicePDF(dados, imgData) {
     sectionTitle('5. Ocorrências');
     rowF('Ocorrências', d.ocorrencias);
 
-    sectionTitle('6. Encerramento');
-    twoColF('Sargento Cessante', d.sargentodia, 'Sargento Entrante', d.entrante);
+    assinaturaF('Sargento Dia', d.sargentodia, d.sargentodiaPosto, d.entrante, d.entrantePosto);
   });
 
   // ── Sargento Piquete reports ────────────────────────────────────────────────
@@ -3642,8 +3686,7 @@ function buildCombinedServicePDF(dados, imgData) {
     sectionTitle('5. Ocorrências'); rowF('', d.ocorrencias);
     sectionTitle('6. Diversos'); rowF('', d.diversos);
 
-    sectionTitle('7. Encerramento');
-    twoColF('Sargento Cessante', d.sargento, 'Sargento Entrante', d.entrante);
+    assinaturaF('Sargento Piquete', d.sargento, d.sargentoPosto, d.entrante, d.entrantePosto);
   });
 
   // ── Sargento Ronda reports ──────────────────────────────────────────────────
@@ -3674,8 +3717,7 @@ function buildCombinedServicePDF(dados, imgData) {
     sectionTitle('7. Ocorrências'); rowF('', d.ocorrencias);
     sectionTitle('8. Documentos Anexados'); rowF('', d.documentos);
 
-    sectionTitle('9. Encerramento');
-    twoColF('Sargento Cessante', d.sargento, 'Sargento Entrante', d.entrante);
+    assinaturaF('Sargento Ronda', d.sargento, d.sargentoPosto, d.entrante, d.entrantePosto);
   });
 
   // ── Informes (um por página, estilo carta) ──────────────────────────────────
@@ -3723,23 +3765,6 @@ function buildCombinedServicePDF(dados, imgData) {
     });
     sectionTitle('Submetido por');
     rowF('Sargento da Guarda', (sgrReports[0] && sgrReports[0].data && sgrReports[0].data.comandanteGuarda) || '—');
-  }
-
-  // ── Signatures on last page ────────────────────────────────────────────────
-  if (odReports.length + sgrReports.length + sdReports.length + spiqReports.length + srondaReports.length > 0) {
-    checkPage(50); y += 12;
-    var sigW = 68;
-    doc.setDrawColor.apply(doc, GREEN); doc.setLineWidth(0.3);
-    // Cessante — bottom left
-    doc.rect(L, y, sigW, 24);
-    doc.line(L, y + 17, L + sigW, y + 17);
-    doc.setFont('helvetica', 'bold'); doc.setFontSize(7); doc.setTextColor.apply(doc, GREEN);
-    doc.text('OFICIAL CESSANTE', L + sigW / 2, y + 21, { align: 'center' });
-    // Entrante — bottom right
-    doc.rect(R - sigW, y, sigW, 24);
-    doc.line(R - sigW, y + 17, R, y + 17);
-    doc.text('OFICIAL ENTRANTE', R - sigW / 2, y + 21, { align: 'center' });
-    y += 28;
   }
 
   // Page numbers
@@ -3840,18 +3865,23 @@ function buildODPDF(report) {
   matSection('6. Material de Guerra', d.movimentosGuerra);
   matSection('7. Material de Aquartelamento', d.movimentosAquartelamento);
   var enc = d.encerramento || {};
-  sectionTitle('8. Encerramento');
-  twoCol('Oficial Cessante', enc.oficialCessante||report.oficialDia, 'Oficial Entrante', enc.oficialEntrante);
-  if (enc.anotacoes) row('Anotações', enc.anotacoes);
-  checkPage(50); y += 12;
-  var sigW = 68;
-  doc.setDrawColor.apply(doc, GREEN); doc.setLineWidth(0.3);
-  doc.rect(L, y, sigW, 24); doc.line(L, y+17, L+sigW, y+17);
-  doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor.apply(doc, GREEN);
-  doc.text('OFICIAL CESSANTE', L+sigW/2, y+21, { align:'center' });
-  doc.rect(R-sigW, y, sigW, 24); doc.line(R-sigW, y+17, R, y+17);
-  doc.text('OFICIAL ENTRANTE', R-sigW/2, y+21, { align:'center' });
-  y += 28;
+  if (enc.anotacoes) { sectionTitle('8. Encerramento'); row('Anotações', enc.anotacoes); }
+
+  y += 20; checkPage(26);
+  var mid = (L+R)/2;
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor.apply(doc, GREEN);
+  doc.text('O Oficial Dia Cessante', L, y);
+  doc.text('O Oficial Dia Entrante', mid, y);
+  y += 6;
+  doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(0,0,0);
+  doc.text((enc.oficialCessante||report.oficialDia)||'—', L, y);
+  doc.text(enc.oficialEntrante||'—', mid, y);
+  y += 5;
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(100,100,100);
+  doc.text(enc.oficialCessantePosto||'—', L, y);
+  doc.text(enc.oficialEntrantePosto||'—', mid, y);
+  y += 8;
+
   var totalPages = doc.internal.pages.length - 1;
   for (var p = 1; p <= totalPages; p++) {
     doc.setPage(p);
@@ -3922,7 +3952,7 @@ function goToSpiqStep(step) { App.spiqStep = step; renderSpiqSteps(); showSpiqPa
 function spiqStepNav(dir) { var next = App.spiqStep + dir; if (next < 1 || next > SPIQ_STEPS_.length) return; goToSpiqStep(next); }
 
 function resetSpiqForm() {
-  ['spiq-sargento','spiq-reserva','spiq-auxiliar','spiq-entrante',
+  ['spiq-sargento','spiq-sargento-posto','spiq-reserva','spiq-auxiliar','spiq-entrante','spiq-entrante-posto',
    'spiq-conferencia-carga','spiq-ocorrencias','spiq-diversos'].forEach(function(id){ var el = document.getElementById(id); if (el) el.value = ''; });
 }
 function lockSpiqInputs(lock) {
@@ -3967,9 +3997,11 @@ function collectSpiqData() {
   }
   return {
     sargento:          document.getElementById('spiq-sargento').value,
+    sargentoPosto:     document.getElementById('spiq-sargento-posto').value,
     reserva:           document.getElementById('spiq-reserva').value,
     auxiliar:          document.getElementById('spiq-auxiliar').value,
     entrante:          document.getElementById('spiq-entrante').value,
+    entrantePosto:     document.getElementById('spiq-entrante-posto').value,
     conferenciaCarga:  document.getElementById('spiq-conferencia-carga').value,
     ocorrencias:       document.getElementById('spiq-ocorrencias').value,
     diversos:          document.getElementById('spiq-diversos').value,
@@ -3980,9 +4012,11 @@ function collectSpiqData() {
 function populateSpiqForm(relatorio) {
   var d = relatorio.data || {};
   document.getElementById('spiq-sargento').value = d.sargento || '';
+  document.getElementById('spiq-sargento-posto').value = d.sargentoPosto || '';
   document.getElementById('spiq-reserva').value = d.reserva || '';
   document.getElementById('spiq-auxiliar').value = d.auxiliar || '';
   document.getElementById('spiq-entrante').value = d.entrante || '';
+  document.getElementById('spiq-entrante-posto').value = d.entrantePosto || '';
   document.getElementById('spiq-conferencia-carga').value = d.conferenciaCarga || '';
   document.getElementById('spiq-ocorrencias').value = d.ocorrencias || '';
   document.getElementById('spiq-diversos').value = d.diversos || '';
@@ -4002,6 +4036,7 @@ function initSpiqRelatorio(params) {
   document.getElementById('spiq-pdf-btn').style.display = 'none';
   document.getElementById('spiq-mode-label').textContent = 'Novo Relatório';
   document.getElementById('spiq-sargento').value = App.user.nome || '';
+  document.getElementById('spiq-sargento-posto').value = App.user.patente || '';
   App.spiqStep = 1; renderSpiqSteps(); showSpiqPanel(1);
   var isView = !!(params && params.mode === 'view' && params.id);
   if (isView) _spiqCurrentId = params.id;
@@ -4137,17 +4172,21 @@ function buildSpiqRelatorioPDF(relatorio) {
   sectionTitle('4. Conferência a Carga'); rowPDF('', d.conferenciaCarga);
   sectionTitle('5. Ocorrências'); rowPDF('', d.ocorrencias);
   sectionTitle('6. Diversos'); rowPDF('', d.diversos);
-  sectionTitle('7. Encerramento');
-  twoCol('Sargento Cessante', d.sargento, 'Sargento Entrante', d.entrante);
-  checkPage(50); y += 12;
-  var sigW = 68;
-  doc.setDrawColor.apply(doc, GREEN); doc.setLineWidth(0.3);
-  doc.rect(L, y, sigW, 24); doc.line(L, y+17, L+sigW, y+17);
-  doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor.apply(doc, GREEN);
-  doc.text('SARGENTO CESSANTE', L+sigW/2, y+21, { align:'center' });
-  doc.rect(R-sigW, y, sigW, 24); doc.line(R-sigW, y+17, R, y+17);
-  doc.text('SARGENTO ENTRANTE', R-sigW/2, y+21, { align:'center' });
-  y += 28;
+  y += 20; checkPage(26);
+  var mid = (L+R)/2;
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor.apply(doc, GREEN);
+  doc.text('O Sargento Piquete Cessante', L, y);
+  doc.text('O Sargento Piquete Entrante', mid, y);
+  y += 6;
+  doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(0,0,0);
+  doc.text(d.sargento||'—', L, y);
+  doc.text(d.entrante||'—', mid, y);
+  y += 5;
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(100,100,100);
+  doc.text(d.sargentoPosto||'—', L, y);
+  doc.text(d.entrantePosto||'—', mid, y);
+  y += 8;
+
   var totalPages = doc.internal.pages.length - 1;
   for (var pg = 1; pg <= totalPages; pg++) { doc.setPage(pg); doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(150,150,150); doc.text(pg+'/'+totalPages, PW/2, PH-5, { align:'center' }); }
   return doc;
@@ -4230,7 +4269,7 @@ function addSrondaZonaRow() {
   '</tr>');
 }
 function resetSrondaForm() {
-  ['sronda-sargento','sronda-reserva','sronda-auxiliar','sronda-entrante',
+  ['sronda-sargento','sronda-sargento-posto','sronda-reserva','sronda-auxiliar','sronda-entrante','sronda-entrante-posto',
    'sronda-ocorrencias','sronda-documentos'].forEach(function(id){ var el = document.getElementById(id); if (el) el.value = ''; });
   var gt = document.getElementById('sronda-grupo-tbody'); if (gt) gt.innerHTML = '';
   var zt = document.getElementById('sronda-zonas-tbody'); if (zt) zt.innerHTML = '';
@@ -4288,9 +4327,11 @@ function collectSrondaData() {
   });
   return {
     sargento:    document.getElementById('sronda-sargento').value,
+    sargentoPosto: document.getElementById('sronda-sargento-posto').value,
     reserva:     document.getElementById('sronda-reserva').value,
     auxiliar:    document.getElementById('sronda-auxiliar').value,
     entrante:    document.getElementById('sronda-entrante').value,
+    entrantePosto: document.getElementById('sronda-entrante-posto').value,
     grupoRonda:  grupo,
     zonas:       zonas,
     ocorrencias: document.getElementById('sronda-ocorrencias').value,
@@ -4303,9 +4344,11 @@ function collectSrondaData() {
 function populateSrondaForm(relatorio) {
   var d = relatorio.data || {};
   document.getElementById('sronda-sargento').value = d.sargento || '';
+  document.getElementById('sronda-sargento-posto').value = d.sargentoPosto || '';
   document.getElementById('sronda-reserva').value = d.reserva || '';
   document.getElementById('sronda-auxiliar').value = d.auxiliar || '';
   document.getElementById('sronda-entrante').value = d.entrante || '';
+  document.getElementById('sronda-entrante-posto').value = d.entrantePosto || '';
   document.getElementById('sronda-ocorrencias').value = d.ocorrencias || '';
   document.getElementById('sronda-documentos').value = d.documentos || '';
   var gt = document.getElementById('sronda-grupo-tbody'); gt.innerHTML = '';
@@ -4341,6 +4384,7 @@ function initSrondaRelatorio(params) {
   document.getElementById('sronda-pdf-btn').style.display = 'none';
   document.getElementById('sronda-mode-label').textContent = 'Novo Relatório';
   document.getElementById('sronda-sargento').value = App.user.nome || '';
+  document.getElementById('sronda-sargento-posto').value = App.user.patente || '';
   App.srondaStep = 1; renderSrondaSteps(); showSrondaPanel(1);
   var isView = !!(params && params.mode === 'view' && params.id);
   if (isView) _srondaCurrentId = params.id;
@@ -4484,17 +4528,21 @@ function buildSrondaRelatorioPDF(relatorio) {
   else { doc.setFont('helvetica','italic'); doc.setFontSize(9); doc.setTextColor(150,150,150); doc.text('Sem zonas registadas.', L, y); y+=6; }
   sectionTitle('7. Ocorrências'); rowPDF('', d.ocorrencias);
   sectionTitle('8. Documentos Anexados'); rowPDF('', d.documentos);
-  sectionTitle('9. Encerramento');
-  twoCol('Sargento Cessante', d.sargento, 'Sargento Entrante', d.entrante);
-  checkPage(50); y += 12;
-  var sigW = 68;
-  doc.setDrawColor.apply(doc, GREEN); doc.setLineWidth(0.3);
-  doc.rect(L, y, sigW, 24); doc.line(L, y+17, L+sigW, y+17);
-  doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor.apply(doc, GREEN);
-  doc.text('SARGENTO CESSANTE', L+sigW/2, y+21, { align:'center' });
-  doc.rect(R-sigW, y, sigW, 24); doc.line(R-sigW, y+17, R, y+17);
-  doc.text('SARGENTO ENTRANTE', R-sigW/2, y+21, { align:'center' });
-  y += 28;
+  y += 20; checkPage(26);
+  var mid = (L+R)/2;
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor.apply(doc, GREEN);
+  doc.text('O Sargento Ronda Cessante', L, y);
+  doc.text('O Sargento Ronda Entrante', mid, y);
+  y += 6;
+  doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(0,0,0);
+  doc.text(d.sargento||'—', L, y);
+  doc.text(d.entrante||'—', mid, y);
+  y += 5;
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(100,100,100);
+  doc.text(d.sargentoPosto||'—', L, y);
+  doc.text(d.entrantePosto||'—', mid, y);
+  y += 8;
+
   var totalPages = doc.internal.pages.length - 1;
   for (var pg = 1; pg <= totalPages; pg++) { doc.setPage(pg); doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(150,150,150); doc.text(pg+'/'+totalPages, PW/2, PH-5, { align:'center' }); }
   return doc;
